@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">B2Doc</string>
+    <string name="menu_item_profile">Профиль</string>
+    <string name="menu_item_recommendations">Рекомендации</string>
+    <string name="menu_item_medicine">Лекарства</string>
+    <string name="menu_item_glossary">Словарь</string>
 </resources>
