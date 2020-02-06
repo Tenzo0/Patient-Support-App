@@ -4,4 +4,27 @@
     <string name="menu_item_recommendations">Рекомендации</string>
     <string name="menu_item_medicine">Лекарства</string>
     <string name="menu_item_glossary">Словарь</string>
+    <string name="B2doc">B2Doc</string>
+    <string name="endopro">Эндопротезирование</string>
+
+    <string name="phone_number_text_input_hint">Номер телефона</string>
+    <string name="password_text_input_laout_hint">Пароль</string>
+    <string name="login_button_text">Войти</string>
+    <string name="accept_text">Принять</string>
+    <string name="reject_button_text">Отклонить</string>
+    <string name="data_agreement">Нажимая кнопку \"Согласен\", вы, в соответствии с п.4 ст.9 Федерального закона от 27.07.2006 N 152-ФЗ "О
+персональных данных", даёте слогласие на обработку ваших персональных данных, то есть на совершение действий, предусмотренных п.3 ст.3
+Федерального закона от 27.07.2006 N 152-ФЗ "О персональных данных"</string>
+    <string name="signup_button_text">Регистрация</string>
+    <string name="agreement_text_view_text">Согласие на обработку данных</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="patronymic">Отчество</string>
+    <string name="password">Пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="recommendations_title">Рекомендации</string>
+    <string name="medication_title">Лекарства</string>
+    <string name="vocabulary_title">Словарь</string>
+    <string name="arterial_pressure_title">Давление</string>
+    <string name="profile_title">Профиль</string>
 </resources>
