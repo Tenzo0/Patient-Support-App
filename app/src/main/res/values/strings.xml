@@ -1,4 +1,6 @@
 <resources>
+
+    <!-- Login Activity strings -->
     <string name="app_name">B2Doc</string>
     <string name="menu_item_profile">Профиль</string>
     <string name="menu_item_recommendations">Рекомендации</string>
@@ -7,24 +9,46 @@
     <string name="B2doc">B2Doc</string>
     <string name="endopro">Эндопротезирование</string>
 
+    <!-- Authorization -->
     <string name="phone_number_text_input_hint">Номер телефона</string>
     <string name="password_text_input_laout_hint">Пароль</string>
     <string name="login_button_text">Войти</string>
+    <string name="signup_button_text">Регистрация</string>
+
+    <!-- Data agreement -->
     <string name="accept_text">Принять</string>
     <string name="reject_button_text">Отклонить</string>
     <string name="data_agreement">Нажимая кнопку \"Согласен\", вы, в соответствии с п.4 ст.9 Федерального закона от 27.07.2006 N 152-ФЗ "О
 персональных данных", даёте слогласие на обработку ваших персональных данных, то есть на совершение действий, предусмотренных п.3 ст.3
 Федерального закона от 27.07.2006 N 152-ФЗ "О персональных данных"</string>
-    <string name="signup_button_text">Регистрация</string>
     <string name="agreement_text_view_text">Согласие на обработку данных</string>
+
+    <!-- Sign up fragment -->
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="patronymic">Отчество</string>
     <string name="password">Пароль</string>
     <string name="repeat_password">Повторите пароль</string>
-    <string name="recommendations_title">Рекомендации</string>
-    <string name="medication_title">Лекарства</string>
-    <string name="vocabulary_title">Словарь</string>
-    <string name="arterial_pressure_title">Давление</string>
-    <string name="profile_title">Профиль</string>
+    <string name="male_short">муж.</string>
+    <string name="female">жен.</string>
+    <string name="date_is_null">Дата рождения не выбрана</string>
+    <string name="man_height">Рост</string>
+    <string name="weight">Вес</string>
+
+    <!-- input data errors -->
+    <string name="empty_phone_number_error">Номер телефона должен быть указан обязательно</string>
+    <string name="empty_name_error">Имя должно быть указано обязательно</string>
+    <string name="empty_surname_error">Фамилия должна быть указана обязательно</string>
+    <string name="empty_patronymic_error">Отчество должно быть указано обязательно</string>
+    <string name="empty_password_error">Пароль должен быть указан обязательно</string>
+    <string name="empty_repeat_password_error">Пароль должен быть указан повторно</string>
+    <string name="empty_height_error">Рост должен быть указан обязательно</string>
+    <string name="empty_weight_error">Вес должен быть указан обязательно</string>
+    <string name="length_phone_number_not_equal_eleven_error">Номер телефона должен состоять из 10 цифр</string>
+    <string name="password_and_repeat_password_are_not_equal_error">Введённые пароли не совпадают</string>
+
+    <!--Network -->
+    <string name="please_wait">Пожалуйста подождите</string>
+    <string name="network_error">"Network error"</string>
+
 </resources>

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-
+<menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/menu_item_profile"/>
+    <item
+        android:title="@string/menu_item_profile"
+        android:id="@+id/profileFragment"/>
 
-    <item android:title="@string/menu_item_recommendations"/>
+    <item
+        android:title="@string/menu_item_recommendations"
+        android:id="@+id/recommendationsFragment"/>
 
-    <item android:title="@string/menu_item_medicine"/>
+    <item
+        android:title="@string/menu_item_medicine"
+        android:id="@+id/medicinesFragment"/>
 
-    <item android:title="@string/menu_item_glossary"/>
+    <item
+        android:title="@string/menu_item_glossary"
+        android:id="@+id/glossaryFragment"/>
 
 </menu>

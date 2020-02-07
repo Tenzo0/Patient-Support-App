@@ -1,8 +1,9 @@
-package ru.poas.patientassistant.client
+package ru.poas.patientassistant.client.ui.login
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import ru.poas.patientassistant.client.R
 
 
 class LoginActivity : AppCompatActivity() {
@@ -10,8 +11,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        // Check if no view has focus:
 
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.login_nav_host_fragment)
     }
 }
