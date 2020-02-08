@@ -7,7 +7,7 @@
     <string name="menu_item_medicine">Лекарства</string>
     <string name="menu_item_glossary">Словарь</string>
     <string name="B2doc">B2Doc</string>
-    <string name="endopro">Эндопротезирование</string>
+    <string name="endopro">Эндопро</string>
 
     <!-- Authorization -->
     <string name="phone_number_text_input_hint">Номер телефона</string>
