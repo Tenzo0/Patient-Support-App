@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
@@ -25,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         //Set navigation drawer
         val navController = findNavController(R.id.main_nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.recommendationsFragment,
+            setOf(
+                R.id.recommendationsFragment,
                 R.id.profileFragment,
                 R.id.glossaryFragment,
                 R.id.medicinesFragment),
@@ -34,4 +36,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.navView, navController)
     }
 
+    override fun onBackPressed() {
+        findNavController(R.id.main_nav_host_fragment)
+            .navigate(R.id.recommendationsFragment)
+    }
 }

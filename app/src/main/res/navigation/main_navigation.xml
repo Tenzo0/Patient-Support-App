@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     app:startDestination="@+id/recommendationsFragment">
 
@@ -20,10 +19,6 @@
     <fragment
         android:id="@+id/recommendationsFragment"
         android:name="ru.poas.patientassistant.client.ui.main.RecommendationsFragment"
-        android:label="recommendations_fragment" >
-        <action
-            android:id="@+id/action_recommendationsFragment_pop"
-            app:popUpTo="@+id/recommendationsFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        android:label="recommendations_fragment" />
+
 </navigation>
