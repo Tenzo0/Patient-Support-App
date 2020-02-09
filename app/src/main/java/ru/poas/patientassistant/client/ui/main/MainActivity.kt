@@ -36,8 +36,4 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.navView, navController)
     }
 
-    override fun onBackPressed() {
-        findNavController(R.id.main_nav_host_fragment)
-            .navigate(R.id.recommendationsFragment)
-    }
 }

@@ -20,10 +20,14 @@ class DataAgreementFragment : Fragment() {
         val binding: DataAgreementFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.data_agreement_fragment, container, false)
 
+        //If user accept law about personal data
         binding.acceptButton.setOnClickListener {
+            //Navigate to MainActivity
             findNavController().navigate(
                 DataAgreementFragmentDirections.actionDataAgreementFragmentToMainActivity()
             )
+            //Finish LoginActivity
+            activity!!.finish()
         }
 
         return binding.root

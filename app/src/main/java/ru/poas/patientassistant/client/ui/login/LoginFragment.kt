@@ -69,14 +69,20 @@ class LoginFragment : Fragment() {
             when (authed) {
                 LoginViewModel.LoginType.FIRTSLY_AUTHED -> {
                     activity?.hideKeyboard()
-
                     findNavController().navigate(
                         LoginFragmentDirections.actionLoginFragmentToDataAgreementFragment()
                     )
                 }
-                LoginViewModel.LoginType.AUTHED -> findNavController().navigate(
-                    LoginFragmentDirections.actionLoginFragmentToMainActivity()
-                )
+                //If user is authorized
+                LoginViewModel.LoginType.AUTHED ->
+                {
+                    //Navigate to MainActivity
+                    findNavController().navigate(
+                        LoginFragmentDirections.actionLoginFragmentToMainActivity()
+                    )
+                    //Finish LoginActivity
+                    activity!!.finish()
+                }
             }
         })
     }
