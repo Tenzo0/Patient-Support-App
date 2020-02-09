@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mask="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -54,10 +55,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <br.com.sapereaude.maskedEditText.MaskedEditText
                         android:id="@+id/phone_number_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        mask:allowed_chars="1234567890"
+                        mask:mask="+7 (###) ###-##-##"
                         android:hint="@string/phone_number_text_input_hint"
                         android:inputType="phone"
                         android:singleLine="true" />

@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import ru.poas.patientassistant.client.viewmodel.login.LoginViewModel
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.LoginFragmentBinding
 import ru.poas.patientassistant.client.utils.hideKeyboard
+import ru.poas.patientassistant.client.viewmodel.login.LoginViewModel
 
 class LoginFragment : Fragment() {
 
@@ -31,13 +31,16 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
-        viewModel = ViewModelProviders.of(this, LoginViewModel.Factory(activity!!.application))
+        viewModel = ViewModelProvider(this, LoginViewModel.Factory(activity!!.application))
             .get(LoginViewModel::class.java)
         init()
+
         return binding.root
     }
 
     private fun init() {
+
+        binding.phoneNumberEditText.isKeepHint = false
 
         binding.signinButton.setOnClickListener {
             if (checkInputData()) {
@@ -95,14 +98,14 @@ class LoginFragment : Fragment() {
     private fun checkInputData(): Boolean {
         var isOk = true
 
-        if (TextUtils.isEmpty(binding.phoneNumberEditText.text)) {
+        if (TextUtils.isEmpty(binding.phoneNumberEditText.rawText)) {
             binding.phoneNumberTextInputLayout.error = getString(R.string.empty_phone_number_error)
             isOk = false
         } else {
             binding.phoneNumberTextInputLayout.error = ""
         }
 
-        if (binding.phoneNumberEditText.text?.length != 10) {
+        if (binding.phoneNumberEditText.rawText.length != 10) {
             binding.phoneNumberTextInputLayout.error =
                 getString(R.string.length_phone_number_not_equal_eleven_error)
             isOk = false
