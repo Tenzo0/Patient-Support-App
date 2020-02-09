@@ -22,7 +22,7 @@ class DataAgreementFragment : Fragment() {
 
         binding.acceptButton.setOnClickListener {
             findNavController().navigate(
-                DataAgreementFragmentDirections.actionDataAgreementFragmentToMainGraph()
+                DataAgreementFragmentDirections.actionDataAgreementFragmentToMainActivity()
             )
         }
 

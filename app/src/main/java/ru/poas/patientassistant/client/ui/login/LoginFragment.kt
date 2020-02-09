@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
                     )
                 }
                 LoginViewModel.LoginType.AUTHED -> findNavController().navigate(
-                    LoginFragmentDirections.actionLoginFragmentToMainGraph()
+                    LoginFragmentDirections.actionLoginFragmentToMainActivity()
                 )
             }
         })

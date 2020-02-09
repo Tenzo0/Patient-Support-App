@@ -24,10 +24,12 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
-            android:id="@+id/action_loginFragment_to_main_graph"
-            app:destination="@id/main_navigation"
-            app:launchSingleTop="true"
-            app:popUpToInclusive="false" />
+            android:id="@+id/action_loginFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -48,9 +50,15 @@
         android:label="DataAgreementFragment"
         tools:layout="@layout/data_agreement_fragment">
         <action
-            android:id="@+id/action_dataAgreementFragment_to_main_graph"
-            app:destination="@id/main_navigation"
-            app:launchSingleTop="true" />
+            android:id="@+id/action_dataAgreementFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
-    <include app:graph="@navigation/main_navigation" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="ru.poas.patientassistant.client.ui.main.MainActivity"
+        android:label="MainActivity" />
 </navigation>

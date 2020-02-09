@@ -20,5 +20,10 @@
     <fragment
         android:id="@+id/recommendationsFragment"
         android:name="ru.poas.patientassistant.client.ui.main.RecommendationsFragment"
-        android:label="recommendations_fragment" />
+        android:label="recommendations_fragment" >
+        <action
+            android:id="@+id/action_recommendationsFragment_pop"
+            app:popUpTo="@+id/recommendationsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
