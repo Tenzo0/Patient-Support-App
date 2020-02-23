@@ -50,5 +50,7 @@
     <!--Network -->
     <string name="please_wait">Пожалуйста подождите</string>
     <string name="network_error">"Network error"</string>
+    <string name="previous_recommendation">предыдущая рекомендация</string>
+    <string name="next_recommendation">следующая рекомендация</string>
 
 </resources>
