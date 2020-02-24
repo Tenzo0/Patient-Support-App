@@ -52,5 +52,6 @@
     <string name="network_error">"Network error"</string>
     <string name="previous_recommendation">предыдущая рекомендация</string>
     <string name="next_recommendation">следующая рекомендация</string>
+    <string name="calendar">календарь</string>
 
 </resources>

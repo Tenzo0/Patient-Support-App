@@ -14,7 +14,22 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
+                android:layout_width="match_parent">
+
+                <ImageButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:id="@+id/calendar_button"
+                    android:src="@drawable/ic_event"
+                    android:visibility="gone"
+                    android:layout_marginEnd="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/calendar" />
+
+            </androidx.appcompat.widget.Toolbar>
 
         </LinearLayout>
 
