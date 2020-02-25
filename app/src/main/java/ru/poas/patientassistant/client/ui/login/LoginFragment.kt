@@ -51,10 +51,6 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding.signupButton.setOnClickListener {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
-        }
-
         // Observer for the progress bar.
         viewModel.isProgressShow.observe(viewLifecycleOwner, Observer<Boolean> { isProgressShow ->
             if (isProgressShow) showDialog() else hideDialog()
