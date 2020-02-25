@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.calendar_button
-import kotlinx.android.synthetic.main.activity_main.view.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.viewmodel.main.RecommendationsViewModel
@@ -26,7 +24,9 @@ class RecommendationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.recommendations_fragment, container, false)
+        binding = DataBindingUtil
+            .inflate(layoutInflater, R.layout.recommendations_fragment,
+                container, false)
 
         val cldr = Calendar.getInstance()
         val day = cldr.get(Calendar.DAY_OF_MONTH)
@@ -34,15 +34,16 @@ class RecommendationsFragment : Fragment() {
         val year = cldr.get(Calendar.YEAR)
 
         val picker = DatePickerDialog(activity!!,
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            }, year, month, day)
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth -> },
+                year, month, day)
 
-        activity!!.toolbar.apply {
-            title = "Рекомендации"
-        }
-        activity!!.calendar_button.visibility = View.VISIBLE
         activity!!.calendar_button.setOnClickListener {
             picker.show()
+        }
+
+        binding.floatingActionButton.setOnClickListener {
+            Snackbar.make(binding.root, "FAB", Snackbar.LENGTH_LONG)
+                .show()
         }
 
         return binding.root
