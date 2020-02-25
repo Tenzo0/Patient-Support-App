@@ -11,6 +11,13 @@
     <color name="black">#1a1a1a</color>
     <color name="white">#ffffff</color>
 
-    <color name="back1">#00b498</color>
-    <color name="back2">#50cbe2</color>
+    <color name="loginBackgroundGradientBegin">#00b498</color>
+    <color name="loginBackgroundGradientEnd">#50cbe2</color>
+
+    <!--Colors for main window -->
+    <color name="mainPrimary">#3e4e88</color>
+    <color name="mainPrimaryDark">#242b58</color>
+    <color name="mainAccent">#2e269c</color>
+    <color name="mainBackground">#e8eaf1</color>
+
 </resources>
