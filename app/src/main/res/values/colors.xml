@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#54cfcb</color>
-    <color name="primaryDark">#0097a7</color>
-
-    <color name="accent">#d8f8f5</color>
-
-    <color name="secondary">#50cbe2</color>
-    <color name="secondaryDark">#49306d</color>
-    <color name="background">#f1fcfc</color>
     <color name="black">#1a1a1a</color>
     <color name="white">#ffffff</color>
 
-    <color name="loginBackgroundGradientBegin">#00b498</color>
+    <color name="loginPrimary">#2658a0</color>
+    <color name="loginBackgroundGradientBegin">#00538c</color>
     <color name="loginBackgroundGradientEnd">#50cbe2</color>
 
     <!--Colors for main window -->
     <color name="mainPrimary">#3e4e88</color>
     <color name="mainPrimaryDark">#242b58</color>
-    <color name="mainAccent">#2e269c</color>
     <color name="mainBackground">#e8eaf1</color>
-
+    <color name="error">#982729</color>
 </resources>
