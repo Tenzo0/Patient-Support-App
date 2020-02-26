@@ -52,11 +52,6 @@ class LoginViewModel : BaseViewModel() {
             //Show Progress bar
             _isProgressShow.value = true
 
-            var prevPhone = ""
-
-            if (UserPreferences.getPhone() != null)
-                prevPhone = UserPreferences.getPhone()!!
-
             //Request for auth user
             try {
                 val user =
@@ -68,7 +63,7 @@ class LoginViewModel : BaseViewModel() {
                 //If roles[0] > 1 then ask the user what roles need to be chosen
                 UserPreferences.saveUser(user!!, password, 0)
 
-                if (prevPhone == phone)
+                if(UserPreferences.isTemporaryPassword())
                     _isAuthed.value = LoginType.AUTHED
                 else
                     _isAuthed.value = LoginType.FIRTSLY_AUTHED

@@ -43,6 +43,8 @@ object UserPreferences {
 
     fun getPassword() = preferences.getString(PREFERENCES_USER_PASSWORD, null)
 
+    fun isTemporaryPassword() = preferences.getBoolean(PREFERENCES_USER_IS_TEMPORARY_PASSWORD, false)
+
     fun getId() = preferences.getLong(PREFERENCES_USER_ID, Long.MAX_VALUE)
 
     fun getRoleId() = preferences.getLong(PREFERENCES_USER_ROLE_ID, Long.MAX_VALUE)
