@@ -11,8 +11,17 @@ import okhttp3.Credentials
 import ru.poas.patientassistant.client.api.UserNetwork
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
+import ru.poas.patientassistant.client.vo.Role
+import ru.poas.patientassistant.client.vo.User
 
 class LoginViewModel : BaseViewModel() {
+
+    private var _roles = MutableLiveData<List<Role>>(emptyList())
+
+    val roles: LiveData<List<Role>>
+        get() = _roles
+
+    var chosenRole: Role? = null
 
     enum class LoginType {
         NOT_AUTHED, FIRTSLY_AUTHED, AUTHED
@@ -34,17 +43,9 @@ class LoginViewModel : BaseViewModel() {
         _isAuthed.value =
             LoginType.NOT_AUTHED
 
-        //TODO if (UserPreferences.getPhone() != null) {
-        //    authUser(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
-        //}
-    }
-
-    /**
-     * Cancel all coroutines when the ViewModel is cleared
-     */
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
+        if (UserPreferences.getPhone() != null) {
+            authUser(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
+        }
     }
 
     fun authUser(phone: String, password: String) {
@@ -58,10 +59,8 @@ class LoginViewModel : BaseViewModel() {
                     UserNetwork.userService.login(Credentials.basic(phone, password))
                        .body()
 
-                // Save the user to preferences
-                //TODO replace roles[0]!!!
-                //If roles[0] > 1 then ask the user what roles need to be chosen
-                UserPreferences.saveUser(user!!, password, 0)
+                _roles.value = user!!.roles
+                UserPreferences.saveUser(user, password)
 
                 if(UserPreferences.isTemporaryPassword())
                     _isAuthed.value = LoginType.AUTHED
@@ -71,9 +70,8 @@ class LoginViewModel : BaseViewModel() {
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
-
-                // Clear the user preferences
                 UserPreferences.clear()
+                _roles.value = emptyList()
                 _isAuthed.value = LoginType.NOT_AUTHED
                 _eventNetworkError.value = true
             }
@@ -81,6 +79,10 @@ class LoginViewModel : BaseViewModel() {
             // Hide Progress Bar
             _isProgressShow.value = false
         }
+    }
+
+    fun chooseRole(role: Role) {
+        UserPreferences.saveRole(role)
     }
 
     /**

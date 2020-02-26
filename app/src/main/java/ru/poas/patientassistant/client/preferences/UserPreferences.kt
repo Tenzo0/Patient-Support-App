@@ -2,6 +2,7 @@ package ru.poas.patientassistant.client.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
+import ru.poas.patientassistant.client.vo.Role
 import ru.poas.patientassistant.client.vo.User
 
 object UserPreferences {
@@ -15,7 +16,7 @@ object UserPreferences {
     private const val PREFERENCES_USER_LAST_NAME = "user_last_name"
     private const val PREFERENCES_USER_PASSWORD = "user_password"
     private const val PREFERENCES_USER_PHONE = "user_phone"
-    private const val PREFERENCES_USER_ROLE_DESCRIPTION = "user_role_desctiption"
+    private const val PREFERENCES_USER_ROLE_DESCRIPTION = "user_role_description"
     private const val PREFERENCES_USER_ROLE_ID = "user_role_id"
     private const val PREFERENCES_USER_ROLE_NAME = "user_role_name"
 
@@ -23,7 +24,7 @@ object UserPreferences {
         preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     }
 
-    fun saveUser(user: User, password: String, chosenRole: Int) {
+    fun saveUser(user: User, password: String) {
         val editor: SharedPreferences.Editor = preferences.edit()
         with(editor) {
             putString(PREFERENCES_USER_FIRST_NAME, user.firstName)
@@ -32,9 +33,16 @@ object UserPreferences {
             putString(PREFERENCES_USER_LAST_NAME, user.lastName)
             putString(PREFERENCES_USER_PASSWORD, password)
             putString(PREFERENCES_USER_PHONE, user.phone)
-            putString(PREFERENCES_USER_ROLE_DESCRIPTION, user.roles[chosenRole].description)
-            putLong(PREFERENCES_USER_ROLE_ID, user.roles[chosenRole].id)
-            putString(PREFERENCES_USER_ROLE_NAME, user.roles[chosenRole].name)
+            apply()
+        }
+    }
+
+    fun saveRole(role: Role) {
+        val editor: SharedPreferences.Editor = preferences.edit()
+        with(editor) {
+            putString(PREFERENCES_USER_ROLE_DESCRIPTION, role.description)
+            putLong(PREFERENCES_USER_ROLE_ID, role.id)
+            putString(PREFERENCES_USER_ROLE_NAME, role.name)
             apply()
         }
     }

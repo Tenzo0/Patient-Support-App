@@ -19,7 +19,6 @@ import ru.poas.patientassistant.client.utils.hideKeyboard
 class LoginFragment : Fragment() {
 
     private lateinit var binding: LoginFragmentBinding
-
     private lateinit var viewModel: LoginViewModel
 
     override fun onCreateView(
@@ -59,6 +58,16 @@ class LoginFragment : Fragment() {
         })
 
         viewModel.isAuthed.observe(viewLifecycleOwner, Observer<LoginViewModel.LoginType> { authed ->
+            if (authed == LoginViewModel.LoginType.AUTHED ||
+                    authed == LoginViewModel.LoginType.FIRTSLY_AUTHED)
+                //TODO choosing role
+                if (viewModel.chosenRole == null) {
+                    viewModel.chosenRole = viewModel.roles.value?.first()
+                    if (viewModel.chosenRole != null)
+                        viewModel.chooseRole(viewModel.chosenRole!!)
+                }
+
+            //Navigation
             when (authed) {
                 LoginViewModel.LoginType.FIRTSLY_AUTHED -> {
                     activity?.hideKeyboard()
