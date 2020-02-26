@@ -5,14 +5,12 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_login.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.LoginFragmentBinding
 import ru.poas.patientassistant.client.utils.hideKeyboard
@@ -52,7 +50,7 @@ class LoginFragment : Fragment() {
 
         // Observer for the progress bar.
         viewModel.isProgressShow.observe(viewLifecycleOwner, Observer<Boolean> { isProgressShow ->
-            if (isProgressShow) showDialog() else hideDialog()
+            if (isProgressShow) binding.progressbar.show() else binding.progressbar.hide()
         })
 
         // Observer fot rhe network error
@@ -88,16 +86,6 @@ class LoginFragment : Fragment() {
                 .show()
             viewModel.onNetworkErrorShown()
         }
-    }
-
-    private fun showDialog() {
-        binding.progressbar.show()
-        //binding.progressbar.visibility = ProgressBar.VISIBLE
-    }
-
-    private fun hideDialog() {
-        binding.progressbar.hide()
-            //.visibility = ProgressBar.GONE
     }
 
     private fun checkInputData(): Boolean {
