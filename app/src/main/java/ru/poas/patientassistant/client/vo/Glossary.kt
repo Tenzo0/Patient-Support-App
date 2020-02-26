@@ -1,31 +1,9 @@
 package ru.poas.patientassistant.client.vo
 
-import ru.poas.patientassistant.client.db.glossary.GlossaryEntity
+import com.squareup.moshi.Json
 
-data class Glossary(
-    val id: Long,
-    val authorId: Long,
-    val authorFirstName: String,
-    val authorLastName: String,
-    val content: String,
-    val dateOfCreation: String,
-    val link: String,
-    val shortTitle: String,
-    val title: String,
-    val visible: Boolean
+data class Glossary (
+    @field:Json(name = "id") val id: Long,
+    @field:Json(name = "recommendationId") val recommendationId: Long,
+    @field:Json(name = "glossaryItems") val glossaryItems: List<GlossaryItem>
 )
-
-fun Glossary.asDatabaseModel(): GlossaryEntity = GlossaryEntity(
-    id,
-    authorId,
-    authorFirstName,
-    authorLastName,
-    content,
-    dateOfCreation,
-    link.orEmpty(),
-    shortTitle,
-    title,
-    visible
-)
-
-fun List<Glossary>.asDatabaseModel(): List<GlossaryEntity> = map { it.asDatabaseModel() }

@@ -24,8 +24,8 @@ class RecommendationsRepository(private val database: RecommendationsDatabase) {
                 .getUserRecommendationsByPatientId(credentials, UserPreferences.getId())
                 .body()
 
-                database.recommendationsDao.clear()
-                database.recommendationsDao.insert(recommendation!!.asDatabaseModel())
+            database.recommendationsDao.clear()
+            database.recommendationsDao.insert(recommendation!!.asDatabaseModel())
         }
     }
 }

@@ -1,5 +1,6 @@
 package ru.poas.patientassistant.client.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
@@ -7,24 +8,28 @@ import kotlinx.coroutines.withContext
 import ru.poas.patientassistant.client.api.GlossaryNetwork
 import ru.poas.patientassistant.client.db.glossary.GlossaryDatabase
 import ru.poas.patientassistant.client.db.glossary.asDomainModel
-import ru.poas.patientassistant.client.vo.Glossary
+import ru.poas.patientassistant.client.preferences.UserPreferences
+import ru.poas.patientassistant.client.vo.GlossaryItem
 import ru.poas.patientassistant.client.vo.asDatabaseModel
-import timber.log.Timber
 
 class GlossaryRepository(private val database: GlossaryDatabase) {
 
-    val glossary: LiveData<List<Glossary>> =
+    val glossaryItems: LiveData<List<GlossaryItem>> =
         Transformations.map(database.glossaryDao.getAll()) { it.asDomainModel() }
 
     /**
      * refresh the glossary in the cache
      */
-    suspend fun refreshGlossary(token: String) {
+    suspend fun refreshGlossary(credentials: String) {
         withContext(Dispatchers.IO) {
-            Timber.d("refresh glossary")
-            val glossary = GlossaryNetwork.glossaryService.getGlossary(token).body().orEmpty()
+            val glossary = GlossaryNetwork.glossaryService
+                .getGlossary(credentials, UserPreferences.getRecommendationId())
+                .body()
+            Log.i("tag4", glossary.toString())
             database.glossaryDao.clear()
-            database.glossaryDao.insert(glossary.asDatabaseModel())
+            glossary?.glossaryItems?.asDatabaseModel()?.let {
+                database.glossaryDao.insert(it)
+            }
         }
     }
 }

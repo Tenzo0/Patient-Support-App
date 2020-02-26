@@ -1,18 +1,14 @@
 package ru.poas.patientassistant.client.ui.main.glossary
 
-import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
 import ru.poas.patientassistant.client.db.glossary.GlossaryDatabase
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.repository.GlossaryRepository
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
-import ru.poas.patientassistant.client.vo.Glossary
-import timber.log.Timber
+import ru.poas.patientassistant.client.vo.GlossaryItem
 
 class GlossaryViewModel(
     private val dataSource: GlossaryDatabase
@@ -20,7 +16,7 @@ class GlossaryViewModel(
 
     private val repository: GlossaryRepository = GlossaryRepository(dataSource)
 
-    val glossary: LiveData<List<Glossary>> = repository.glossary
+    val glossaryItem: LiveData<List<GlossaryItem>> = repository.glossaryItems
 
     /**
      * Cancel all coroutines when the ViewModel is cleared
@@ -40,11 +36,12 @@ class GlossaryViewModel(
                         UserPreferences.getPassword()!!
                     )
                 )
+                Log.i("tag3", repository.glossaryItems.value?.first()?.title)
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
+                Log.i("tag2", e.toString())
                 _eventNetworkError.value = true
-                Timber.e(e)
             }
             _isProgressShow.value = false
         }
@@ -54,8 +51,7 @@ class GlossaryViewModel(
      * Factory for constructing [GlossaryViewModel] with parameters
      */
     class GlossaryViewModelFactory(
-        private val dataSource: GlossaryDatabase,
-        private val application: Application
+        private val dataSource: GlossaryDatabase
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -70,7 +66,7 @@ class GlossaryViewModel(
     /**
      * Variable that tells the Fragment to navigate to a specific [GlossaryDetailsFragment]
      */
-    private val _navigateToDefinitionDetails = MutableLiveData<Glossary>()
+    private val _navigateToDefinitionDetails = MutableLiveData<GlossaryItem>()
 
     /**
      * If this is non-null, immediately navigate to [GlossaryDetailsFragment]
@@ -91,8 +87,8 @@ class GlossaryViewModel(
     /**
      * Navigation for the DefinitionDetails Fragment.
      */
-    fun onDefinitionClicked(glossary: Glossary) {
-        _navigateToDefinitionDetails.value = glossary
+    fun onDefinitionClicked(glossaryItem: GlossaryItem) {
+        _navigateToDefinitionDetails.value = glossaryItem
     }
 
 

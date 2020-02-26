@@ -1,5 +1,6 @@
 package ru.poas.patientassistant.client.ui.main.recommendations
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,7 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
 
                 //Save information about user recommendation in preferences
                 repository.userRecommendation.value?.let {
+                    Log.i("tag", "${it.operationDate} ${it.recommendationId}")
                     UserPreferences.saveUserRecommendation(it)
                 }
 

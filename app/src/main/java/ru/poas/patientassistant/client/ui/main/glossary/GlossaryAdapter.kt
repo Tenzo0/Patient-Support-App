@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.GlossaryFragmentItemBinding
-import ru.poas.patientassistant.client.vo.Glossary
+import ru.poas.patientassistant.client.vo.GlossaryItem
 
 /**
  * Adapter which adapt glossary entities from database
  * to the [RecyclerView] with Data Binging
  */
 class GlossaryAdapter(private val clickListener: ItemClickListener) :
-    ListAdapter<Glossary, GlossaryAdapter.ViewHolder>(DefinitionDiffCallback()) {
+    ListAdapter<GlossaryItem, GlossaryAdapter.ViewHolder>(GlossaryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         LayoutInflater.from(parent.context)
@@ -31,7 +31,7 @@ class GlossaryAdapter(private val clickListener: ItemClickListener) :
     class ViewHolder private constructor(private val binding: GlossaryFragmentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Glossary, clickListener: ItemClickListener) {
+        fun bind(item: GlossaryItem, clickListener: ItemClickListener) {
             binding.glossaryItem = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -52,19 +52,19 @@ class GlossaryAdapter(private val clickListener: ItemClickListener) :
 /**
  * Handle each item click
  */
-class ItemClickListener(val clickListener: (glossary: Glossary) -> Unit) {
-    fun onClick(glossary: Glossary) = clickListener(glossary)
+class ItemClickListener(val clickListener: (glossaryItem: GlossaryItem) -> Unit) {
+    fun onClick(glossaryItem: GlossaryItem) = clickListener(glossaryItem)
 }
 
 /**
  * Diff util for callback in case of difference of definitions in dictionary
  */
-class DefinitionDiffCallback : DiffUtil.ItemCallback<Glossary>() {
-    override fun areItemsTheSame(oldItem: Glossary, newItem: Glossary): Boolean {
+class GlossaryDiffCallback : DiffUtil.ItemCallback<GlossaryItem>() {
+    override fun areItemsTheSame(oldItem: GlossaryItem, newItem: GlossaryItem): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Glossary, newItem: Glossary): Boolean {
+    override fun areContentsTheSame(oldItem: GlossaryItem, newItem: GlossaryItem): Boolean {
         return oldItem == newItem
     }
 

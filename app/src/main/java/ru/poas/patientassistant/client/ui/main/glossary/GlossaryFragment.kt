@@ -1,6 +1,5 @@
 package ru.poas.patientassistant.client.ui.main.glossary
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -40,8 +39,7 @@ class GlossaryFragment : Fragment() {
         val database = getGlossaryDatabase(application)
         val viewModelFactory =
             GlossaryViewModel.GlossaryViewModelFactory(
-                database,
-                application
+                database
             )
         viewModel =
             ViewModelProvider(
@@ -89,7 +87,7 @@ class GlossaryFragment : Fragment() {
         /**
          * DataBinding for this Fragment
          */
-        viewModel.glossary.observe(viewLifecycleOwner, Observer {
+        viewModel.glossaryItem.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
                 binding.glossarySwipeRefresh.isRefreshing = false

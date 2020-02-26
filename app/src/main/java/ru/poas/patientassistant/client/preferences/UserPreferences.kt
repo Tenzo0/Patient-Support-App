@@ -2,6 +2,7 @@ package ru.poas.patientassistant.client.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import ru.poas.patientassistant.client.vo.Role
 import ru.poas.patientassistant.client.vo.User
 import ru.poas.patientassistant.client.vo.UserRecommendation
@@ -20,7 +21,7 @@ object UserPreferences {
     private const val PREFERENCES_USER_ROLE_DESCRIPTION = "user_role_description"
     private const val PREFERENCES_USER_ROLE_ID = "user_role_id"
     private const val PREFERENCES_USER_ROLE_NAME = "user_role_name"
-    private const val PREFERENCES_USER_OPERATION_DATE = "user_recommendation_id"
+    private const val PREFERENCES_USER_OPERATION_DATE = "user_operation_date"
     private const val PREFERENCES_USER_RECOMMENDATION_ID = "user_recommendation_id"
 
     fun init(context: Context) {
@@ -36,6 +37,7 @@ object UserPreferences {
             putString(PREFERENCES_USER_LAST_NAME, user.lastName)
             putString(PREFERENCES_USER_PASSWORD, password)
             putString(PREFERENCES_USER_PHONE, user.phone)
+            putLong(PREFERENCES_USER_RECOMMENDATION_ID, 0)
             apply()
         }
     }
@@ -53,8 +55,8 @@ object UserPreferences {
     fun saveUserRecommendation(userRecommendation: UserRecommendation) {
         val editor: SharedPreferences.Editor = preferences.edit()
         with(editor) {
-            putLong(PREFERENCES_USER_RECOMMENDATION_ID, userRecommendation.recommendationId)
             putString(PREFERENCES_USER_OPERATION_DATE, userRecommendation.operationDate)
+            putLong(PREFERENCES_USER_RECOMMENDATION_ID, userRecommendation.recommendationId)
             apply()
         }
     }
@@ -74,4 +76,6 @@ object UserPreferences {
         editor.clear()
         editor.apply()
     }
+
+    fun getRecommendationId() = preferences.getLong(PREFERENCES_USER_RECOMMENDATION_ID, 0)
 }

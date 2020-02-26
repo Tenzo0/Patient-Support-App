@@ -8,7 +8,7 @@
 
         <variable
             name="glossaryItem"
-            type="ru.poas.patientassistant.client.vo.Glossary" />
+            type="ru.poas.patientassistant.client.vo.GlossaryItem" />
 
         <variable
             name="clickListener"
