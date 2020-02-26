@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -90,11 +91,13 @@ class LoginFragment : Fragment() {
     }
 
     private fun showDialog() {
-        requireActivity().progressbar.visibility = View.VISIBLE
+        binding.progressbar.show()
+        //binding.progressbar.visibility = ProgressBar.VISIBLE
     }
 
     private fun hideDialog() {
-        requireActivity().progressbar.visibility = View.GONE
+        binding.progressbar.hide()
+            //.visibility = ProgressBar.GONE
     }
 
     private fun checkInputData(): Boolean {
