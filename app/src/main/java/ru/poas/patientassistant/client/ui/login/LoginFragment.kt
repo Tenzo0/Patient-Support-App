@@ -1,6 +1,5 @@
 package ru.poas.patientassistant.client.ui.login
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -12,16 +11,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_login.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.LoginFragmentBinding
 import ru.poas.patientassistant.client.utils.hideKeyboard
-import ru.poas.patientassistant.client.viewmodel.login.LoginViewModel
+
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: LoginFragmentBinding
-
-    private var progressDialog: ProgressDialog? = null
 
     private lateinit var viewModel: LoginViewModel
 
@@ -45,7 +43,7 @@ class LoginFragment : Fragment() {
         binding.signinButton.setOnClickListener {
             if (checkInputData()) {
                 viewModel.authUser(
-                    binding.phoneNumberEditText.text.toString(),
+                    binding.phoneNumberEditText.rawText,
                     binding.passwordEditText.text.toString()
                 )
             }
@@ -85,17 +83,19 @@ class LoginFragment : Fragment() {
 
     private fun onNetworkError() {
         if (!viewModel.isNetworkErrorShown.value!!) {
-            Snackbar.make(binding.root, getString(R.string.network_error), Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)
                 .show()
             viewModel.onNetworkErrorShown()
         }
     }
 
     private fun showDialog() {
-        progressDialog = ProgressDialog.show(this.activity, "", getString(R.string.please_wait))
+        requireActivity().progressbar.visibility = View.VISIBLE
     }
 
-    private fun hideDialog() = progressDialog?.dismiss()
+    private fun hideDialog() {
+        requireActivity().progressbar.visibility = View.GONE
+    }
 
     private fun checkInputData(): Boolean {
         var isOk = true

@@ -12,16 +12,16 @@ abstract class BaseViewModel : ViewModel() {
      * This is the job for all coroutines started by this ViewModel.
      * Cancelling this job will cancel all coroutines started by this ViewModel.
      */
-    protected val viewModelJob = SupervisorJob()
+    val viewModelJob = SupervisorJob()
 
     /** A [CoroutineScope] keeps track of all coroutines started by this ViewModel. */
-    protected val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     /**
      * Event triggered for network error. This is private to avoid exposing a
      * way to set this value to observers.
      */
-    protected var _eventNetworkError = MutableLiveData<Boolean>()
+    var _eventNetworkError = MutableLiveData<Boolean>()
 
     /**
      * Event triggered for network error. Views should use this to get access
@@ -34,7 +34,7 @@ abstract class BaseViewModel : ViewModel() {
      * Flag to display the error message. This is private to avoid exposing a
      * way to set this value to observers.
      */
-    protected var _isNetworkErrorShown = MutableLiveData<Boolean>()
+    var _isNetworkErrorShown = MutableLiveData<Boolean>()
 
     /**
      * Flag to display the error message. Views should use this to get access
@@ -48,7 +48,7 @@ abstract class BaseViewModel : ViewModel() {
      * Flag to display the progress bar. This is private to avoid exposing a
      * way to set this value to observers.
      */
-    protected var _isProgressShow = MutableLiveData<Boolean>()
+    var _isProgressShow = MutableLiveData<Boolean>()
 
     /**
      * Flag to display the progress bar.
@@ -69,5 +69,11 @@ abstract class BaseViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    init {
+        _eventNetworkError.value = false
+        _isNetworkErrorShown.value = false
+        _isProgressShow.value = false
     }
 }

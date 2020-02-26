@@ -1,11 +1,15 @@
-package ru.poas.patientassistant.client.viewmodel.login
+package ru.poas.patientassistant.client.ui.login
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
+import okhttp3.Credentials
+import ru.poas.patientassistant.client.api.UserNetwork
+import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 
 class LoginViewModel : BaseViewModel() {
@@ -27,10 +31,8 @@ class LoginViewModel : BaseViewModel() {
         get() = _isAuthed
 
     init {
-        _eventNetworkError.value = false
-        _isNetworkErrorShown.value = false
-        _isProgressShow.value = false
-        _isAuthed.value = LoginType.NOT_AUTHED
+        _isAuthed.value =
+            LoginType.NOT_AUTHED
 
         //TODO if (UserPreferences.getPhone() != null) {
         //    authUser(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
@@ -46,7 +48,6 @@ class LoginViewModel : BaseViewModel() {
     }
 
     fun authUser(phone: String, password: String) {
-        /* TODO
         viewModelScope.launch {
             //Show Progress bar
             _isProgressShow.value = true
@@ -59,13 +60,13 @@ class LoginViewModel : BaseViewModel() {
             //Request for auth user
             try {
                 val user =
-                    UserNetwork.userService.login(getTokenFromPhoneAndPassword(phone, password))
-                        .await().body()
+                    UserNetwork.userService.login(Credentials.basic(phone, password))
+                       .body()
 
                 // Save the user to preferences
-                UserPreferences.saveUser(user!!, password)
-
-                Timber.i(user.toString())
+                //TODO replace roles[0]!!!
+                //If roles[0] > 1 then ask the user what roles need to be chosen
+                UserPreferences.saveUser(user!!, password, 0)
 
                 if (prevPhone == phone)
                     _isAuthed.value = LoginType.AUTHED
@@ -80,16 +81,11 @@ class LoginViewModel : BaseViewModel() {
                 UserPreferences.clear()
                 _isAuthed.value = LoginType.NOT_AUTHED
                 _eventNetworkError.value = true
-                Timber.e(e)
             }
 
             // Hide Progress Bar
             _isProgressShow.value = false
-        }*/
-
-        _eventNetworkError.value = false
-        _isNetworkErrorShown.value = false
-        _isAuthed.value = LoginType.FIRTSLY_AUTHED //TODO delete this lines
+        }
     }
 
     /**
