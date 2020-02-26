@@ -1,8 +1,9 @@
-package ru.poas.patientassistant.client.db
+package ru.poas.patientassistant.client.db.recommendations
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import ru.poas.patientassistant.client.db.recommendations.RecommendationEntity
 
 @Dao
 interface RecommendationsDao {

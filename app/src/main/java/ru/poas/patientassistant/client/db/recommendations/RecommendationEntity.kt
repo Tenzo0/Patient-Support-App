@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.db
+package ru.poas.patientassistant.client.db.recommendations
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

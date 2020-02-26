@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.db
+package ru.poas.patientassistant.client.db.recommendations
 
 import android.content.Context
 import androidx.room.Database
@@ -12,7 +12,7 @@ abstract class RecommendationsDatabase: RoomDatabase() {
 
 private lateinit var INSTANCE: RecommendationsDatabase
 
-fun getRecommendationsDatabase(context: Context): RecommendationsDatabase{
+fun getRecommendationsDatabase(context: Context): RecommendationsDatabase {
     synchronized(RecommendationsDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
