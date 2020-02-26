@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import ru.poas.patientassistant.client.vo.Role
 import ru.poas.patientassistant.client.vo.User
+import ru.poas.patientassistant.client.vo.UserRecommendation
 
 object UserPreferences {
     private lateinit var preferences: SharedPreferences
@@ -19,6 +20,8 @@ object UserPreferences {
     private const val PREFERENCES_USER_ROLE_DESCRIPTION = "user_role_description"
     private const val PREFERENCES_USER_ROLE_ID = "user_role_id"
     private const val PREFERENCES_USER_ROLE_NAME = "user_role_name"
+    private const val PREFERENCES_USER_OPERATION_DATE = "user_recommendation_id"
+    private const val PREFERENCES_USER_RECOMMENDATION_ID = "user_recommendation_id"
 
     fun init(context: Context) {
         preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -43,6 +46,15 @@ object UserPreferences {
             putString(PREFERENCES_USER_ROLE_DESCRIPTION, role.description)
             putLong(PREFERENCES_USER_ROLE_ID, role.id)
             putString(PREFERENCES_USER_ROLE_NAME, role.name)
+            apply()
+        }
+    }
+
+    fun saveUserRecommendation(userRecommendation: UserRecommendation) {
+        val editor: SharedPreferences.Editor = preferences.edit()
+        with(editor) {
+            putLong(PREFERENCES_USER_RECOMMENDATION_ID, userRecommendation.recommendationId)
+            putString(PREFERENCES_USER_OPERATION_DATE, userRecommendation.operationDate)
             apply()
         }
     }

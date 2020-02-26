@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
+import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase
+import ru.poas.patientassistant.client.vo.UserRecommendation
 import java.util.*
 
 class RecommendationsFragment : Fragment() {
@@ -27,6 +30,13 @@ class RecommendationsFragment : Fragment() {
             .inflate(layoutInflater, R.layout.recommendations_fragment,
                 container, false)
 
+        //Database and viewmodel connection
+        val database = getRecommendationsDatabase(requireNotNull(this.activity)
+            .application)
+        viewModel = ViewModelProvider(this, RecommendationsViewModel
+            .RecommendationsViewModelFactory(database)
+        ).get(RecommendationsViewModel::class.java)
+
         val cldr = Calendar.getInstance()
         val day = cldr.get(Calendar.DAY_OF_MONTH)
         val month = cldr.get(Calendar.MONTH)
@@ -41,18 +51,12 @@ class RecommendationsFragment : Fragment() {
         }
 
         binding.floatingActionButton.setOnClickListener {
+            viewModel.refreshRecommendations()
             Snackbar.make(binding.root, "FAB", Snackbar.LENGTH_LONG)
                 .show()
         }
 
         return binding.root
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        //viewModel = ViewModelProvider(this).get(RecommendationsViewModel::class.java)
-        // TODO: Use a ViewModel
-    }
-
 
 }
