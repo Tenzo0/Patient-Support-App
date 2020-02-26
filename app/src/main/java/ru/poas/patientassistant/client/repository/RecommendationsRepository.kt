@@ -5,7 +5,7 @@ import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.poas.patientassistant.client.vo.Recommendation
-import ru.poas.patientassistant.client.db.RecommendationsDatabase
+import ru.poas.patientassistant.client.db.recommendations.RecommendationsDatabase
 
 class RecommendationsRepository(private val database: RecommendationsDatabase) {
     val allRecommendations: LiveData<List<Recommendation>> =
