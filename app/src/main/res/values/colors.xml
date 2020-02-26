@@ -12,4 +12,8 @@
     <color name="mainPrimaryDark">#242b58</color>
     <color name="mainBackground">#e8eaf1</color>
     <color name="error">#982729</color>
+
+    <color name="red">#ff4d4d</color>
+    <color name="yellow">#ffeb3b</color>
+    <color name="green">#8BC34A</color>
 </resources>

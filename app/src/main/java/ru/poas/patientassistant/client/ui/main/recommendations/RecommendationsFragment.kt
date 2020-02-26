@@ -50,7 +50,7 @@ class RecommendationsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RecommendationsViewModel::class.java)
+        //viewModel = ViewModelProvider(this).get(RecommendationsViewModel::class.java)
         // TODO: Use a ViewModel
     }
 

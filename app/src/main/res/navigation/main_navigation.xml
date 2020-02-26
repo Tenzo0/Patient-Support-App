@@ -6,8 +6,20 @@
 
     <fragment
         android:id="@+id/glossaryFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.GlossaryFragment"
-        android:label="glossary_fragment" />
+        android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryFragment"
+        android:label="glossary_fragment" >
+        <action
+            android:id="@+id/action_glossaryFragment_to_glossaryDetailsFragment"
+            app:destination="@id/glossaryDetailsFragment" >
+            <argument
+                android:name="title"
+                app:argType="string" />
+            <argument
+                android:name="content"
+                app:argType="string" />
+        </action>
+
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.poas.patientassistant.client.ui.main.ProfileFragment"
@@ -20,5 +32,20 @@
         android:id="@+id/recommendationsFragment"
         android:name="ru.poas.patientassistant.client.ui.main.recommendations.RecommendationsFragment"
         android:label="recommendations_fragment" />
+    <fragment
+        android:id="@+id/glossaryDetailsFragment"
+        android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryDetailsFragment"
+        android:label="GlossaryDetailsFragment" >
+        <action
+            android:id="@+id/action_glossaryDetailsFragment_pop"
+            app:popUpTo="@id/glossaryDetailsFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="content"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

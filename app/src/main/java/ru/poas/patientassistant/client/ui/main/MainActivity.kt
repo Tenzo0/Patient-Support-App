@@ -17,16 +17,20 @@ import ru.poas.patientassistant.client.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(
-             this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         drawerLayout = binding.drawerLayout
 
         //Set navigation drawer
+        setupToolbarWithNavController()
+    }
+
+    private fun setupToolbarWithNavController() {
         val navController = findNavController(R.id.main_nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -34,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.profileFragment,
                 R.id.glossaryFragment,
                 R.id.medicinesFragment),
-                drawerLayout)
+            drawerLayout)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         NavigationUI.setupWithNavController(binding.navView, navController)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -44,6 +48,12 @@ class MainActivity : AppCompatActivity() {
                         title = "Рекомендации"
                     }
                     binding.calendarButton.visibility = View.VISIBLE
+                }
+                R.id.glossaryFragment -> {
+                    binding.toolbar.apply {
+                        title = "Словарь"
+                    }
+                    binding.calendarButton.visibility = View.GONE
                 }
                 else -> {
                     binding.calendarButton.visibility = View.GONE

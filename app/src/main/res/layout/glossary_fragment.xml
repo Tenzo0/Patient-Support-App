@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.GlossaryFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+
+        <variable
+            name="dictionaryViewModel"
+            type="ru.poas.patientassistant.client.ui.main.glossary.GlossaryViewModel" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/glossary_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="glossary" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/glossary_list"
+            android:name="com.example.b2docoks.ui.dictionary.DictionaryFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>
