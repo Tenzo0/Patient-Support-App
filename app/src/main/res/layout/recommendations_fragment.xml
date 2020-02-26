@@ -7,7 +7,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.RecommendationsFragment"
+        tools:context=".ui.main.recommendations.RecommendationsFragment"
         android:background="@color/mainBackground">
 
         <ImageButton

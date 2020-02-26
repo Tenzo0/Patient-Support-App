@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main
+package ru.poas.patientassistant.client.ui.main.recommendations
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -12,7 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
-import ru.poas.patientassistant.client.viewmodel.main.RecommendationsViewModel
 import java.util.*
 
 class RecommendationsFragment : Fragment() {

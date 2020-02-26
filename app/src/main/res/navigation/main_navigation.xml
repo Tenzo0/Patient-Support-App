@@ -18,7 +18,7 @@
         android:label="medicines_fragment" />
     <fragment
         android:id="@+id/recommendationsFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.RecommendationsFragment"
+        android:name="ru.poas.patientassistant.client.ui.main.recommendations.RecommendationsFragment"
         android:label="recommendations_fragment" />
 
 </navigation>
