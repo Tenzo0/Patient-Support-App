@@ -31,19 +31,8 @@ class GlossaryDetailsFragment : Fragment() {
             container,
             false
         )
-        init()
-        return binding.root
-    }
 
-    private fun init() {
-        with(binding) {
-            requireActivity().toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-            requireActivity().toolbar.setNavigationOnClickListener {
-                findNavController().navigateUp()
-                val mainActivity = activity as MainActivity
-                mainActivity.setupToolbarWithNavController()
-            }
-        }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

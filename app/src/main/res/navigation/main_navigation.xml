@@ -36,16 +36,18 @@
         android:id="@+id/glossaryDetailsFragment"
         android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryDetailsFragment"
         android:label="GlossaryDetailsFragment" >
-        <action
-            android:id="@+id/action_glossaryDetailsFragment_pop"
-            app:popUpTo="@id/glossaryDetailsFragment"
-            app:popUpToInclusive="true" />
+
         <argument
             android:name="title"
             app:argType="string" />
         <argument
             android:name="content"
             app:argType="string" />
+        <action
+            android:id="@+id/action_glossaryDetailsFragment_to_glossaryFragment"
+            app:destination="@id/glossaryFragment"
+            app:popUpTo="@id/glossaryFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
