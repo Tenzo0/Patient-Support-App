@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setupToolbarWithNavController()
     }
 
-    private fun setupToolbarWithNavController() {
+    fun setupToolbarWithNavController() {
         val navController = findNavController(R.id.main_nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.GlossaryDetailsFragmentBinding
+import ru.poas.patientassistant.client.ui.main.MainActivity
 
 class GlossaryDetailsFragment : Fragment() {
 
@@ -39,6 +40,8 @@ class GlossaryDetailsFragment : Fragment() {
             requireActivity().toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             requireActivity().toolbar.setNavigationOnClickListener {
                 findNavController().navigateUp()
+                val mainActivity = activity as MainActivity
+                mainActivity.setupToolbarWithNavController()
             }
         }
     }
