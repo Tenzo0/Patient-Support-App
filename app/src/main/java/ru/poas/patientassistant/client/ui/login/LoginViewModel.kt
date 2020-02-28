@@ -1,7 +1,6 @@
 package ru.poas.patientassistant.client.ui.login
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,7 @@ import ru.poas.patientassistant.client.api.UserNetwork
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import ru.poas.patientassistant.client.vo.Role
-import ru.poas.patientassistant.client.vo.User
+import timber.log.Timber
 
 class LoginViewModel : BaseViewModel() {
 
@@ -48,6 +47,8 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
+    var _isPasswordUpdated = MutableLiveData<Boolean>()
+
     fun authUser(phone: String, password: String) {
         viewModelScope.launch {
             //Show Progress bar
@@ -62,17 +63,50 @@ class LoginViewModel : BaseViewModel() {
                 _roles.value = user!!.roles
                 UserPreferences.saveUser(user, password)
 
-                if(UserPreferences.isTemporaryPassword())
-                    _isAuthed.value = LoginType.AUTHED
-                else
+                if(UserPreferences.isTemporaryPassword()) {
                     _isAuthed.value = LoginType.FIRTSLY_AUTHED
+                    _isPasswordUpdated.value = false
+                }
+                else {
+                    _isAuthed.value = LoginType.AUTHED
+                    _isPasswordUpdated.value = true
+                }
 
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
+                Timber.e(e)
                 UserPreferences.clear()
                 _roles.value = emptyList()
                 _isAuthed.value = LoginType.NOT_AUTHED
+                _eventNetworkError.value = true
+            }
+
+            // Hide Progress Bar
+            _isProgressShow.value = false
+        }
+    }
+
+    fun updatePassword(password: String) {
+        viewModelScope.launch {
+            //Show Progress bar
+            _isProgressShow.value = true
+
+            //Request for changing password
+            try {
+                val response =
+                    UserNetwork.userService.updatePassword(Credentials.basic(
+                        UserPreferences.getPhone(), UserPreferences.getPassword()), password)
+
+                if (response.isSuccessful) {
+                    UserPreferences.savePassword(password)
+                    _isAuthed.value = LoginType.AUTHED
+                    _eventNetworkError.value = false
+                    _isNetworkErrorShown.value = false
+                    _isPasswordUpdated.value = true
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
                 _eventNetworkError.value = true
             }
 

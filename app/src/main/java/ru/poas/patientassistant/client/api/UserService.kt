@@ -17,6 +17,11 @@ interface UserService {
 
     @GET("users/login")
     suspend fun login(@Header("Authorization") credentials: String): Response<User>
+
+    @FormUrlEncoded
+    @PUT("users/password")
+    suspend fun updatePassword(@Header("Authorization") credentials: String,
+                               @Field("password") password: String): Response<Unit>
 }
 
 /**
