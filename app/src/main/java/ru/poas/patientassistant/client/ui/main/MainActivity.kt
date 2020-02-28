@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     binding.calendarButton.visibility = View.VISIBLE
                 }
-                R.id.glossaryFragment -> {
+                R.id.glossaryFragment, R.id.glossaryDetailsFragment -> {
                     binding.toolbar.apply {
                         title = "Словарь"
                     }
