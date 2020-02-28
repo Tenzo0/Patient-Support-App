@@ -8,6 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.preferences.UserPreferences
+import timber.log.Timber
 
 
 class LoginActivity : AppCompatActivity() {

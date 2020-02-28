@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DataAgreementFragmentBinding
+import ru.poas.patientassistant.client.preferences.UserPreferences
 
 class DataAgreementFragment : Fragment() {
 
@@ -24,8 +25,7 @@ class DataAgreementFragment : Fragment() {
 
         //If user accept law about personal data
         binding.acceptButton.setOnClickListener {
-            //Navigate to MainActivity
-            startMainActivity()
+            navigateNext()
         }
 
         //if decline
@@ -51,23 +51,27 @@ class DataAgreementFragment : Fragment() {
             when (which) {
                 // accept button
                 Dialog.BUTTON_POSITIVE -> {
-                    startMainActivity()
+                    navigateNext()
                 }
                 // decline button
                 Dialog.BUTTON_NEGATIVE -> activity!!.finish()
             }
         }
 
-    private fun startMainActivity() {
-        //Navigate to MainActivity
-        findNavController().navigate(
-            DataAgreementFragmentDirections.actionDataAgreementFragmentToMainActivity()
-        )
-        //Finish LoginActivity
-        activity!!.finish()
-    }
-
-    companion object {
-        //private const val DIALOG_EXIT = 1
+    private fun navigateNext() {
+        if (UserPreferences.isTemporaryPassword()) {
+            findNavController().navigate(
+                DataAgreementFragmentDirections
+                    .actionDataAgreementFragmentToChangePasswordFragment()
+            )
+        }
+        else {
+            findNavController().navigate(
+                DataAgreementFragmentDirections
+                    .actionDataAgreementFragmentToMainActivity()
+            )
+            //Finish LoginActivity
+            requireActivity().finish()
+        }
     }
 }

@@ -61,6 +61,14 @@ object UserPreferences {
         }
     }
 
+    fun savePassword(password: String) {
+        val editor: SharedPreferences.Editor = preferences.edit()
+        with(editor) {
+            putString(PREFERENCES_USER_PASSWORD, password)
+            apply()
+        }
+    }
+
     fun getPhone() = preferences.getString(PREFERENCES_USER_PHONE, null)
 
     fun getPassword() = preferences.getString(PREFERENCES_USER_PASSWORD, null)

@@ -31,15 +31,24 @@
         android:label="DataAgreementFragment"
         tools:layout="@layout/data_agreement_fragment">
         <action
+            android:id="@+id/action_dataAgreementFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment"
+            app:popUpTo="@id/changePasswordFragment"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_dataAgreementFragment_to_mainActivity"
-            app:destination="@id/mainActivity"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:destination="@id/mainActivity" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="ru.poas.patientassistant.client.ui.main.MainActivity"
         android:label="MainActivity" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="ru.poas.patientassistant.client.ui.login.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" >
+        <action
+            android:id="@+id/action_changePasswordFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
 </navigation>

@@ -44,6 +44,7 @@ class LoginFragment : Fragment() {
                     binding.phoneNumberEditText.rawText,
                     binding.passwordEditText.text.toString()
                 )
+                requireActivity().hideKeyboard()
             }
         }
 
@@ -70,7 +71,6 @@ class LoginFragment : Fragment() {
             //Navigation
             when (authed) {
                 LoginViewModel.LoginType.FIRTSLY_AUTHED -> {
-                    activity?.hideKeyboard()
                     findNavController().navigate(
                         LoginFragmentDirections.actionLoginFragmentToDataAgreementFragment()
                     )
@@ -83,7 +83,7 @@ class LoginFragment : Fragment() {
                         LoginFragmentDirections.actionLoginFragmentToMainActivity()
                     )
                     //Finish LoginActivity
-                    activity!!.finish()
+                    requireActivity().finish()
                 }
             }
         })
