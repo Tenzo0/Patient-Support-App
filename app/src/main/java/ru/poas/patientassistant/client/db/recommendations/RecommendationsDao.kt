@@ -10,10 +10,10 @@ import androidx.room.Query
 interface RecommendationsDao {
 
     @Query("select * from recommendations_database")
-    fun getUserRecommendation(): LiveData<UserRecommendationEntity>
+    fun getUserRecommendation(): LiveData<List<RecommendationEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(recommendations: UserRecommendationEntity)
+    fun insert(recommendations: List<RecommendationEntity>)
 
     @Query("delete from recommendations_database")
     fun clear()

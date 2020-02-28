@@ -85,5 +85,5 @@ object UserPreferences {
         editor.apply()
     }
 
-    fun getRecommendationId() = preferences.getLong(PREFERENCES_USER_RECOMMENDATION_ID, 0)
+    fun getRecommendationId() = preferences.getLong(PREFERENCES_USER_RECOMMENDATION_ID, Long.MAX_VALUE)
 }

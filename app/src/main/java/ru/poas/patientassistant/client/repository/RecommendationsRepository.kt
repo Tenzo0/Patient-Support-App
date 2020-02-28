@@ -8,24 +8,36 @@ import ru.poas.patientassistant.client.api.RecommendationNetwork
 import ru.poas.patientassistant.client.db.recommendations.RecommendationsDatabase
 import ru.poas.patientassistant.client.db.recommendations.asDomainModel
 import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.vo.UserRecommendation
+import ru.poas.patientassistant.client.vo.Recommendation
 import ru.poas.patientassistant.client.vo.asDatabaseModel
+import timber.log.Timber
 
 class RecommendationsRepository(private val database: RecommendationsDatabase) {
-    val userRecommendation: LiveData<UserRecommendation> =
-        Transformations.map(database.recommendationsDao.getUserRecommendation()) { it?.asDomainModel() }
+    val recommendationsList: LiveData<List<Recommendation>> =
+        Transformations.map(database.recommendationsDao.getUserRecommendation()) { it.asDomainModel() }
 
     /**
-     * refresh the glossary in the offline cache
+     * refresh the recommendation id in the offline cache
      */
-    suspend fun refreshRecommendations(credentials: String) {
+    suspend fun refreshRecommendationInfo(credentials: String) {
         withContext(Dispatchers.IO) {
-            val recommendation = RecommendationNetwork.recommendationService
+            val userRecommendation= RecommendationNetwork.recommendationService
                 .getUserRecommendationsByPatientId(credentials, UserPreferences.getId())
                 .body()
+            userRecommendation?.let {
+                UserPreferences.saveUserRecommendation(it)
+            }
+        }
+    }
 
+    suspend fun refreshRecommendations(credentials: String, recommendationId: Long) {
+        withContext(Dispatchers.IO) {
+            val recommendations = RecommendationNetwork.recommendationService
+                .getRecommendationListById(credentials, recommendationId)
+
+            Timber.i(recommendations.code().toString())
             database.recommendationsDao.clear()
-            database.recommendationsDao.insert(recommendation!!.asDatabaseModel())
+            database.recommendationsDao.insert(recommendations.body()!!.asDatabaseModel())
         }
     }
 }

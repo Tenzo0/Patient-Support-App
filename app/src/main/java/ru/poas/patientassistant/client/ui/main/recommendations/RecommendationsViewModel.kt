@@ -10,29 +10,32 @@ import ru.poas.patientassistant.client.db.recommendations.RecommendationsDatabas
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.repository.RecommendationsRepository
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
+import ru.poas.patientassistant.client.vo.Recommendation
 import ru.poas.patientassistant.client.vo.UserRecommendation
 
 class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) : BaseViewModel() {
     private val repository: RecommendationsRepository = RecommendationsRepository(dataSource)
 
-    val userRecommendation: LiveData<UserRecommendation> = repository.userRecommendation
+    val recommendationsList: LiveData<List<Recommendation>> = repository.recommendationsList
 
-    fun refreshRecommendations() {
+    fun refreshRecommendationsInfo() {
         viewModelScope.launch {
             _isProgressShow.value = true
             try {
-                repository.refreshRecommendations(
+                repository.refreshRecommendationInfo(
                     Credentials.basic(
                         UserPreferences.getPhone()!!,
                         UserPreferences.getPassword()!!
                     )
                 )
 
-                //Save information about user recommendation in preferences
-                repository.userRecommendation.value?.let {
-                    Log.i("tag", "${it.operationDate} ${it.recommendationId}")
-                    UserPreferences.saveUserRecommendation(it)
-                }
+                repository.refreshRecommendations(
+                    Credentials.basic(
+                        UserPreferences.getPhone()!!,
+                        UserPreferences.getPassword()!!
+                    ),
+                    UserPreferences.getRecommendationId()
+                )
 
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false

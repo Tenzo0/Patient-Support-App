@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [UserRecommendationEntity::class], version = 1, exportSchema = false)
+@Database(entities = [RecommendationEntity::class], version = 1, exportSchema = false)
 abstract class RecommendationsDatabase: RoomDatabase() {
     abstract val recommendationsDao: RecommendationsDao
 }

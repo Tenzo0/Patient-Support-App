@@ -8,6 +8,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
+import ru.poas.patientassistant.client.vo.Recommendation
 import ru.poas.patientassistant.client.vo.UserRecommendation
 
 /**
@@ -18,6 +19,10 @@ interface RecommendationService {
     @GET("recommendations/patient/{patientId}")
     suspend fun getUserRecommendationsByPatientId(@Header("Authorization") credentials: String,
                                                   @Path("patientId") patientId: Long): Response<UserRecommendation>
+
+    @GET("recommendationFull/RecommendationId/{id}")
+    suspend fun getRecommendationListById(@Header("Authorization") credentials: String,
+                                          @Path("id") id: Long): Response<List<Recommendation>>
 }
 
 /**

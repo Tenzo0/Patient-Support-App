@@ -3,39 +3,31 @@ package ru.poas.patientassistant.client.db.recommendations
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squareup.moshi.Json
-import ru.poas.patientassistant.client.vo.UserRecommendation
+import ru.poas.patientassistant.client.vo.Recommendation
+import ru.poas.patientassistant.client.vo.RecommendationUnit
 
-/*@Entity(tableName = "recommendations_database")
+@Entity(tableName = "recommendations_database")
 data class RecommendationEntity(
-    @ColumnInfo val description: String,
-    @ColumnInfo val dischargeDay: Int,
     @PrimaryKey val id: Long,
-    @ColumnInfo val name: String,
-    @ColumnInfo val updateAt: String
+    @ColumnInfo val recommendationId: Long,
+    @ColumnInfo val day: Int,
+    @ColumnInfo val recommendationUnitId: Long,
+    @ColumnInfo val content: String,
+    @ColumnInfo val importantContent: String,
+    @ColumnInfo val message: String
 )
 
 fun RecommendationEntity.asDomainModel(): Recommendation = Recommendation(
-    description,
-    dischargeDay,
-    id,
-    name,
-    updateAt
+        id,
+        recommendationId,
+        day,
+        RecommendationUnit(
+            recommendationUnitId,
+            content,
+            importantContent,
+            message
+        )
 )
 
-fun List<RecommendationEntity>.asDomainModel(): List<Recommendation> = map { it.asDomainModel() }*/
-
-@Entity(tableName = "recommendations_database")
-data class UserRecommendationEntity (
-    @PrimaryKey val operationDate: String,
-    @ColumnInfo val patientId: Long
-    //@ColumnInfo  val recommendationId: Long
-)
-
-fun UserRecommendationEntity.asDomainModel(): UserRecommendation = UserRecommendation(
-    operationDate,
-    patientId
-    //recommendationId
-)
-
-fun List<UserRecommendationEntity>.asDomainModel(): List<UserRecommendation> = map { it.asDomainModel() }
+fun List<RecommendationEntity>.asDomainModel(): List<Recommendation>
+        = map { it.asDomainModel() }
