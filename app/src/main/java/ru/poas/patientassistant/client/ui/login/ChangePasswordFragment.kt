@@ -1,5 +1,6 @@
 package ru.poas.patientassistant.client.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -10,9 +11,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ChangePasswordFragmentBinding
+import ru.poas.patientassistant.client.ui.main.MainActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -39,13 +42,17 @@ class ChangePasswordFragment : Fragment() {
             }
         }
 
-        viewModel._isPasswordUpdated.observe(viewLifecycleOwner, Observer<Boolean> {
+        viewModel.isPasswordUpdated.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
-                findNavController().navigate(
-                    ChangePasswordFragmentDirections.actionChangePasswordFragmentToMainActivity()
-                )
+                //Navigate to MainActivity
+                startActivity(Intent(requireContext(), MainActivity::class.java))
                 //Finish LoginActivity
                 requireActivity().finish()
+            }
+            else if (viewModel.eventNetworkError.value == true) {
+                Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)
+                    .show()
+                viewModel.onNetworkErrorShown()
             }
         })
 
