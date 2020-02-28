@@ -21,7 +21,7 @@ abstract class BaseViewModel : ViewModel() {
      * Event triggered for network error. This is private to avoid exposing a
      * way to set this value to observers.
      */
-    var _eventNetworkError = MutableLiveData<Boolean>()
+    protected var _eventNetworkError = MutableLiveData<Boolean>()
 
     /**
      * Event triggered for network error. Views should use this to get access
@@ -34,7 +34,7 @@ abstract class BaseViewModel : ViewModel() {
      * Flag to display the error message. This is private to avoid exposing a
      * way to set this value to observers.
      */
-    var _isNetworkErrorShown = MutableLiveData<Boolean>()
+    protected var _isNetworkErrorShown = MutableLiveData<Boolean>()
 
     /**
      * Flag to display the error message. Views should use this to get access
@@ -48,7 +48,7 @@ abstract class BaseViewModel : ViewModel() {
      * Flag to display the progress bar. This is private to avoid exposing a
      * way to set this value to observers.
      */
-    var _isProgressShow = MutableLiveData<Boolean>()
+    protected var _isProgressShow = MutableLiveData<Boolean>()
 
     /**
      * Flag to display the progress bar.

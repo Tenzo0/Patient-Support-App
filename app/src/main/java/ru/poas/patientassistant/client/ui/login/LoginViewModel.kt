@@ -23,31 +23,27 @@ class LoginViewModel : BaseViewModel() {
     var chosenRole: Role? = null
 
     enum class LoginType {
-        NOT_AUTHED, FIRTSLY_AUTHED, AUTHED
+        UNAUTHORIZED, FIRSTLY_AUTHORIZED, AUTHORIZED
     }
 
-    /**
-     * Flag to display state of user auth. This is private to avoid exposing a
-     * way to set this value to observers.
-     */
-    private var _isAuthed = MutableLiveData<LoginType>()
+    private var _isAuthorized = MutableLiveData<LoginType>()
 
-    /**
-     * Flag to display state of user auth.
-     */
-    val isAuthed: LiveData<LoginType>
-        get() = _isAuthed
+    val isAuthorized: LiveData<LoginType>
+        get() = _isAuthorized
 
     init {
-        _isAuthed.value =
-            LoginType.NOT_AUTHED
+        _isAuthorized.value =
+            LoginType.UNAUTHORIZED
 
         if (UserPreferences.getPhone() != null) {
             authUser(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
         }
     }
 
-    var _isPasswordUpdated = MutableLiveData<Boolean>()
+    private var _isPasswordUpdated = MutableLiveData<Boolean>()
+
+    val isPasswordUpdated: LiveData<Boolean>
+        get() = _isPasswordUpdated
 
     fun authUser(phone: String, password: String) {
         viewModelScope.launch {
@@ -64,11 +60,11 @@ class LoginViewModel : BaseViewModel() {
                 UserPreferences.saveUser(user, password)
 
                 if(UserPreferences.isTemporaryPassword()) {
-                    _isAuthed.value = LoginType.FIRTSLY_AUTHED
+                    _isAuthorized.value = LoginType.FIRSTLY_AUTHORIZED
                     _isPasswordUpdated.value = false
                 }
                 else {
-                    _isAuthed.value = LoginType.AUTHED
+                    _isAuthorized.value = LoginType.AUTHORIZED
                     _isPasswordUpdated.value = true
                 }
 
@@ -78,7 +74,7 @@ class LoginViewModel : BaseViewModel() {
                 Timber.e(e)
                 UserPreferences.clear()
                 _roles.value = emptyList()
-                _isAuthed.value = LoginType.NOT_AUTHED
+                _isAuthorized.value = LoginType.UNAUTHORIZED
                 _eventNetworkError.value = true
             }
 
@@ -100,7 +96,7 @@ class LoginViewModel : BaseViewModel() {
 
                 if (response.isSuccessful) {
                     UserPreferences.savePassword(password)
-                    _isAuthed.value = LoginType.AUTHED
+                    _isAuthorized.value = LoginType.AUTHORIZED
                     _eventNetworkError.value = false
                     _isNetworkErrorShown.value = false
                     _isPasswordUpdated.value = true
