@@ -36,11 +36,9 @@ class GlossaryViewModel(
                         UserPreferences.getPassword()!!
                     )
                 )
-                Log.i("tag3", repository.glossaryItems.value?.first()?.title)
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
-                Log.i("tag2", e.toString())
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false

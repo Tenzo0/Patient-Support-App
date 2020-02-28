@@ -32,7 +32,6 @@ class GlossaryRepository(private val database: GlossaryDatabase) {
                 val glossary = GlossaryNetwork.glossaryService
                     .getGlossary(credentials, it.recommendationId)
                     .body()
-                Log.i("tag4", glossary.toString())
                 database.glossaryDao.clear()
                 glossary?.glossaryItems?.asDatabaseModel()?.let {
                     database.glossaryDao.insert(it)
