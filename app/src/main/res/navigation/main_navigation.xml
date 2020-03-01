@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/glossaryFragment"
         android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryFragment"
-        android:label="glossary_fragment" >
+        android:label="@string/glossary" >
         <action
             android:id="@+id/action_glossaryFragment_to_glossaryDetailsFragment"
             app:destination="@id/glossaryDetailsFragment" >
@@ -23,19 +23,19 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.poas.patientassistant.client.ui.main.ProfileFragment"
-        android:label="profile_fragment" />
+        android:label="@string/profile" />
     <fragment
         android:id="@+id/medicinesFragment"
         android:name="ru.poas.patientassistant.client.ui.main.MedicinesFragment"
-        android:label="medicines_fragment" />
+        android:label="@string/medicines" />
     <fragment
         android:id="@+id/recommendationsFragment"
         android:name="ru.poas.patientassistant.client.ui.main.recommendations.RecommendationsFragment"
-        android:label="recommendations_fragment" />
+        android:label="@string/recommendations" />
     <fragment
         android:id="@+id/glossaryDetailsFragment"
         android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryDetailsFragment"
-        android:label="GlossaryDetailsFragment" >
+        android:label="@string/glossary" >
 
         <argument
             android:name="title"

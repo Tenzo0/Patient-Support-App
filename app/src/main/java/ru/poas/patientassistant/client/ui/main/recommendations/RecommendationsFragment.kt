@@ -2,21 +2,13 @@ package ru.poas.patientassistant.client.ui.main.recommendations
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase
-import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.vo.Recommendation
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +18,7 @@ class RecommendationsFragment : Fragment() {
     private lateinit var binding: RecommendationsFragmentBinding
     private var selectedDay = 0 //TODO day of the beginning of recommendations
     private lateinit var currentRecommendationCalendar: Calendar
+    private lateinit var picker: DatePickerDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +42,7 @@ class RecommendationsFragment : Fragment() {
 
         //TODO fix recommendation text and Date formatting
         selectedDay = day
-        val picker = DatePickerDialog(activity!!,
+        picker = DatePickerDialog(activity!!,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 run {
                     try {
@@ -68,17 +61,31 @@ class RecommendationsFragment : Fragment() {
                 }
             }, year, month, day)
 
-        activity!!.calendar_button.setOnClickListener {
-            picker.show()
-        }
-
         viewModel.refreshRecommendationsInfo()
 
         binding.floatingActionButton.setOnClickListener {
             binding.recommendationText.text = viewModel.recommendationsList.value.toString()
         }
 
+        //Set Toolbar menu with calendar icon visible
+        setHasOptionsMenu(true)
+
         return binding.root
     }
 
+    //On click calendar icon show DatePickerDialog
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_choose_date -> {
+                picker.show()
+                true
+            }
+            else -> false
+        }
+    }
+
+    //Set calendar icon in top left corner of Toolbar (as menu item)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.recommendations_fragment_menu, menu)
+    }
 }

@@ -14,22 +14,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent">
-
-                <ImageButton
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:id="@+id/calendar_button"
-                    android:src="@drawable/ic_event"
-                    android:visibility="gone"
-                    android:layout_marginEnd="8dp"
-                    android:layout_width="50dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="end"
-                    android:scaleType="fitXY"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/calendar" />
-
-            </com.google.android.material.appbar.MaterialToolbar>
+                android:layout_width="match_parent"/>
 
         </LinearLayout>
 

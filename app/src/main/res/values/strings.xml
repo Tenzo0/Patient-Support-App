@@ -55,7 +55,11 @@
     <string name="calendar">календарь</string>
     <string name="update">Обновить</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- MainActivity strings -->
+    <string name="choose_date">Выбрать дату</string>
+    <string name="recommendations">Рекомендации</string>
+    <string name="glossary">Словарь</string>
+    <string name="medicines">Лекарства</string>
+    <string name="profile">Профиль</string>
 
 </resources>
