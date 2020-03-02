@@ -38,12 +38,16 @@ class ChangePasswordFragment : Fragment() {
         //If user accept law about personal data
         binding.nextButton.setOnClickListener {
             if(isCorrectInputData()) {
+                Snackbar.make(binding.root, "Changing password", Snackbar.LENGTH_SHORT)
+                    .show()
                 viewModel.updatePassword(binding.newPassword.text.toString())
             }
         }
 
         viewModel.isPasswordUpdated.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
+                Snackbar.make(binding.root, "Password successfully changed", Snackbar.LENGTH_SHORT)
+                    .show()
                 //Navigate to MainActivity
                 startActivity(Intent(requireContext(), MainActivity::class.java))
                 //Finish LoginActivity

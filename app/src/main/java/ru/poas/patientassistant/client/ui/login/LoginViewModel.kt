@@ -101,6 +101,8 @@ class LoginViewModel : BaseViewModel() {
                     _isNetworkErrorShown.value = false
                     _isPasswordUpdated.value = true
                 }
+                else
+                    throw Exception("Response is not correct!")
             } catch (e: Exception) {
                 Timber.e(e)
                 _eventNetworkError.value = true
