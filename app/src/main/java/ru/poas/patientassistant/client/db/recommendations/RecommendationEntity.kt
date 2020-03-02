@@ -8,10 +8,10 @@ import ru.poas.patientassistant.client.vo.RecommendationUnit
 
 @Entity(tableName = "recommendations_database")
 data class RecommendationEntity(
-    @PrimaryKey val id: Long,
+    @ColumnInfo val id: Long,
     @ColumnInfo val recommendationId: Long,
     @ColumnInfo val day: Int,
-    @ColumnInfo val recommendationUnitId: Long,
+    @PrimaryKey val recommendationUnitId: Long,
     @ColumnInfo val content: String,
     @ColumnInfo val importantContent: String,
     @ColumnInfo val message: String

@@ -10,10 +10,16 @@ import androidx.room.Query
 interface RecommendationsDao {
 
     @Query("select * from recommendations_database")
-    fun getUserRecommendation(): LiveData<List<RecommendationEntity>>
+    fun getAllRecommendations(): LiveData<List<RecommendationEntity>>
+
+    @Query("select * from recommendations_database where id = :id")
+    fun getById(id: Long): LiveData<RecommendationEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recommendations: List<RecommendationEntity>)
+
+    @Query("delete from recommendations_database where id = :id")
+    fun deleteById(id: Long)
 
     @Query("delete from recommendations_database")
     fun clear()

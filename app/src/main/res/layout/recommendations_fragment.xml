@@ -55,13 +55,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_date_text">
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:id="@+id/recommendation_text"
-                android:layout_margin="8dp"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:text="recommendation text"/>
+                android:layout_height="match_parent">
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/recommendation_text"
+                    android:layout_margin="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="recommendation text"/>
+            </ScrollView>
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

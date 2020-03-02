@@ -86,4 +86,6 @@ object UserPreferences {
     }
 
     fun getRecommendationId() = preferences.getLong(PREFERENCES_USER_RECOMMENDATION_ID, Long.MAX_VALUE)
+
+    fun getOperationDate() = preferences.getString(PREFERENCES_USER_OPERATION_DATE, null)
 }

@@ -22,9 +22,14 @@ fun Recommendation.asDatabaseModel(): RecommendationEntity = RecommendationEntit
     recommendationId,
     day,
     recommendationUnit.id,
-    recommendationUnit.content,
+    parseRecommendationContent(recommendationUnit.content),
     recommendationUnit.importantContent,
     recommendationUnit.message
 )
 
 fun List<Recommendation>.asDatabaseModel(): List<RecommendationEntity> = map { it.asDatabaseModel() }
+
+private fun parseRecommendationContent(content: String): String = buildString {
+    append('\t')
+    append(content.replace("|", "\n\t"))
+}
