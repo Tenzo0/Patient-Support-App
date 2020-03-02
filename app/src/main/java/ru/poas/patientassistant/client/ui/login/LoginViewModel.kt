@@ -75,6 +75,7 @@ class LoginViewModel : BaseViewModel() {
                 UserPreferences.clear()
                 _roles.value = emptyList()
                 _isAuthorized.value = LoginType.UNAUTHORIZED
+                _isNetworkErrorShown.value = true
                 _eventNetworkError.value = true
             }
 
@@ -115,18 +116,5 @@ class LoginViewModel : BaseViewModel() {
 
     fun chooseRole(role: Role) {
         UserPreferences.saveRole(role)
-    }
-
-    /**
-     * Factory for constructing LoginViewModel with parameter
-     */
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return LoginViewModel() as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
     }
 }
