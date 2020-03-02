@@ -1,8 +1,6 @@
 package ru.poas.patientassistant.client.ui.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -10,11 +8,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityMainBinding
-import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.ui.login.LoginActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,23 +36,6 @@ class MainActivity : AppCompatActivity() {
             .build()
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         NavigationUI.setupWithNavController(binding.navView, navController)
-
-        //Setup exit button listener in the navigation drawer
-        binding.navView.setNavigationItemSelectedListener(
-            object : NavigationView.OnNavigationItemSelectedListener {
-            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when(item.itemId) {
-                    R.id.exit -> {
-                        //Clear all information about user
-                        UserPreferences.clear()
-                        //Start LoginActivity
-                        startActivity(Intent(applicationContext, LoginActivity::class.java))
-                        //Finish session with this activity
-                        finish()
-                    }
-                }
-                return true //display the item as the selected item
-            }
-        })
     }
+
 }
