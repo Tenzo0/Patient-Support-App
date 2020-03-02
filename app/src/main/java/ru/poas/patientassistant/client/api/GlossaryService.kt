@@ -13,7 +13,6 @@ import ru.poas.patientassistant.client.vo.Glossary
 
 interface GlossaryService {
 
-    @Headers("Accept-Encoding: identity")
     @GET("glossary/{recommendationId}")
     suspend fun getGlossary(@Header("Authorization") credentials: String,
                             @Path("recommendationId") recommendationId: Long): Response<Glossary>
