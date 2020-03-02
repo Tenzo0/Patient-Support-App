@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:title="@string/menu_item_profile"
-        android:id="@+id/profileFragment"/>
+        <group android:id="@+id/patient_fragment_group">
+            <item
+                android:title="@string/menu_item_profile"
+                android:id="@+id/profileFragment"/>
 
-    <item
-        android:title="@string/menu_item_recommendations"
-        android:id="@+id/recommendationsFragment"/>
+            <item
+                android:title="@string/menu_item_recommendations"
+                android:id="@+id/recommendationsFragment"/>
 
-    <item
-        android:title="@string/menu_item_medicine"
-        android:id="@+id/medicinesFragment"/>
+            <item
+                android:title="@string/menu_item_medicine"
+                android:id="@+id/medicinesFragment"/>
 
-    <item
-        android:title="@string/menu_item_glossary"
-        android:id="@+id/glossaryFragment"/>
+            <item
+                android:title="@string/menu_item_glossary"
+                android:id="@+id/glossaryFragment"/>
+        </group>
+
+
+        <group android:id="@+id/service_group">
+            <item
+                android:title="@string/about_app"
+                android:id="@+id/aboutAppFragment"/>
+
+            <item
+                android:title="@string/exit"
+                android:id="@+id/exit"/>
+        </group>
 
 </menu>

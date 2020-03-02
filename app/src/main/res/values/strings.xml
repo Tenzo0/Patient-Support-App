@@ -61,5 +61,7 @@
     <string name="glossary">Словарь</string>
     <string name="medicines">Лекарства</string>
     <string name="profile">Профиль</string>
+    <string name="exit">Выход</string>
+    <string name="about_app">О приложении</string>
 
 </resources>
