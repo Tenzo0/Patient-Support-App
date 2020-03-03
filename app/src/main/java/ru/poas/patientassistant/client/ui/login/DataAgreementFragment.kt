@@ -69,7 +69,8 @@ class DataAgreementFragment : Fragment() {
         }
         else {
             //Navigate to MainActivity
-            startActivity(Intent(requireContext(), MainActivity::class.java))
+            findNavController().navigate(DataAgreementFragmentDirections
+                .actionDataAgreementFragmentToMainActivity())
             //Finish LoginActivity
             requireActivity().finish()
         }

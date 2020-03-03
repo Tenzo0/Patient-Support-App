@@ -49,7 +49,8 @@ class ChangePasswordFragment : Fragment() {
                 Snackbar.make(binding.root, "Password successfully changed", Snackbar.LENGTH_SHORT)
                     .show()
                 //Navigate to MainActivity
-                startActivity(Intent(requireContext(), MainActivity::class.java))
+                findNavController().navigate(ChangePasswordFragmentDirections
+                    .actionChangePasswordFragmentToMainActivity())
                 //Finish LoginActivity
                 requireActivity().finish()
             }

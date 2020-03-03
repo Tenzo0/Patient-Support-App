@@ -49,5 +49,9 @@
             app:popUpTo="@id/glossaryFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="ru.poas.patientassistant.client.ui.login.LoginActivity"
+        android:label="LoginActivity" />
 
 </navigation>

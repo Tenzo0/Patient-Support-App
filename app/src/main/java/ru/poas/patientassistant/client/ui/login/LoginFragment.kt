@@ -81,7 +81,8 @@ class LoginFragment : Fragment() {
                 LoginViewModel.LoginType.AUTHORIZED ->
                 {
                     //Navigate to MainActivity
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                    findNavController().navigate(LoginFragmentDirections
+                        .actionLoginFragmentToMainActivity())
                     //Finish LoginActivity
                     requireActivity().finish()
                 }

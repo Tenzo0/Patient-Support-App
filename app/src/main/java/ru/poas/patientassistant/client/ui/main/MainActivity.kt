@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -65,8 +67,15 @@ class MainActivity : AppCompatActivity() {
     private fun exit() {
         //Clear all information about user
         UserPreferences.clear()
-        //Navigate to start (login activity)
-        startActivity(Intent(applicationContext, LoginActivity::class.java))
+        //Create animations for navigation
+        val navOptions = NavOptions.Builder()
+        navOptions
+            .setEnterAnim(R.anim.nav_default_enter_anim)
+            .setExitAnim(R.anim.nav_default_exit_anim)
+            .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+        //Navigate to start (LoginActivity)
+        navController.navigate(R.id.loginActivity, null, navOptions.build())
         //Finish session with this activity
         finish()
     }
