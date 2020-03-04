@@ -60,10 +60,6 @@ class RecommendationsFragment : Fragment() {
             updateRecommendationView(viewModel.selectedDate.value)
         })
 
-        binding.floatingActionButton.setOnClickListener {
-            //TODO выполнить рекомендацию
-        }
-
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 
