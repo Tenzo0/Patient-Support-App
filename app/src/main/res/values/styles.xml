@@ -11,12 +11,14 @@
         <item name="colorPrimary">@color/mainPrimary</item>
         <item name="colorPrimaryDark">@color/mainPrimaryDark</item>
         <item name="colorAccent">@color/mainPrimary</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/textColorOnDark</item>
         <item name="android:statusBarColor">@color/mainPrimaryDark</item>
         <item name="colorError">@color/error</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="snackbarStyle">@style/snackbarStyle</item>
+        <item name="android:windowBackground">@color/mainPrimaryLight</item>
+        <item name="backgroundColor">@color/white</item>
     </style>
 
     <style name="snackbarStyle" parent="Widget.MaterialComponents.Snackbar">
@@ -25,7 +27,7 @@
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
-        <item name="color">@android:color/white</item>
+        <item name="color">@color/textColorOnDark</item>
     </style>
 
 </resources>
