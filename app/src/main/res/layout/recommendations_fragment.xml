@@ -75,8 +75,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ScrollView
-                    android:id="@+id/scrollView"
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/displayed_recommendations"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -117,7 +117,7 @@
 
                                 <TextView
                                     android:id="@+id/important_recommendation_text"
-                                    style="@style/TextAppearance.AppCompat.Large"
+                                    style="@style/TextAppearance.AppCompat.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
@@ -150,6 +150,7 @@
                                     android:layout_height="wrap_content"
                                     android:drawableStart="@drawable/ic_subject_black_24dp"
                                     android:drawablePadding="4dp"
+                                    android:textStyle="bold"
                                     android:text="@string/recommendations"
                                     android:textColor="@color/textColorOnLight" />
 
@@ -174,7 +175,7 @@
 
                     </LinearLayout>
 
-                </ScrollView>
+                </androidx.core.widget.NestedScrollView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/empty_recommendation_card"

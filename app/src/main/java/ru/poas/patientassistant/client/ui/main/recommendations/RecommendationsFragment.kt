@@ -3,20 +3,22 @@ package ru.poas.patientassistant.client.ui.main.recommendations
 import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
-import android.text.Layout.*
+import android.text.Layout.HYPHENATION_FREQUENCY_FULL
 import android.view.*
-import android.widget.LinearLayout
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputLayout
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class RecommendationsFragment : Fragment() {
 
@@ -70,6 +72,19 @@ class RecommendationsFragment : Fragment() {
         else {
             binding.recommendationText.gravity = Gravity.END
         }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshRecommendationsInfo()
+        }
+
+        viewModel.isProgressShow.observe(viewLifecycleOwner, Observer {
+            binding.swipeRefreshLayout.isRefreshing = it
+        })
+
+        binding.doneRecommendationButton.setOnClickListener {
+
+        }
+
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 
@@ -80,19 +95,33 @@ class RecommendationsFragment : Fragment() {
         with(viewModel) {
             binding.currentDateText.text = recommendationsFragmentDateFormat.format(date!!.time)
 
-            val daysAfterOperation = Calendar.getInstance()
-            daysAfterOperation.clear()
-            daysAfterOperation.add(Calendar.DAY_OF_YEAR, date.get(Calendar.DAY_OF_YEAR))
-            daysAfterOperation.add(Calendar.DAY_OF_YEAR, -(operationDate.value?.get(Calendar.DAY_OF_YEAR)!! + 1))
+            val millisPassedFromOperation = date.timeInMillis - operationDate.value!!.timeInMillis
+            val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
 
-                Timber.i("${daysAfterOperation.get(Calendar.DAY_OF_YEAR)} days passed since operation date")
+            Timber.i("$daysPassedFromOperation days passed since operation date")
 
-                val recommendation = recommendationsList
-                    .value?.firstOrNull {
-                    it.day == daysAfterOperation.get(Calendar.DAY_OF_YEAR)
+            val recommendation = recommendationsList
+                .value?.firstOrNull {
+                it.day == daysPassedFromOperation.toInt()
+            }
+            if (recommendation?.recommendationUnit != null) {
+                binding.recommendationText.text = recommendation.recommendationUnit.content
+                binding.displayedRecommendations.visibility = VISIBLE
+                binding.emptyRecommendationCard.visibility = GONE
+
+                binding.importantCard.visibility = if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
+                    binding.importantRecommendationText.text = recommendation.recommendationUnit.importantContent
+                    VISIBLE
                 }
-                binding.recommendationText.text =
-                    recommendation?.recommendationUnit?.content ?: ""
+                else {
+                    GONE
+                }
+            }
+            else {
+                binding.displayedRecommendations.visibility = GONE
+                binding.emptyRecommendationCard.visibility = VISIBLE
+            }
+
 
         }
     }

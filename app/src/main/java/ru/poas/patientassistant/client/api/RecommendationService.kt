@@ -23,6 +23,7 @@ interface RecommendationService {
     @GET("recommendationFull/RecommendationId/{id}")
     suspend fun getRecommendationListById(@Header("Authorization") credentials: String,
                                           @Path("id") id: Long): Response<List<Recommendation>>
+
 }
 
 /**
