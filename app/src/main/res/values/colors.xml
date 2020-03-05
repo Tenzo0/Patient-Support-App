@@ -10,9 +10,9 @@
     <color name="loginBackgroundGradientEnd">#50cbe2</color>
 
     <!--Colors for main window -->
-    <color name="mainPrimary">#3a96e0</color>
+    <color name="mainPrimary">#3f89c4</color>
     <color name="mainPrimaryLight">#ECEFF1</color>
-    <color name="mainPrimaryDark">#277bbf</color>
+    <color name="mainPrimaryDark">#2f73aa</color>
     <color name="mainBackground">#e8eaf1</color>
     <color name="error">#982729</color>
 
