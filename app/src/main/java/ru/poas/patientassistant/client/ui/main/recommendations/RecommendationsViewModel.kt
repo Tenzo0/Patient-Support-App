@@ -11,6 +11,7 @@ import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.repository.RecommendationsRepository
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import ru.poas.patientassistant.client.vo.Recommendation
+import ru.poas.patientassistant.client.vo.RecommendationConfirmKey
 import timber.log.Timber
 import java.util.*
 
@@ -19,6 +20,9 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
 
     val recommendationsList: LiveData<List<Recommendation>> = repository.recommendationsList
     val operationDate: LiveData<Calendar> = repository.operationDate
+    private var _isRecommendationConfirmed = MutableLiveData<Boolean>()
+    val isRecommendationConfirmed: LiveData<Boolean>
+        get() = _isRecommendationConfirmed
 
     private var _selectedDate = MutableLiveData<Calendar>()
     val selectedDate: LiveData<Calendar>
@@ -26,6 +30,32 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
 
     init {
         _selectedDate.value = Calendar.getInstance()
+        _isRecommendationConfirmed.value = false
+    }
+
+    fun confirmRecommendation() {
+        viewModelScope.launch {
+            try {
+                repository.confirmRecommendation(
+                    Credentials.basic(
+                        UserPreferences.getPhone()!!,
+                        UserPreferences.getPassword()!!
+                    ),
+                    RecommendationConfirmKey(
+                        UserPreferences.getId(),
+                        UserPreferences.getRecommendationId()
+                    )
+                )
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+                _isRecommendationConfirmed.value = true
+            }
+            catch (e: Exception) {
+                Timber.e(e)
+                _eventNetworkError.value = true
+                _isNetworkErrorShown.value = true
+            }
+        }
     }
 
     fun updateSelectedDate(year: Int, month: Int, day: Int) {

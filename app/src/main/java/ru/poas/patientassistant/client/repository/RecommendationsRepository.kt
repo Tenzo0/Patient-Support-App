@@ -1,5 +1,6 @@
 package ru.poas.patientassistant.client.repository
 
+import android.accounts.NetworkErrorException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -10,6 +11,7 @@ import ru.poas.patientassistant.client.db.recommendations.RecommendationsDatabas
 import ru.poas.patientassistant.client.db.recommendations.asDomainModel
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.vo.Recommendation
+import ru.poas.patientassistant.client.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.vo.asDatabaseModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -53,6 +55,14 @@ class RecommendationsRepository(private val database: RecommendationsDatabase) {
             Timber.i("recommendations refresh with code ${recommendations.code()}")
             database.recommendationsDao.insert(recommendations.body()!!.asDatabaseModel())
             Timber.i("recommendations inserted into database: ${database.recommendationsDao.getAllRecommendations().value}")
+        }
+    }
+
+    suspend fun confirmRecommendation(credentials: String, recommendationConfirmKey: RecommendationConfirmKey) {
+        withContext(Dispatchers.IO) {
+            if (RecommendationNetwork.recommendationService
+                .putConfirmRecommendationKey(credentials, recommendationConfirmKey).code() != 200)
+                throw NetworkErrorException("Confirm recommendation network error")
         }
     }
 }

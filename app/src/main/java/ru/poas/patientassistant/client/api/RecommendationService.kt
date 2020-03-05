@@ -5,10 +5,9 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 import ru.poas.patientassistant.client.vo.Recommendation
+import ru.poas.patientassistant.client.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.vo.UserRecommendation
 
 /**
@@ -24,6 +23,9 @@ interface RecommendationService {
     suspend fun getRecommendationListById(@Header("Authorization") credentials: String,
                                           @Path("id") id: Long): Response<List<Recommendation>>
 
+    @PUT("users/confirm/")
+    suspend fun putConfirmRecommendationKey(@Header("Authorization") credentials: String,
+                                            @Body patientConfirmKey: RecommendationConfirmKey): Response<Unit>
 }
 
 /**

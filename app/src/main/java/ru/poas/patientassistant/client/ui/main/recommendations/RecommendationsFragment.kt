@@ -7,11 +7,11 @@ import android.text.Layout.HYPHENATION_FREQUENCY_FULL
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase
@@ -82,8 +82,21 @@ class RecommendationsFragment : Fragment() {
         })
 
         binding.doneRecommendationButton.setOnClickListener {
-
+            viewModel.confirmRecommendation()
         }
+
+        viewModel.isRecommendationConfirmed.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                binding.doneRecommendationButton.visibility = GONE
+                Snackbar.make(binding.root, "Рекомендация выполнена!", Snackbar.LENGTH_SHORT).show()
+                Timber.i("Рекомендация выполнена")
+            }
+        })
+
+        viewModel.isNetworkErrorShown.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT).show()
+        })
 
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
@@ -100,10 +113,13 @@ class RecommendationsFragment : Fragment() {
 
             Timber.i("$daysPassedFromOperation days passed since operation date")
 
+            //Find recommendation by days passed from operation date
             val recommendation = recommendationsList
                 .value?.firstOrNull {
                 it.day == daysPassedFromOperation.toInt()
             }
+
+            //If recommendation found, set it to view
             if (recommendation?.recommendationUnit != null) {
                 binding.recommendationText.text = recommendation.recommendationUnit.content
                 binding.displayedRecommendations.visibility = VISIBLE
@@ -117,12 +133,18 @@ class RecommendationsFragment : Fragment() {
                     GONE
                 }
             }
+            //Else show view with empty recommendation text
             else {
                 binding.displayedRecommendations.visibility = GONE
                 binding.emptyRecommendationCard.visibility = VISIBLE
             }
 
-
+            binding.doneRecommendationButton.visibility =
+                if (selectedDate.value!!.get(Calendar.DATE) == Calendar.getInstance().get(Calendar.DATE)
+                    && !isRecommendationConfirmed.value!!)
+                    VISIBLE
+                else
+                    GONE
         }
     }
 
