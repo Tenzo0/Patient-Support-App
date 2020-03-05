@@ -20,6 +20,7 @@
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
+                    app:titleTextColor="@color/textColorOnDark"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:popupTheme="@android:style/ThemeOverlay.Material.Light"
