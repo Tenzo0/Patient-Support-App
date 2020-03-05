@@ -1,12 +1,16 @@
 package ru.poas.patientassistant.client.ui.main.recommendations
 
 import android.app.DatePickerDialog
+import android.os.Build
 import android.os.Bundle
+import android.text.Layout.*
 import android.view.*
+import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase
@@ -60,6 +64,12 @@ class RecommendationsFragment : Fragment() {
             updateRecommendationView(viewModel.selectedDate.value)
         })
 
+        binding.recommendationText.textLocale = Locale("ru", "RU")
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            binding.recommendationText.hyphenationFrequency = HYPHENATION_FREQUENCY_FULL
+        else {
+            binding.recommendationText.gravity = Gravity.END
+        }
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 

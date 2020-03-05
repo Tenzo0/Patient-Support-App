@@ -4,8 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import timber.log.Timber

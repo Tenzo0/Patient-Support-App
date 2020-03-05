@@ -63,5 +63,6 @@
     <string name="profile">Профиль</string>
     <string name="exit">Выход</string>
     <string name="about_app">О приложении</string>
+    <string name="important">Важно</string>
 
 </resources>

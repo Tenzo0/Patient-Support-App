@@ -7,6 +7,7 @@
     </style>
 
     <style name="MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat</item>
         <item name="colorPrimary">@color/mainPrimary</item>
         <item name="colorPrimaryDark">@color/mainPrimaryDark</item>
         <item name="colorAccent">@color/mainPrimary</item>

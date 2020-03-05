@@ -14,9 +14,14 @@
     <color name="mainBackground">#e8eaf1</color>
     <color name="error">#982729</color>
 
+
+    <color name="lightPink">#fef3ff</color>
+    <color name="lightBlue">#f2fbff</color>
     <color name="important">#982729</color>
 
     <color name="red">#ff4d4d</color>
     <color name="yellow">#ffeb3b</color>
     <color name="green">#8BC34A</color>
+
+    <color name="greenTransparent">#99FFFFFF</color>
 </resources>
