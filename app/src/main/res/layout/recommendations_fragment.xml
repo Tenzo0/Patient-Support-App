@@ -20,9 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:paddingTop="8dp"
-            android:elevation="4dp"
-            app:cardElevation="3dp">
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            android:layout_marginTop="-16dp"
+            app:cardElevation="@dimen/card_elevation"
+            android:paddingTop="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -222,7 +223,7 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <Button
-            style="@style/Widget.MaterialComponents.Button"
+            style="@style/blueButton"
             android:gravity="center"
             android:id="@+id/done_recommendation_button"
             android:layout_width="match_parent"
@@ -234,7 +235,7 @@
             android:elevation="8dp"
             android:textSize="18sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
-            android:background="@color/mainPrimary"
+            android:background="@color/mainAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

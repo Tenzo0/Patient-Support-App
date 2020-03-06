@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="textColorOnDark">#ffffff</color>
+    <color name="textColorOnDark">#2a2a2a</color>
 
     <color name="textColorOnLight">#2a2a2a</color>
     <color name="white">#ffffff</color>
@@ -10,10 +10,17 @@
     <color name="loginBackgroundGradientEnd">#50cbe2</color>
 
     <!--Colors for main window -->
+    <!--
+    <color name="textColorOnDark">#ffffff</color>
     <color name="mainPrimary">#3f89c4</color>
     <color name="mainPrimaryLight">#ECEFF1</color>
     <color name="mainPrimaryDark">#2f73aa</color>
-    <color name="mainBackground">#e8eaf1</color>
+    <color name="mainBackground">#e8eaf1</color> -->
+    <color name="mainPrimary">#FFFFFF</color>
+    <color name="mainPrimaryLight">#DDEDFD</color>
+    <color name="mainPrimaryDark">#D5E6FA</color>
+    <color name="mainBackground">#F2F6FF</color>
+    <color name="mainAccent">#94D9FA</color>
     <color name="error">#982729</color>
 
 

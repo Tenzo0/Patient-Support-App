@@ -10,7 +10,7 @@
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat</item>
         <item name="colorPrimary">@color/mainPrimary</item>
         <item name="colorPrimaryDark">@color/mainPrimaryDark</item>
-        <item name="colorAccent">@color/mainPrimary</item>
+        <item name="colorAccent">@color/mainAccent</item>
         <item name="android:textColor">@color/textColorOnLight</item>
         <item name="android:statusBarColor">@color/mainPrimaryDark</item>
         <item name="colorError">@color/error</item>
@@ -18,6 +18,10 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="snackbarStyle">@style/snackbarStyle</item>
         <item name="backgroundColor">@color/white</item>
+    </style>
+
+    <style name="blueButton" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:colorBackground">@color/mainAccent</item>
     </style>
 
     <style name="snackbarStyle" parent="Widget.MaterialComponents.Snackbar">
