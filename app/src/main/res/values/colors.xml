@@ -9,6 +9,9 @@
     <color name="loginBackgroundGradientBegin">#00538c</color>
     <color name="loginBackgroundGradientEnd">#50cbe2</color>
 
+
+    <color name="defaultGradientBackgroundStart">#FFFFFF</color>
+    <color name="defaultGradientBackgroundEnd">#DDEDFE</color>
     <!--Colors for main window -->
     <!--
     <color name="textColorOnDark">#ffffff</color>

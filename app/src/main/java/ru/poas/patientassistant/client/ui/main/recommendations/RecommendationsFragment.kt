@@ -156,7 +156,7 @@ class RecommendationsFragment : Fragment() {
     //On click calendar icon show DatePickerDialog
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_choose_date -> {
+            R.id.choose_date_button -> {
                 picker.show()
                 true
             }

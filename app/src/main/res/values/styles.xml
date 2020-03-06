@@ -18,6 +18,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="snackbarStyle">@style/snackbarStyle</item>
         <item name="backgroundColor">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/textColorOnLight</item>
     </style>
 
     <style name="blueButton" parent="TextAppearance.MaterialComponents.Button">
