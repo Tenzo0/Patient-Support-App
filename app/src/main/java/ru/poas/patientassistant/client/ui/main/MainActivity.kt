@@ -2,10 +2,7 @@ package ru.poas.patientassistant.client.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -61,20 +58,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-        binding.toolbar.apply {
-            for (child in children) {
-                if (child is TextView) {
-                    setMarquee(child)
-                }
-            }
-        }
-    }
-
-    private fun setMarquee(textView: TextView) {
-        textView.ellipsize = TextUtils.TruncateAt.MARQUEE
-        textView.isSelected = true
-        textView.marqueeRepeatLimit = -1
     }
 
     /**
