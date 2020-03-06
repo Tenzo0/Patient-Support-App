@@ -23,7 +23,6 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:label="@string/recommendations"
             android:theme="@style/MainTheme">
         </activity>
     </application>

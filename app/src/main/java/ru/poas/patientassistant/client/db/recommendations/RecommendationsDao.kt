@@ -1,10 +1,7 @@
 package ru.poas.patientassistant.client.db.recommendations
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface RecommendationsDao {
@@ -20,6 +17,12 @@ interface RecommendationsDao {
 
     @Query("delete from recommendations_database where id = :id")
     fun deleteById(id: Long)
+
+    @Query("update recommendations_database set isConfirmed = 1 where recommendationUnitId = :recommendationUnitId")
+    fun confirmRecommendationById(recommendationUnitId: Long)
+
+    @Query("select isConfirmed from recommendations_database where recommendationUnitId = :recommendationUnitId")
+    fun getIsRecommendationConfirmedById(recommendationUnitId: Long): Boolean
 
     @Query("delete from recommendations_database")
     fun clear()

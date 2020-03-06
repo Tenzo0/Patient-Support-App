@@ -21,6 +21,10 @@ class RecommendationsRepository(private val database: RecommendationsDatabase) {
     val recommendationsList: LiveData<List<Recommendation>> =
         Transformations.map(database.recommendationsDao.getAllRecommendations()) { it.asDomainModel() }
 
+    private var _isRecommendationConfirmed = MutableLiveData<Boolean>()
+    val isRecommendationConfirmed: LiveData<Boolean>
+        get() = _isRecommendationConfirmed
+
     private var _operationDate = MutableLiveData<Calendar>()
     val operationDate: LiveData<Calendar>
         get() = _operationDate
@@ -28,6 +32,7 @@ class RecommendationsRepository(private val database: RecommendationsDatabase) {
     private var databaseDateFormat: SimpleDateFormat
 
     init {
+        _isRecommendationConfirmed.value = true
         _operationDate.value = Calendar.getInstance()
         databaseDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale("ru", "RU"))
     }
@@ -63,6 +68,15 @@ class RecommendationsRepository(private val database: RecommendationsDatabase) {
             if (RecommendationNetwork.recommendationService
                 .putConfirmRecommendationKey(credentials, recommendationConfirmKey).code() != 200)
                 throw NetworkErrorException("Confirm recommendation network error")
+            else
+                database.recommendationsDao.confirmRecommendationById(recommendationConfirmKey.recommendationId)
+        }
+    }
+
+    suspend fun getIsRecommendationConfirmedById(recommendationUnitId: Long) {
+        withContext(Dispatchers.IO) {
+            _isRecommendationConfirmed.postValue(database.recommendationsDao
+                .getIsRecommendationConfirmedById(recommendationUnitId))
         }
     }
 }

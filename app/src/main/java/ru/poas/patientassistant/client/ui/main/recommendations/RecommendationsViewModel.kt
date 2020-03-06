@@ -20,9 +20,7 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
 
     val recommendationsList: LiveData<List<Recommendation>> = repository.recommendationsList
     val operationDate: LiveData<Calendar> = repository.operationDate
-    private var _isRecommendationConfirmed = MutableLiveData<Boolean>()
-    val isRecommendationConfirmed: LiveData<Boolean>
-        get() = _isRecommendationConfirmed
+    val isRecommendationConfirmed: LiveData<Boolean> = repository.isRecommendationConfirmed
 
     private var _selectedDate = MutableLiveData<Calendar>()
     val selectedDate: LiveData<Calendar>
@@ -30,7 +28,6 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
 
     init {
         _selectedDate.value = Calendar.getInstance()
-        _isRecommendationConfirmed.value = false
     }
 
     fun confirmRecommendation() {
@@ -46,14 +43,21 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
                         UserPreferences.getRecommendationId()
                     )
                 )
-                _eventNetworkError.value = false
-                _isNetworkErrorShown.value = false
-                _isRecommendationConfirmed.value = true
             }
             catch (e: Exception) {
                 Timber.e(e)
-                _eventNetworkError.value = true
-                _isNetworkErrorShown.value = true
+            }
+        }
+    }
+
+    fun updateInfoAboutRecommendationConfirm(recommendationUnitId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.getIsRecommendationConfirmedById(
+                    recommendationUnitId
+                )
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }

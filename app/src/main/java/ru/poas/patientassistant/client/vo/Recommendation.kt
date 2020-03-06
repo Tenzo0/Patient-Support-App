@@ -24,7 +24,8 @@ fun Recommendation.asDatabaseModel(): RecommendationEntity = RecommendationEntit
     recommendationUnit.id,
     parseServerContent(recommendationUnit.content),
     parseServerContent(recommendationUnit.importantContent),
-    parseServerContent(recommendationUnit.message)
+    parseServerContent(recommendationUnit.message),
+    isConfirmed = false
 )
 
 fun List<Recommendation>.asDatabaseModel(): List<RecommendationEntity> = map { it.asDatabaseModel() }

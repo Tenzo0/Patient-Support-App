@@ -14,7 +14,8 @@ data class RecommendationEntity(
     @PrimaryKey val recommendationUnitId: Long,
     @ColumnInfo val content: String,
     @ColumnInfo val importantContent: String,
-    @ColumnInfo val message: String
+    @ColumnInfo val message: String,
+    @ColumnInfo val isConfirmed: Boolean
 )
 
 fun RecommendationEntity.asDomainModel(): Recommendation = Recommendation(
