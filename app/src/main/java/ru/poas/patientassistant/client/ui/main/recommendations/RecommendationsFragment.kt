@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase
+import ru.poas.patientassistant.client.vo.Recommendation
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,71 +37,111 @@ class RecommendationsFragment : Fragment() {
             .inflate(layoutInflater, R.layout.recommendations_fragment,
                 container, false)
 
-        //Database and viewmodel connection TODO вынести отсюда бд -.-
-        val database = getRecommendationsDatabase(activity!!.applicationContext)
         viewModel = ViewModelProvider(this, RecommendationsViewModel
-            .RecommendationsViewModelFactory(database)
+            .RecommendationsViewModelFactory(getRecommendationsDatabase(requireContext()))
         ).get(RecommendationsViewModel::class.java)
 
-        picker = DatePickerDialog(activity!!,
-            DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                viewModel.updateSelectedDate(year, month, day)
-                updateRecommendationView(viewModel.selectedDate.value)
-            },
-            viewModel.selectedDate.value!!.get(Calendar.YEAR),
-            viewModel.selectedDate.value!!.get(Calendar.MONTH),
-            viewModel.selectedDate.value!!.get(Calendar.DAY_OF_WEEK)
-        )
-
-        viewModel.recommendationsList.observe(viewLifecycleOwner, Observer {
-            updateRecommendationView(viewModel.selectedDate.value)
-        })
-
-        binding.recommendationText.textLocale = Locale("ru", "RU")
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            binding.recommendationText.hyphenationFrequency = HYPHENATION_FREQUENCY_FULL
-        else {
-            binding.recommendationText.gravity = Gravity.END
+        //Select date with DatePickerDialog
+        with(viewModel.selectedDate.value!!) {
+            picker = DatePickerDialog(
+                requireActivity(),
+                DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                    viewModel.updateSelectedDate(year, month, day)
+                    updateRecommendationView(viewModel.selectedDate.value)
+                }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_WEEK)
+            )
         }
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.refreshRecommendationsInfo()
-        }
+        //Set onRefresh and onClick listeners
+        with(binding) {
 
-        viewModel.isProgressShow.observe(viewLifecycleOwner, Observer {
-            binding.swipeRefreshLayout.isRefreshing = it
-        })
-
-        binding.doneRecommendationButton.setOnClickListener {
-            viewModel.confirmRecommendation()
-            Snackbar.make(binding.root, "Рекомендация выполнена!", Snackbar.LENGTH_SHORT).show()
-            Timber.i("Рекомендация выполнена")
-        }
-
-        viewModel.isRecommendationConfirmed.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                //binding.doneRecommendationButton.visibility = GONE
+            swipeRefreshLayout.setOnRefreshListener {
+                viewModel.refreshRecommendationsInfo()
             }
-        })
 
-        viewModel.isNetworkErrorShown.observe(viewLifecycleOwner, Observer {
-            if (it == true)
-                Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT).show()
-        })
+            doneRecommendationButton.setOnClickListener {
+                viewModel.confirmRecommendation(
+                    getCurrentRecommendation(viewModel.selectedDate.value)?.recommendationUnit?.id!!
+                )
+                Snackbar.make(binding.root, "Рекомендация выполнена!", Snackbar.LENGTH_SHORT).show()
+                Timber.i("Рекомендация выполнена")
+            }
+        }
+
+
+        //Setup viewModel
+        with(viewModel) {
+
+            recommendationsList.observe(viewLifecycleOwner, Observer {
+                updateRecommendationView(selectedDate.value)
+            })
+
+            isProgressShow.observe(viewLifecycleOwner, Observer {
+                binding.swipeRefreshLayout.isRefreshing = it
+            })
+
+            isRecommendationConfirmed.observe(viewLifecycleOwner, Observer {
+                val selectedDate = selectedDate.value
+                val currentDate = Calendar.getInstance()
+                val isEqualDates =
+                    (selectedDate?.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
+
+                binding.doneRecommendationButton.visibility =  if (it == false && isEqualDates)
+                    VISIBLE
+                else {
+                    GONE
+                }
+            })
+
+            isNetworkErrorShown.observe(viewLifecycleOwner, Observer {
+                if (it == true)
+                    Snackbar.make(
+                        binding.root,
+                        R.string.network_error,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+            })
+        }
 
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 
+        requireActivity().toolbar.title = getString(R.string.endopro)
+
         return binding.root
     }
+
+    private fun getCurrentRecommendation(date: Calendar?): Recommendation? {
+        var recommendation: Recommendation? = null
+        try {
+            val millisPassedFromOperation =
+                date!!.timeInMillis - viewModel.operationDate.value!!.timeInMillis
+            val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
+
+            Timber.i("$daysPassedFromOperation days passed since operation date")
+
+            //Find recommendation by days passed from operation date
+            recommendation = viewModel.recommendationsList
+                .value?.firstOrNull {
+                it.day == daysPassedFromOperation.toInt()
+            }
+        }
+        catch (e: Exception) {
+            Timber.e(e)
+        }
+        return recommendation
+    }
+
 
     private fun updateRecommendationView(date: Calendar?) {
         binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
         binding.chosenDateEmpty.text = binding.chosenDate.text
+        binding.doneRecommendationButton.visibility = GONE
+
         with(viewModel) {
             try {
                 binding.displayedRecommendations.fullScroll(FOCUS_UP)
-                binding.doneRecommendationButton.visibility = GONE
+
 
                 val millisPassedFromOperation =
                     date.timeInMillis - operationDate.value!!.timeInMillis
@@ -114,44 +155,32 @@ class RecommendationsFragment : Fragment() {
                     it.day == daysPassedFromOperation.toInt()
                 }
 
-                //If recommendation found, set it to view
-                if (recommendation?.recommendationUnit != null) {
-                    binding.chosenDate.visibility = VISIBLE
-                    binding.chosenDateEmpty.visibility = GONE
-
-                    updateInfoAboutRecommendationConfirm(recommendation.recommendationUnit.id)
-
-                    binding.recommendationText.text = recommendation.recommendationUnit.content
-                    binding.displayedRecommendations.visibility = VISIBLE
-                    binding.emptyRecommendationCard.visibility = GONE
-
-                    binding.importantCard.visibility =
-                        if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
-                            binding.importantRecommendationText.text =
-                                recommendation.recommendationUnit.importantContent
-                            VISIBLE
-                        } else {
-                            GONE
-                        }
+                with(binding) {
+                    //If recommendation found, set it to view
+                    if (recommendation?.recommendationUnit != null) {
+                        chosenDate.visibility = VISIBLE
+                        chosenDateEmpty.visibility = GONE
+                        refreshRecommendationConfirm(recommendation.recommendationUnit.id)
+                        recommendationText.text = recommendation.recommendationUnit.content
+                        displayedRecommendations.visibility = VISIBLE
+                        emptyRecommendationCard.visibility = GONE
+                        importantCard.visibility =
+                            if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
+                                binding.importantRecommendationText.text =
+                                    recommendation.recommendationUnit.importantContent
+                                VISIBLE
+                            } else {
+                                GONE
+                            }
+                    }
+                    //Else show view with empty recommendation text
+                    else {
+                        chosenDate.visibility = GONE
+                        chosenDateEmpty.visibility = VISIBLE
+                        displayedRecommendations.visibility = GONE
+                        emptyRecommendationCard.visibility = VISIBLE
+                    }
                 }
-                //Else show view with empty recommendation text
-                else {
-                    binding.chosenDate.visibility = GONE
-                    binding.chosenDateEmpty.visibility = VISIBLE
-
-                    binding.displayedRecommendations.visibility = GONE
-                    binding.emptyRecommendationCard.visibility = VISIBLE
-                }
-
-                /*binding.doneRecommendationButton.visibility =
-                    TODO("incorrect database value getting")
-                    if (selectedDate.value!!.get(Calendar.DATE) == Calendar.getInstance()
-                            .get(Calendar.DATE)
-                        && !isRecommendationConfirmed.value!!
-                    )
-                        VISIBLE
-                    else
-                        GONE*/
             }
             catch (e: Exception) {
                 Timber.e("first user auth? $e")

@@ -18,10 +18,13 @@ interface RecommendationsDao {
     @Query("delete from recommendations_database where id = :id")
     fun deleteById(id: Long)
 
-    @Query("update recommendations_database set isConfirmed = 1 where recommendationUnitId = :recommendationUnitId")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertConfirmation(recommendationConfirmKeyEntity: RecommendationConfirmKeyEntity)
+
+    @Query("update recommendations_confirm_keys_db set isConfirmed = 1 where recommendationUnitId = :recommendationUnitId")
     fun confirmRecommendationById(recommendationUnitId: Long)
 
-    @Query("select isConfirmed from recommendations_database where recommendationUnitId = :recommendationUnitId")
+    @Query("select isConfirmed from recommendations_confirm_keys_db where recommendationUnitId = :recommendationUnitId")
     fun getIsRecommendationConfirmedById(recommendationUnitId: Long): Boolean
 
     @Query("delete from recommendations_database")

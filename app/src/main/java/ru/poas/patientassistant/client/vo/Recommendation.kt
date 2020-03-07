@@ -4,17 +4,17 @@ import com.squareup.moshi.Json
 import ru.poas.patientassistant.client.db.recommendations.RecommendationEntity
 
 data class Recommendation(
-    @field:Json(name = "id") val id: Long,
-    @field:Json(name = "recommendationId") val recommendationId: Long,
-    @field:Json(name = "day") val day: Int,
-    @field:Json(name = "recommendationUnit") val recommendationUnit: RecommendationUnit
+    @Json(name = "id") val id: Long,
+    @Json(name = "recommendationId") val recommendationId: Long,
+    @Json(name = "day") val day: Int,
+    @Json(name = "recommendationUnit") val recommendationUnit: RecommendationUnit
 )
 
 data class RecommendationUnit(
-    @field:Json(name = "id") val id: Long,
-    @field:Json(name = "content") val content: String,
-    @field:Json(name = "importantContent") val importantContent: String,
-    @field:Json(name = "message") val message: String
+    @Json(name = "id") val id: Long,
+    @Json(name = "content") val content: String,
+    @Json(name = "importantContent") val importantContent: String,
+    @Json(name = "message") val message: String
 )
 
 fun Recommendation.asDatabaseModel(): RecommendationEntity = RecommendationEntity(
@@ -24,8 +24,7 @@ fun Recommendation.asDatabaseModel(): RecommendationEntity = RecommendationEntit
     recommendationUnit.id,
     parseServerContent(recommendationUnit.content),
     parseServerContent(recommendationUnit.importantContent),
-    parseServerContent(recommendationUnit.message),
-    isConfirmed = false
+    parseServerContent(recommendationUnit.message)
 )
 
 fun List<Recommendation>.asDatabaseModel(): List<RecommendationEntity> = map { it.asDatabaseModel() }

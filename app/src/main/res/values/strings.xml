@@ -64,6 +64,7 @@
     <string name="exit">Выход</string>
     <string name="about_app">О приложении</string>
     <string name="important">Важно</string>
+    <string name="Endopro">Эндопро</string>
     <string name="confirm_recommendation_text">Нажмите галочку, чтобы доктор увидел, что вы выполнили рекомендацию на сегодня.</string>
 
 </resources>

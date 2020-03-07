@@ -30,7 +30,7 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
         _selectedDate.value = Calendar.getInstance()
     }
 
-    fun confirmRecommendation() {
+    fun confirmRecommendation(recommendationUnitId: Long) {
         viewModelScope.launch {
             try {
                 repository.confirmRecommendation(
@@ -41,22 +41,11 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
                     RecommendationConfirmKey(
                         UserPreferences.getId(),
                         UserPreferences.getRecommendationId()
-                    )
+                    ),
+                    recommendationUnitId
                 )
             }
             catch (e: Exception) {
-                Timber.e(e)
-            }
-        }
-    }
-
-    fun updateInfoAboutRecommendationConfirm(recommendationUnitId: Long) {
-        viewModelScope.launch {
-            try {
-                repository.getIsRecommendationConfirmedById(
-                    recommendationUnitId
-                )
-            } catch (e: Exception) {
                 Timber.e(e)
             }
         }
@@ -73,13 +62,6 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
 
     fun decSelectedDate() {
         _selectedDate.value!!.add(Calendar.DATE, -1)
-    }
-
-    fun getSelectedDate() {
-        val currentRecommendationCalendar = Calendar.getInstance()
-        val day = currentRecommendationCalendar.get(Calendar.DAY_OF_MONTH)
-        val month = currentRecommendationCalendar.get(Calendar.MONTH)
-        val year = currentRecommendationCalendar.get(Calendar.YEAR)
     }
 
     fun refreshRecommendationsInfo() {
@@ -107,6 +89,19 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false
+        }
+    }
+
+    fun refreshRecommendationConfirm(recommendationUnitId: Long) {
+        viewModelScope.launch {
+            try {
+                repository.getIsRecommendationConfirmedById(
+                    recommendationUnitId
+                )
+            }
+            catch (e: Exception) {
+                Timber.e(e)
+            }
         }
     }
 
