@@ -30,7 +30,6 @@
                     android:layout_marginTop="8dp"
                     android:singleLine="false"
                     android:text="@string/agreement_text_view_text"
-                    android:textColor="@color/mainPrimaryDark"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
