@@ -31,19 +31,22 @@ class LoginViewModel : BaseViewModel() {
     val isAuthorized: LiveData<LoginType>
         get() = _isAuthorized
 
+    private var _isPasswordUpdated = MutableLiveData<Boolean>()
+    val isPasswordUpdated: LiveData<Boolean>
+        get() = _isPasswordUpdated
+
     init {
         _isAuthorized.value =
             LoginType.UNAUTHORIZED
+
+        _isPasswordUpdated.value = UserPreferences.isTemporaryPassword()
 
         if (UserPreferences.getPhone() != null) {
             authUser(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
         }
     }
 
-    private var _isPasswordUpdated = MutableLiveData<Boolean>()
 
-    val isPasswordUpdated: LiveData<Boolean>
-        get() = _isPasswordUpdated
 
     fun authUser(phone: String, password: String) {
         viewModelScope.launch {
