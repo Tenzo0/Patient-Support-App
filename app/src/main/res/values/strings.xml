@@ -66,5 +66,9 @@
     <string name="important">Важно</string>
     <string name="Endopro">Эндопро</string>
     <string name="confirm_recommendation_text">Нажмите галочку, чтобы доктор увидел, что вы выполнили рекомендацию на сегодня.</string>
+    <string name="profile_phone_number">Номер телефона:</string>
+    <string name="profile_your_doctor">Ваш доктор:</string>
+    <string name="Patient">Пациент</string>
+    <string name="exit_from_profile">Выйти из профиля</string>
 
 </resources>

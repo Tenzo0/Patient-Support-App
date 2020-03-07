@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
      * Exit from [MainActivity]: clear all info about user,
      * start [LoginActivity], finish [MainActivity]
      */
-    private fun exit() {
+    fun exit() {
         //Clear all information about user
         UserPreferences.clear()
         //Create animations for navigation

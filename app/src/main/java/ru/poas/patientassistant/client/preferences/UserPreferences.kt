@@ -2,7 +2,6 @@ package ru.poas.patientassistant.client.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import ru.poas.patientassistant.client.vo.Role
 import ru.poas.patientassistant.client.vo.User
 import ru.poas.patientassistant.client.vo.UserRecommendation
@@ -23,6 +22,7 @@ object UserPreferences {
     private const val PREFERENCES_USER_ROLE_NAME = "user_role_name"
     private const val PREFERENCES_USER_OPERATION_DATE = "user_operation_date"
     private const val PREFERENCES_USER_RECOMMENDATION_ID = "user_recommendation_id"
+    private const val PREFERENCES_USER_RELATED_DOCTOR_NAME = "user_related_doctor_name"
 
     fun init(context: Context) {
         preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -74,6 +74,11 @@ object UserPreferences {
     fun getPassword() = preferences.getString(PREFERENCES_USER_PASSWORD, null)
 
     fun isTemporaryPassword() = preferences.getBoolean(PREFERENCES_USER_IS_TEMPORARY_PASSWORD, false)
+
+    fun getRelatedDoctorName() = preferences.getString(PREFERENCES_USER_RELATED_DOCTOR_NAME, "")
+
+    fun getUserFullName() = preferences.getString(PREFERENCES_USER_FIRST_NAME, "") +
+            " " + preferences.getString(PREFERENCES_USER_LAST_NAME, "")
 
     fun getId() = preferences.getLong(PREFERENCES_USER_ID, Long.MAX_VALUE)
 

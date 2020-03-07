@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.ProfileFragment"
+        android:name="ru.poas.patientassistant.client.ui.main.profile.ProfileFragment"
         android:label="@string/profile" />
     <fragment
         android:id="@+id/medicinesFragment"
