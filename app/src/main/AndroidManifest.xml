@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:label="@string/endopro"
             android:name=".ui.main.MainActivity"
             android:theme="@style/MainTheme">
         </activity>
