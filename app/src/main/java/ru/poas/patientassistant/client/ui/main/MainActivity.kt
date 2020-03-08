@@ -1,21 +1,19 @@
 package ru.poas.patientassistant.client.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityMainBinding
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.ui.login.LoginActivity
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,15 +44,11 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.exit -> exit() // exit from profile
-                else ->
-                    try             // navigate to fragment
-                    {
-                        navController.navigate(it.itemId)
-                        drawerLayout.closeDrawers()
-                    }
-                    catch (e: IllegalArgumentException) {
-                        Timber.e("Illegal navigation destination in MainActivity:\n$e")
-                    }
+                else -> {
+                    // navigate to fragment
+                    NavigationUI.onNavDestinationSelected(it, navController)
+                    drawerLayout.closeDrawers()
+                }
             }
             true
         }
