@@ -26,7 +26,7 @@
         android:label="@string/profile" />
     <fragment
         android:id="@+id/medicinesFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.MedicinesFragment"
+        android:name="ru.poas.patientassistant.client.ui.main.drugs.DrugsFragment"
         android:label="@string/medicines" />
     <fragment
         android:id="@+id/recommendationsFragment"

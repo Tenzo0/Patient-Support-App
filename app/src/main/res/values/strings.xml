@@ -71,4 +71,18 @@
     <string name="Patient">Пациент</string>
     <string name="exit_from_profile">Выйти из профиля</string>
 
+    <!-- DrugsFragment -->
+    <string name="medicament">Препарат</string>
+    <string name="test_drug_dosage">1000 мг</string>
+    <string name="time_of_take_drug">Время приёма:</string>
+    <string name="test_drug_time">13:00</string>
+    <string name="accept_drug">Лекарство принято</string>
+    <string name="today_icon">today icon</string>
+    <string name="test_drug_date">25 июля</string>
+    <string name="need_accept">Нужно принять</string>
+    <string name="all_drugs">Все приёмы</string>
+    <string name="medicament_fragment_title">Лекарства</string>
+    <string name="medicament_date_picker_fragment_title">Выберите дату</string>
+    <string name="no_medicine">Лекарства отсутствуют</string>
+
 </resources>
