@@ -1,9 +1,7 @@
-package ru.poas.patientassistant.client.ui.main.recommendations
+package ru.poas.patientassistant.client.ui.patient.recommendations
 
 import android.app.DatePickerDialog
-import android.os.Build
 import android.os.Bundle
-import android.text.Layout.HYPHENATION_FREQUENCY_FULL
 import android.view.*
 import android.view.View.*
 import androidx.databinding.DataBindingUtil
@@ -11,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_patient.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.db.recommendations.getRecommendationsDatabase

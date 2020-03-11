@@ -1,6 +1,5 @@
 package ru.poas.patientassistant.client.ui.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.LoginFragmentBinding
-import ru.poas.patientassistant.client.ui.main.MainActivity
 import ru.poas.patientassistant.client.utils.hideKeyboard
 
 

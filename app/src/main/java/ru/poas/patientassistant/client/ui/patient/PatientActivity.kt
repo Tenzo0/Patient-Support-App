@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main
+package ru.poas.patientassistant.client.ui.patient
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,19 +11,19 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import ru.poas.patientassistant.client.R
-import ru.poas.patientassistant.client.databinding.ActivityMainBinding
+import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.ui.login.LoginActivity
 
-class MainActivity : AppCompatActivity() {
+class PatientActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityPatientBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_patient)
         drawerLayout = binding.drawerLayout
 
         //Set action bar which changes own menu depending on fragment
@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Exit from [MainActivity]: clear all info about user,
-     * start [LoginActivity], finish [MainActivity]
+     * Exit from [PatientActivity]: clear all info about user,
+     * start [LoginActivity], finish [PatientActivity]
      */
     fun exit() {
         //Clear all information about user

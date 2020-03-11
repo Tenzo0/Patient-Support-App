@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main.profile
+package ru.poas.patientassistant.client.ui.patient.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ProfileFragmentBinding
 import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.ui.main.MainActivity
+import ru.poas.patientassistant.client.ui.patient.PatientActivity
 
 class ProfileFragment : Fragment() {
 
@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
             else
                 doctorName
             exitButton.setOnClickListener {
-                (requireActivity() as MainActivity).exit()
+                (requireActivity() as PatientActivity).exit()
             }
         }
 

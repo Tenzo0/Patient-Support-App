@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main.glossary
+package ru.poas.patientassistant.client.ui.patient.glossary
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

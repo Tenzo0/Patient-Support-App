@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:label="@string/endopro"
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.patient.PatientActivity"
             android:theme="@style/MainTheme">
         </activity>
     </application>

@@ -1,6 +1,5 @@
-package ru.poas.patientassistant.client.ui.main.glossary
+package ru.poas.patientassistant.client.ui.patient.glossary
 
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import okhttp3.Credentials

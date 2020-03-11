@@ -2,7 +2,6 @@ package ru.poas.patientassistant.client.ui.login
 
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DataAgreementFragmentBinding
 import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.ui.main.MainActivity
 
 class DataAgreementFragment : Fragment() {
 

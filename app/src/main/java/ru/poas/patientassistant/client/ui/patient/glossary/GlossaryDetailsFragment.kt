@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main.glossary
+package ru.poas.patientassistant.client.ui.patient.glossary
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.activity_main.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.GlossaryDetailsFragmentBinding
-import ru.poas.patientassistant.client.ui.main.MainActivity
 
 class GlossaryDetailsFragment : Fragment() {
 

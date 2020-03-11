@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main.recommendations
+package ru.poas.patientassistant.client.ui.patient.recommendations
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

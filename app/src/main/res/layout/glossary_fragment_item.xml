@@ -12,7 +12,7 @@
 
         <variable
             name="clickListener"
-            type="ru.poas.patientassistant.client.ui.main.glossary.ItemClickListener" />
+            type="ru.poas.patientassistant.client.ui.patient.glossary.ItemClickListener" />
 
     </data>
 

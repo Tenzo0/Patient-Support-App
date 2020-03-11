@@ -1,6 +1,5 @@
 package ru.poas.patientassistant.client.ui.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -15,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ChangePasswordFragmentBinding
-import ru.poas.patientassistant.client.ui.main.MainActivity
 
 /**
  * A simple [Fragment] subclass.

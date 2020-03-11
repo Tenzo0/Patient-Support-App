@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/glossaryFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryFragment"
+        android:name="ru.poas.patientassistant.client.ui.patient.glossary.GlossaryFragment"
         android:label="@string/glossary" >
         <action
             android:id="@+id/action_glossaryFragment_to_glossaryDetailsFragment"
@@ -22,19 +22,19 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.profile.ProfileFragment"
+        android:name="ru.poas.patientassistant.client.ui.patient.profile.ProfileFragment"
         android:label="@string/profile" />
     <fragment
         android:id="@+id/medicinesFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.MedicinesFragment"
+        android:name="ru.poas.patientassistant.client.ui.patient.MedicinesFragment"
         android:label="@string/medicines" />
     <fragment
         android:id="@+id/recommendationsFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.recommendations.RecommendationsFragment"
+        android:name="ru.poas.patientassistant.client.ui.patient.recommendations.RecommendationsFragment"
         android:label="@string/recommendations" />
     <fragment
         android:id="@+id/glossaryDetailsFragment"
-        android:name="ru.poas.patientassistant.client.ui.main.glossary.GlossaryDetailsFragment"
+        android:name="ru.poas.patientassistant.client.ui.patient.glossary.GlossaryDetailsFragment"
         android:label="@string/glossary" >
 
         <argument

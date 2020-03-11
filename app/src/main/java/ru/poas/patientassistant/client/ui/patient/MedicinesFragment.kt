@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.ui.main
+package ru.poas.patientassistant.client.ui.patient
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
