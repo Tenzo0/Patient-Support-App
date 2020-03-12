@@ -19,7 +19,7 @@
     <color name="mainPrimaryLight">#ECEFF1</color>
     <color name="mainPrimaryDark">#2f73aa</color>
     <color name="mainBackground">#e8eaf1</color> -->
-    <color name="mainPrimary">#FFFFFF</color>
+    <color name="mainPrimary">#42A5F5</color>
     <color name="mainPrimaryLight">#DDEDFD</color>
     <color name="mainPrimaryDark">#D5E6FA</color>
     <color name="mainBackground">#F2F6FF</color>

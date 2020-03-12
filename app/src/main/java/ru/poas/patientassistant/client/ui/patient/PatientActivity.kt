@@ -1,6 +1,8 @@
 package ru.poas.patientassistant.client.ui.patient
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -36,21 +38,37 @@ class PatientActivity : AppCompatActivity() {
             R.id.profileFragment,
             R.id.glossaryFragment,
             R.id.medicinesFragment)
-            .setDrawerLayout(drawerLayout)
+            .setOpenableLayout(drawerLayout)
             .build()
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         //Setup menu in NavDrawer with navigation
-        binding.navView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.exit -> exit() // exit from profile
-                else -> {
-                    // navigate to fragment
-                    NavigationUI.onNavDestinationSelected(it, navController)
-                    drawerLayout.closeDrawers()
+        setupNavDrawerWithNavController()
+    }
+
+    private fun setupNavDrawerWithNavController() {
+        with(binding) {
+            navView.setNavigationItemSelectedListener {
+                when (it.itemId) {
+                    R.id.exit -> exit() // exit from profile
+                    else -> {
+                        // navigate to fragment
+                        NavigationUI.onNavDestinationSelected(it, navController)
+                        drawerLayout.closeDrawers()
+                    }
+                }
+                true
+            }
+
+            //set selected item highlighted in the drawable menu
+            navController.addOnDestinationChangedListener { controller, destination, arguments ->
+                val menu: Menu = navView.menu
+
+                for (i in 0 until menu.size()) {
+                    val item: MenuItem = menu.getItem(i)
+                    item.isChecked = destination.id == item.itemId
                 }
             }
-            true
         }
     }
 

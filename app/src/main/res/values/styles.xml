@@ -14,7 +14,7 @@
         <item name="android:textColor">@color/textColorOnLight</item>
         <item name="android:statusBarColor">@color/mainPrimaryDark</item>
         <item name="colorError">@color/error</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Surface</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="snackbarStyle">@style/snackbarStyle</item>
         <item name="backgroundColor">@color/white</item>
