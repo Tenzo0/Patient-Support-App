@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="LoginTheme" parent="MainTheme">
         <item name="colorPrimary">@color/loginPrimary</item>
@@ -19,6 +19,7 @@
         <item name="snackbarStyle">@style/snackbarStyle</item>
         <item name="backgroundColor">@color/white</item>
         <item name="android:actionMenuTextColor">@color/textColorOnLight</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="blueButton" parent="TextAppearance.MaterialComponents.Button">

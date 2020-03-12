@@ -1,8 +1,12 @@
 package ru.poas.patientassistant.client.ui.patient
 
+import android.app.Activity
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,6 +20,7 @@ import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.ui.login.LoginActivity
+
 
 class PatientActivity : AppCompatActivity() {
 
@@ -41,6 +46,10 @@ class PatientActivity : AppCompatActivity() {
             .setOpenableLayout(drawerLayout)
             .build()
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            window.statusBarColor = Color.BLACK
+        }
 
         //Setup menu in NavDrawer with navigation
         setupNavDrawerWithNavController()
