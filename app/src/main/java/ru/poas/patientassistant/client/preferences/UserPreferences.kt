@@ -2,9 +2,9 @@ package ru.poas.patientassistant.client.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import ru.poas.patientassistant.client.vo.Role
-import ru.poas.patientassistant.client.vo.User
-import ru.poas.patientassistant.client.vo.UserRecommendation
+import ru.poas.patientassistant.client.patient.vo.Role
+import ru.poas.patientassistant.client.login.vo.User
+import ru.poas.patientassistant.client.patient.vo.UserRecommendation
 
 object UserPreferences {
     private lateinit var preferences: SharedPreferences

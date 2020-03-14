@@ -8,11 +8,11 @@
 
         <variable
             name="glossaryItem"
-            type="ru.poas.patientassistant.client.vo.GlossaryItem" />
+            type="ru.poas.patientassistant.client.patient.vo.GlossaryItem" />
 
         <variable
             name="clickListener"
-            type="ru.poas.patientassistant.client.ui.patient.glossary.ItemClickListener" />
+            type="ru.poas.patientassistant.client.patient.ui.glossary.ItemClickListener" />
 
     </data>
 

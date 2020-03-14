@@ -6,7 +6,7 @@
 
         <variable
             name="dictionaryViewModel"
-            type="ru.poas.patientassistant.client.ui.patient.glossary.GlossaryViewModel" />
+            type="ru.poas.patientassistant.client.patient.ui.glossary.GlossaryViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

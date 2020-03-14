@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="ru.poas.patientassistant.client.ui.login.LoginFragment"
+        android:name="ru.poas.patientassistant.client.login.ui.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_dataAgreementFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/dataAgreementFragment"
-        android:name="ru.poas.patientassistant.client.ui.login.DataAgreementFragment"
+        android:name="ru.poas.patientassistant.client.login.ui.DataAgreementFragment"
         android:label="DataAgreementFragment"
         tools:layout="@layout/data_agreement_fragment">
         <action
@@ -48,11 +48,11 @@
     </fragment>
     <activity
         android:id="@+id/mainActivity"
-        android:name="ru.poas.patientassistant.client.ui.patient.PatientActivity"
+        android:name="ru.poas.patientassistant.client.patient.ui.PatientActivity"
         android:label="MainActivity" />
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="ru.poas.patientassistant.client.ui.login.ChangePasswordFragment"
+        android:name="ru.poas.patientassistant.client.login.ui.ChangePasswordFragment"
         android:label="ChangePasswordFragment" >
         <action
             android:id="@+id/action_changePasswordFragment_to_mainActivity"

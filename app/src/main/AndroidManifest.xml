@@ -13,7 +13,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true">
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".login.ui.LoginActivity"
             android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:label="@string/endopro"
-            android:name=".ui.patient.PatientActivity"
+            android:name=".patient.ui.PatientActivity"
             android:theme="@style/MainTheme">
         </activity>
     </application>
