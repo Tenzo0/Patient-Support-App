@@ -4,9 +4,10 @@
         <item name="colorPrimary">@color/loginPrimary</item>
         <item name="android:statusBarColor">@color/loginBackgroundGradientBegin</item>
         <item name="android:windowBackground">@drawable/gradient_background</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
-    <style name="MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+    <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat</item>
         <item name="colorPrimary">@color/mainPrimary</item>
         <item name="colorPrimaryDark">@color/mainPrimaryDark</item>
