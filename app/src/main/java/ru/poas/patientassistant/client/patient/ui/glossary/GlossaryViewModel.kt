@@ -3,19 +3,17 @@ package ru.poas.patientassistant.client.patient.ui.glossary
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
-import ru.poas.patientassistant.client.patient.db.glossary.GlossaryDatabase
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.patient.repository.GlossaryRepository
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import ru.poas.patientassistant.client.patient.vo.GlossaryItem
+import javax.inject.Inject
 
-class GlossaryViewModel(
-    private val dataSource: GlossaryDatabase
+class GlossaryViewModel @Inject constructor(
+    private val glossaryRepository: GlossaryRepository
 ) : BaseViewModel() {
 
-    private val repository: GlossaryRepository = GlossaryRepository(dataSource)
-
-    val glossaryItem: LiveData<List<GlossaryItem>> = repository.glossaryItems
+    val glossaryItem: LiveData<List<GlossaryItem>> = glossaryRepository.glossaryItems
 
     /**
      * Cancel all coroutines when the ViewModel is cleared
@@ -29,7 +27,7 @@ class GlossaryViewModel(
         viewModelScope.launch {
             _isProgressShow.value = true
             try {
-                repository.refreshGlossary(
+                glossaryRepository.refreshGlossary(
                     Credentials.basic(
                         UserPreferences.getPhone()!!,
                         UserPreferences.getPassword()!!
@@ -42,24 +40,6 @@ class GlossaryViewModel(
             }
             _isProgressShow.value = false
         }
-    }
-
-    /**
-     * Factory for constructing [GlossaryViewModel] with parameters
-     */
-    class GlossaryViewModelFactory(
-        private val dataSource: GlossaryDatabase
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(GlossaryViewModel::class.java)) {
-                return GlossaryViewModel(
-                    dataSource
-                ) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-
     }
 
     /**

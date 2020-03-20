@@ -11,8 +11,11 @@ import ru.poas.patientassistant.client.patient.db.glossary.asDomainModel
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.patient.vo.GlossaryItem
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
+import javax.inject.Inject
 
-class GlossaryRepository(private val database: GlossaryDatabase) {
+class GlossaryRepository @Inject constructor(
+    private val database: GlossaryDatabase
+) {
 
     val glossaryItems: LiveData<List<GlossaryItem>> =
         Transformations.map(database.glossaryDao.getAll()) { it.asDomainModel() }

@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.android.AndroidInjectionModule
+import ru.poas.patientassistant.client.patient.di.GlossaryComponent
 import javax.inject.Singleton
 
 /**
@@ -14,9 +15,9 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AppModule::class,
-        AppModuleBinds::class,
         AndroidInjectionModule::class,
-        ViewModelBuilderModule::class
+        ViewModelBuilderModule::class,
+        PatientSubcomponentsModule::class
     ]
 )
 interface AppComponent {
@@ -25,4 +26,11 @@ interface AppComponent {
     interface Factory {
         fun create(@BindsInstance applicationContext: Context): AppComponent
     }
+
+    fun glossaryComponent(): GlossaryComponent.Factory
 }
+
+@Module(
+    subcomponents = [GlossaryComponent::class]
+)
+object PatientSubcomponentsModule

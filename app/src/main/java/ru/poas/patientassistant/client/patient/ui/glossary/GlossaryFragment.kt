@@ -1,75 +1,81 @@
 package ru.poas.patientassistant.client.patient.ui.glossary
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.GlossaryFragmentBinding
-import ru.poas.patientassistant.client.patient.db.glossary.getGlossaryDatabase
+import javax.inject.Inject
 
 class GlossaryFragment : Fragment() {
 
-    private lateinit var viewModel: GlossaryViewModel
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val glossaryAdapter: GlossaryAdapter = GlossaryAdapter(
+        ItemClickListener { glossary ->
+            viewModel.onDefinitionClicked(glossary)
+        })
+
+
+    private val viewModel by viewModels<GlossaryViewModel> { viewModelFactory }
 
     private lateinit var binding: GlossaryFragmentBinding
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as B2DocApplication)
+            .appComponent
+            .glossaryComponent().create()
+            .inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val application = requireNotNull(this.activity).application
-
         binding = DataBindingUtil.inflate(
             inflater, R.layout.glossary_fragment, container, false
         )
 
-        /**
-         * ViewModel connection
-         */
-        val database = getGlossaryDatabase(application)
-        val viewModelFactory =
-            GlossaryViewModel.GlossaryViewModelFactory(
-                database
-            )
-        viewModel =
-            ViewModelProvider(
-                this, viewModelFactory
-            ).get(GlossaryViewModel::class.java)
-        binding.dictionaryViewModel = viewModel
+        with(binding) {
+            dictionaryViewModel = viewModel
+
+            with(glossarySwipeRefresh) {
+                setColorSchemeResources(
+                    R.color.mainPrimary,
+                    R.color.green,
+                    R.color.red
+                )
+
+                setOnRefreshListener {
+                    viewModel.refreshGlossary()
+                }
+            }
+
+            with(glossaryList) {
+
+            }
+        }
         viewModel.refreshGlossary()
 
         //on click navigate to GlossaryContentDetailsFragment
-        val adapter =
-            GlossaryAdapter(
-                ItemClickListener { glossary ->
-                    viewModel.onDefinitionClicked(glossary)
-                })
-        binding.glossaryList.adapter = adapter
-
-        val manager = LinearLayoutManager(activity)
-        binding.glossaryList.layoutManager = manager
+        binding.glossaryList.adapter = glossaryAdapter
+        binding.glossaryList.layoutManager = LinearLayoutManager(activity)
 
         //Necessary to the observe LiveData updates with binding
         binding.lifecycleOwner = this
-
-        binding.glossarySwipeRefresh.setColorSchemeResources(
-            R.color.mainPrimary,
-            R.color.green,
-            R.color.red
-        )
-
-        binding.glossarySwipeRefresh.setOnRefreshListener {
-            viewModel.refreshGlossary()
-        }
 
         //Add an Observer for Navigating when definition is clicked
         viewModel.navigateToDefinitionDetails.observe(viewLifecycleOwner, Observer { glossaryItem ->
@@ -84,12 +90,9 @@ class GlossaryFragment : Fragment() {
             }
         })
 
-        /**
-         * DataBinding for this Fragment
-         */
         viewModel.glossaryItem.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                glossaryAdapter.submitList(it)
                 binding.glossarySwipeRefresh.isRefreshing = false
                 binding.invalidateAll()
             }
