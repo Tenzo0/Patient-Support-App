@@ -20,21 +20,19 @@ import javax.inject.Inject
 
 class GlossaryFragment : Fragment() {
 
+    //GlossaryViewModel
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    val glossaryAdapter: GlossaryAdapter = GlossaryAdapter(
-        ItemClickListener { glossary ->
-            viewModel.onDefinitionClicked(glossary)
-        })
-
-
     private val viewModel by viewModels<GlossaryViewModel> { viewModelFactory }
+
+    //Glossary list adapter
+    private lateinit var glossaryAdapter: GlossaryAdapter
 
     private lateinit var binding: GlossaryFragmentBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        //Inject dagger dependencies
         (requireActivity().application as B2DocApplication)
             .appComponent
             .glossaryComponent().create()
@@ -45,68 +43,79 @@ class GlossaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //setup with data binding
         binding = DataBindingUtil.inflate(
             inflater, R.layout.glossary_fragment, container, false
         )
-
-        with(binding) {
-            dictionaryViewModel = viewModel
-
-            with(glossarySwipeRefresh) {
-                setColorSchemeResources(
-                    R.color.mainPrimary,
-                    R.color.green,
-                    R.color.red
-                )
-
-                setOnRefreshListener {
-                    viewModel.refreshGlossary()
-                }
-            }
-
-            with(glossaryList) {
-
-            }
-        }
-        viewModel.refreshGlossary()
-
-        //on click navigate to GlossaryContentDetailsFragment
-        binding.glossaryList.adapter = glossaryAdapter
-        binding.glossaryList.layoutManager = LinearLayoutManager(activity)
-
-        //Necessary to the observe LiveData updates with binding
         binding.lifecycleOwner = this
 
-        //Add an Observer for Navigating when definition is clicked
-        viewModel.navigateToDefinitionDetails.observe(viewLifecycleOwner, Observer { glossaryItem ->
-            glossaryItem?.let {
-                this.findNavController().navigate(
-                    GlossaryFragmentDirections.actionGlossaryFragmentToGlossaryDetailsFragment(
-                        glossaryItem.title, glossaryItem.content
-                    )
-                )
+        //setup list
+        setupGlossaryList()
 
-                viewModel.onDefinitionNavigated()
-            }
-        })
-
-        viewModel.glossaryItem.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                glossaryAdapter.submitList(it)
-                binding.glossarySwipeRefresh.isRefreshing = false
-                binding.invalidateAll()
-            }
-        })
-
-        viewModel.isProgressShow.observe(viewLifecycleOwner, Observer<Boolean>{isProgress ->
-            binding.glossarySwipeRefresh.isRefreshing = isProgress
-        })
-
-        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
-            if(isNetworkError) onNetworkError()
-        })
+        //setup viewModel
+        binding.glossaryViewModel = viewModel
+        setupGlossaryViewModel()
 
         return binding.root
+    }
+
+    private fun setupGlossaryList() {
+        glossaryAdapter = GlossaryAdapter(
+            ItemClickListener { glossary ->
+                viewModel.onDefinitionClicked(glossary)
+            })
+        with(binding.glossaryList) {
+            //on click navigate to GlossaryContentDetailsFragment
+            adapter = glossaryAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
+
+        //set onSwipeRefresh view updating
+        with(binding.glossarySwipeRefresh) {
+            setColorSchemeResources(
+                R.color.mainPrimary,
+                R.color.green,
+                R.color.red
+            )
+            setOnRefreshListener {
+                viewModel.refreshGlossary()
+            }
+        }
+    }
+
+    private fun setupGlossaryViewModel() {
+        with(viewModel) {
+            //Add an Observer for Navigating when definition is clicked
+            navigateToDefinitionDetails.observe(viewLifecycleOwner, Observer { glossaryItem ->
+                glossaryItem?.let {
+                    this@GlossaryFragment.findNavController().navigate(
+                        GlossaryFragmentDirections.actionGlossaryFragmentToGlossaryDetailsFragment(
+                            glossaryItem.title, glossaryItem.content
+                        )
+                    )
+
+                    viewModel.onDefinitionNavigated()
+                }
+            })
+
+            //Update list if exist database updates
+            glossaryItemsList.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    glossaryAdapter.submitList(it)
+                    binding.glossarySwipeRefresh.isRefreshing = false
+                    binding.invalidateAll()
+                }
+            })
+
+            isProgressShow.observe(viewLifecycleOwner, Observer<Boolean>{isProgress ->
+                binding.glossarySwipeRefresh.isRefreshing = isProgress
+            })
+
+            eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
+                if(isNetworkError) onNetworkError()
+            })
+        }
     }
 
     private fun onNetworkError() {

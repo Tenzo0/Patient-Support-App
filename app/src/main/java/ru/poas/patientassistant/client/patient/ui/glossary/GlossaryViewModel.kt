@@ -13,7 +13,7 @@ class GlossaryViewModel @Inject constructor(
     private val glossaryRepository: GlossaryRepository
 ) : BaseViewModel() {
 
-    val glossaryItem: LiveData<List<GlossaryItem>> = glossaryRepository.glossaryItems
+    val glossaryItemsList: LiveData<List<GlossaryItem>> = glossaryRepository.glossaryItemsList
 
     /**
      * Cancel all coroutines when the ViewModel is cleared

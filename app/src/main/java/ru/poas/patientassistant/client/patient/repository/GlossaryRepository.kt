@@ -17,7 +17,7 @@ class GlossaryRepository @Inject constructor(
     private val database: GlossaryDatabase
 ) {
 
-    val glossaryItems: LiveData<List<GlossaryItem>> =
+    val glossaryItemsList: LiveData<List<GlossaryItem>> =
         Transformations.map(database.glossaryDao.getAll()) { it.asDomainModel() }
 
     /**
