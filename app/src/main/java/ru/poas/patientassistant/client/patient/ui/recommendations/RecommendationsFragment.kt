@@ -214,11 +214,6 @@ class RecommendationsFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refreshRecommendationsInfo()
-    }
-
     //On click calendar icon show DatePickerDialog
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -242,7 +237,7 @@ class RecommendationsFragment : Fragment() {
 
     //Set calendar icon in top left corner of Toolbar (as menu item)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.recommendations_fragment_menu, menu)
+        inflater.inflate(R.menu.date_navigation_menu, menu)
     }
 
 
