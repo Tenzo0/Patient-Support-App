@@ -80,6 +80,9 @@ class RecommendationsRepository @Inject constructor(
                     true
                 )
             )
+
+            _isRecommendationConfirmed.postValue(true)
+
             Timber.i("confirmRecommendation repo: key(${recommendationConfirmKey}), db: ${database.recommendationsDao
                 .getIsRecommendationConfirmedById(recommendationUnitId)}, $recommendationUnitId")
         }
