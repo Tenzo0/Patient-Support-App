@@ -13,8 +13,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#FAFAFA"
-             android:layout_marginTop="12dp"
-            android:text="6 окт. 2018г."
+            android:layout_marginTop="12dp"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/medicament_swipe_refresh"
+            android:id="@+id/drugs_swipe_refresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
