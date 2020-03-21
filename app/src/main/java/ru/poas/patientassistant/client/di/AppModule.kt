@@ -5,8 +5,10 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
+import ru.poas.patientassistant.client.patient.db.drugs.DrugsDatabase
 import ru.poas.patientassistant.client.patient.db.glossary.GlossaryDatabase
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationsDatabase
+import ru.poas.patientassistant.client.patient.repository.DrugsRepository
 import ru.poas.patientassistant.client.patient.repository.GlossaryRepository
 import ru.poas.patientassistant.client.patient.repository.RecommendationsRepository
 import javax.inject.Singleton
@@ -31,6 +33,13 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
+    fun bindDrugsRepository(database: DrugsDatabase): DrugsRepository {
+        return DrugsRepository(database)
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
     fun provideGlossaryDatabase(context: Context): GlossaryDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
@@ -50,6 +59,16 @@ object AppModule {
         ).build()
     }
 
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideDrugsDatabase(context: Context): DrugsDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            DrugsDatabase::class.java,
+            "Drugs.db"
+        ).build()
+    }
 
     @Singleton
     @Provides
