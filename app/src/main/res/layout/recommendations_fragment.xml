@@ -3,224 +3,213 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/rootLinearLayout"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/default_gradient_background"
-        android:clipToPadding="false"
-        android:elevation="0dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:outlineProvider="bounds">
 
-            <RelativeLayout
+            <ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 android:clipToPadding="false"
-                android:outlineProvider="bounds">
+                android:fadeScrollbars="false"
+                android:outlineProvider="bounds"
+                android:scrollbars="vertical">
 
-                <ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView
-                    android:id="@+id/scrollView"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"
-                    android:clipToPadding="false"
-                    android:fadeScrollbars="false"
-                    android:outlineProvider="bounds"
-                    android:scrollbars="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:outlineProvider="bounds">
-
-                        <TextView
-                            style="@style/TextAppearance.AppCompat.Medium"
-                            android:id="@+id/chosen_date"
-                            android:text="Сегодня"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                        <LinearLayout
-                            android:id="@+id/displayed_recommendations"
-                            android:animateLayoutChanges="true"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginTop="28dp"
-                            android:clipToPadding="false"
-                            android:outlineProvider="bounds"
-                            tools:visibility="gone"
-                            android:orientation="vertical">
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/important_card"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="12dp"
-                                android:layout_marginTop="12dp"
-                                android:visibility="gone"
-                                app:cardBackgroundColor="@color/lightPink"
-                                app:cardCornerRadius="@dimen/card_corner_radius"
-                                app:cardElevation="@dimen/card_elevation"
-                                tools:visibility="visible">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/TextAppearance.AppCompat.Large"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:drawableStart="@drawable/ic_error_outline_black_24dp"
-                                        android:drawablePadding="4dp"
-                                        android:text="@string/important"
-                                        android:textColor="@color/important"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/important_recommendation_text"
-                                        style="@style/TextAppearance.AppCompat.Medium"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="8dp"
-                                        tools:text="important recommendation text" />
-                                </LinearLayout>
-
-                            </androidx.cardview.widget.CardView>
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/recommendation_card"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="12dp"
-                                app:cardCornerRadius="12dp"
-                                app:cardElevation="@dimen/card_elevation"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/TextAppearance.AppCompat.Large"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:drawableStart="@drawable/ic_subject_black_24dp"
-                                        android:drawablePadding="4dp"
-                                        android:text="@string/recommendations"
-                                        android:textColor="@color/textColorOnLight"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/recommendation_text"
-                                        style="@style/TextAppearance.AppCompat.Medium"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_margin="12dp"
-                                        tools:text="recommendation text" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/empty_recommendation_layout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="8dp"
-                                    android:orientation="vertical">
-
-                                </LinearLayout>
-                            </androidx.cardview.widget.CardView>
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                </ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/done_recommendation_button"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/mainAccent"
-                    android:src="@drawable/ic_done" >
-                </com.google.android.material.floatingactionbutton.FloatingActionButton>
+                    android:clipToPadding="false"
+                    android:outlineProvider="bounds">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/empty_recommendation_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginTop="40dp"
-                    android:visibility="gone"
-                    android:animateLayoutChanges="true"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="@dimen/card_elevation"
-                    tools:visibility="invisible">
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Medium"
+                        android:id="@+id/chosen_date"
+                        android:text="@string/today"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
+                        android:id="@+id/displayed_recommendations"
+                        android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="8dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="28dp"
+                        android:clipToPadding="false"
+                        android:outlineProvider="bounds"
+                        tools:visibility="gone"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/empty_recommendation_text"
-                            style="@style/TextAppearance.AppCompat.Large"
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/important_card"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:alpha="0.4"
-                            android:text="Рекомендаций\nна эту дату нет"
-                            android:textAlignment="center"
-                            android:textColor="@color/textColorOnLight"
+                            android:layout_marginHorizontal="12dp"
+                            android:layout_marginTop="12dp"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/lightPink"
+                            app:cardCornerRadius="@dimen/card_corner_radius"
+                            app:cardElevation="@dimen/card_elevation"
+                            tools:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/TextAppearance.AppCompat.Large"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_error_outline_black_24dp"
+                                    android:drawablePadding="4dp"
+                                    android:text="@string/important"
+                                    android:textColor="@color/important"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/important_recommendation_text"
+                                    style="@style/TextAppearance.AppCompat.Medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    tools:text="important recommendation text" />
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/recommendation_card"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="12dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="@dimen/card_elevation"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/empty_recommendation_img" />
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-                        <ImageView
-                            android:id="@+id/empty_recommendation_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:alpha="0.7"
-                            android:background="@color/white"
-                            android:src="@drawable/ic_content_empty"
-                            app:layout_constraintBottom_toTopOf="@+id/empty_recommendation_text"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_chainStyle="packed" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                                <TextView
+                                    style="@style/TextAppearance.AppCompat.Large"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_subject_black_24dp"
+                                    android:drawablePadding="4dp"
+                                    android:text="@string/recommendations"
+                                    android:textColor="@color/textColorOnLight"
+                                    android:textStyle="bold" />
 
-            </RelativeLayout>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                                <TextView
+                                    android:id="@+id/recommendation_text"
+                                    style="@style/TextAppearance.AppCompat.Medium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="12dp"
+                                    tools:text="recommendation text" />
+                            </LinearLayout>
 
-    </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/empty_recommendation_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/done_recommendation_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:background="@color/mainAccent"
+                android:src="@drawable/ic_done" >
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/empty_recommendation_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="40dp"
+                android:visibility="gone"
+                android:animateLayoutChanges="true"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation"
+                tools:visibility="invisible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/empty_recommendation_text"
+                        style="@style/TextAppearance.AppCompat.Large"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.4"
+                        android:text="@string/there_is_no_recommendations"
+                        android:textAlignment="center"
+                        android:textColor="@color/textColorOnLight"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/empty_recommendation_img" />
+
+                    <ImageView
+                        android:id="@+id/empty_recommendation_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.7"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_content_empty"
+                        app:layout_constraintBottom_toTopOf="@+id/empty_recommendation_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

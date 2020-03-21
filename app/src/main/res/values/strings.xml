@@ -84,5 +84,7 @@
     <string name="medicament_fragment_title">Лекарства</string>
     <string name="medicament_date_picker_fragment_title">Выберите дату</string>
     <string name="no_medicine">Лекарства отсутствуют</string>
+    <string name="there_is_no_recommendations">Рекомендаций\nна эту дату нет</string>
+    <string name="today">Сегодня</string>
 
 </resources>
