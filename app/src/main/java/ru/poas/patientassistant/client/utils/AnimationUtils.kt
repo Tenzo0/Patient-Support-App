@@ -17,7 +17,7 @@ fun hideView(view: View) {
         .setDuration(ANIMATION_DURATION)
         .setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
-                view.visibility = View.INVISIBLE
+                view.visibility = View.GONE
             }
         })
 }
