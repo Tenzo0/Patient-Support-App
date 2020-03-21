@@ -2,8 +2,6 @@ package ru.poas.patientassistant.client.patient.ui.recommendations
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationsDatabase
@@ -14,13 +12,15 @@ import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
-class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) : BaseViewModel() {
-    private val repository: RecommendationsRepository = RecommendationsRepository(dataSource)
+class RecommendationsViewModel @Inject constructor(
+    private val recommendationsRepository: RecommendationsRepository
+) : BaseViewModel() {
 
-    val recommendationsList: LiveData<List<Recommendation>> = repository.recommendationsList
-    val operationDate: LiveData<Calendar> = repository.operationDate
-    val isRecommendationConfirmed: LiveData<Boolean> = repository.isRecommendationConfirmed
+    val recommendationsList: LiveData<List<Recommendation>> = recommendationsRepository.recommendationsList
+    val operationDate: LiveData<Calendar> = recommendationsRepository.operationDate
+    val isRecommendationConfirmed: LiveData<Boolean> = recommendationsRepository.isRecommendationConfirmed
 
     private var _selectedDate = MutableLiveData<Calendar>()
     val selectedDate: LiveData<Calendar>
@@ -33,7 +33,7 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
     fun confirmRecommendation(recommendationUnitId: Long) {
         viewModelScope.launch {
             try {
-                repository.confirmRecommendation(
+                recommendationsRepository.confirmRecommendation(
                     Credentials.basic(
                         UserPreferences.getPhone()!!,
                         UserPreferences.getPassword()!!
@@ -68,14 +68,14 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
         viewModelScope.launch {
             _isProgressShow.value = true
             try {
-                repository.refreshRecommendationInfo(
+                recommendationsRepository.refreshRecommendationInfo(
                     Credentials.basic(
                         UserPreferences.getPhone()!!,
                         UserPreferences.getPassword()!!
                     )
                 )
 
-                repository.refreshRecommendations(
+                recommendationsRepository.refreshRecommendations(
                     Credentials.basic(
                         UserPreferences.getPhone()!!,
                         UserPreferences.getPassword()!!
@@ -95,7 +95,7 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
     fun refreshRecommendationConfirm(recommendationUnitId: Long) {
         viewModelScope.launch {
             try {
-                repository.getIsRecommendationConfirmedById(
+                recommendationsRepository.getIsRecommendationConfirmedById(
                     recommendationUnitId
                 )
             }
@@ -104,22 +104,4 @@ class RecommendationsViewModel(private val dataSource: RecommendationsDatabase) 
             }
         }
     }
-
-    /**
-     * Factory for constructing [RecommendationsViewModel] with parameters
-     */
-    class RecommendationsViewModelFactory(private val dataSource: RecommendationsDatabase)
-        : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(RecommendationsViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return RecommendationsViewModel(
-                    dataSource
-                ) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
-
-
 }

@@ -17,8 +17,11 @@ import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class RecommendationsRepository(private val database: RecommendationsDatabase) {
+class RecommendationsRepository @Inject constructor(
+    private val database: RecommendationsDatabase
+) {
     val recommendationsList: LiveData<List<Recommendation>> =
         Transformations.map(database.recommendationsDao.getAllRecommendations()) { it.asDomainModel() }
 

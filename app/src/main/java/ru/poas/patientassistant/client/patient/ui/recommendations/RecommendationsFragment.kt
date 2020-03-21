@@ -1,58 +1,53 @@
 package ru.poas.patientassistant.client.patient.ui.recommendations
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.View.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_patient.*
+import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
-import ru.poas.patientassistant.client.patient.db.recommendations.getRecommendationsDatabase
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
 class RecommendationsFragment : Fragment() {
 
-    private lateinit var viewModel: RecommendationsViewModel
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val viewModel by viewModels<RecommendationsViewModel> { viewModelFactory }
+
     private lateinit var binding: RecommendationsFragmentBinding
+
     private lateinit var picker: DatePickerDialog
-    private val recommendationsFragmentDateFormat = SimpleDateFormat("d MMMM",
-        Locale("ru", "RU"))
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as B2DocApplication)
+            .appComponent
+            .recommendationsComponent().create()
+            .inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil
-            .inflate(layoutInflater, R.layout.recommendations_fragment,
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.recommendations_fragment,
                 container, false)
 
-        viewModel = ViewModelProvider(this,
-            RecommendationsViewModel.RecommendationsViewModelFactory(
-                getRecommendationsDatabase(
-                    requireContext()
-                )
-            )
-        ).get(RecommendationsViewModel::class.java)
-
-        //Select date with DatePickerDialog
-        with(viewModel.selectedDate.value!!) {
-            picker = DatePickerDialog(
-                requireActivity(),
-                DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                    viewModel.updateSelectedDate(year, month, day)
-                    updateRecommendationView(viewModel.selectedDate.value)
-                }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_WEEK)
-            )
-        }
+        setupRecommendationsDatePickerDialog()
 
         //Set onRefresh and onClick listeners
         with(binding) {
@@ -70,12 +65,35 @@ class RecommendationsFragment : Fragment() {
             }
         }
 
+        setupViewModel()
 
-        //Setup viewModel
+        //Set Toolbar menu with calendar icon visible
+        setHasOptionsMenu(true)
+
+        requireActivity().toolbar.title = getString(R.string.endopro)
+
+        return binding.root
+    }
+
+    private fun setupRecommendationsDatePickerDialog() {
+
+        //Select date with DatePickerDialog
+        with(viewModel.selectedDate.value!!) {
+            picker = DatePickerDialog(
+                requireActivity(),
+                DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                    viewModel.updateSelectedDate(year, month, day)
+                    updateRecommendationViewForDate(viewModel.selectedDate.value)
+                }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_WEEK)
+            )
+        }
+    }
+
+    private fun setupViewModel() {
         with(viewModel) {
 
             recommendationsList.observe(viewLifecycleOwner, Observer {
-                updateRecommendationView(selectedDate.value)
+                updateRecommendationViewForDate(selectedDate.value)
             })
 
             isProgressShow.observe(viewLifecycleOwner, Observer {
@@ -104,13 +122,6 @@ class RecommendationsFragment : Fragment() {
                     ).show()
             })
         }
-
-        //Set Toolbar menu with calendar icon visible
-        setHasOptionsMenu(true)
-
-        requireActivity().toolbar.title = getString(R.string.endopro)
-
-        return binding.root
     }
 
     private fun getCurrentRecommendation(date: Calendar?): Recommendation? {
@@ -135,7 +146,7 @@ class RecommendationsFragment : Fragment() {
     }
 
 
-    private fun updateRecommendationView(date: Calendar?) {
+    private fun updateRecommendationViewForDate(date: Calendar?) {
         binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
         binding.chosenDateEmpty.text = binding.chosenDate.text
         binding.doneRecommendationButton.visibility = GONE
@@ -204,12 +215,12 @@ class RecommendationsFragment : Fragment() {
             }
             R.id.chevron_left -> {
                 viewModel.decSelectedDate()
-                updateRecommendationView(viewModel.selectedDate.value)
+                updateRecommendationViewForDate(viewModel.selectedDate.value)
                 true
             }
             R.id.chevron_right -> {
                 viewModel.incSelectedDate()
-                updateRecommendationView(viewModel.selectedDate.value)
+                updateRecommendationViewForDate(viewModel.selectedDate.value)
                 true
             }
             else -> false
@@ -219,5 +230,12 @@ class RecommendationsFragment : Fragment() {
     //Set calendar icon in top left corner of Toolbar (as menu item)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.recommendations_fragment_menu, menu)
+    }
+
+    companion object {
+        private val recommendationsFragmentDateFormat = SimpleDateFormat(
+            "d MMMM",
+            Locale("ru", "RU")
+        )
     }
 }

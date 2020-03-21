@@ -6,6 +6,7 @@ import dagger.Component
 import dagger.Module
 import dagger.android.AndroidInjectionModule
 import ru.poas.patientassistant.client.patient.di.GlossaryComponent
+import ru.poas.patientassistant.client.patient.di.RecommendationsComponent
 import javax.inject.Singleton
 
 /**
@@ -28,9 +29,13 @@ interface AppComponent {
     }
 
     fun glossaryComponent(): GlossaryComponent.Factory
+    fun recommendationsComponent(): RecommendationsComponent.Factory
 }
 
 @Module(
-    subcomponents = [GlossaryComponent::class]
+    subcomponents = [
+        GlossaryComponent::class,
+        RecommendationsComponent::class
+    ]
 )
 object PatientSubcomponentsModule
