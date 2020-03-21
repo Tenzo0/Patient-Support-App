@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:id="@+id/rootLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/default_gradient_background"
@@ -19,26 +20,27 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:outlineProvider="bounds">
 
                 <androidx.core.widget.NestedScrollView
-                    android:id="@+id/displayed_recommendations"
+                    android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
                     android:clipToPadding="false"
                     android:fadeScrollbars="false"
                     android:outlineProvider="bounds"
-                    android:scrollbars="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
+                    android:scrollbars="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:clipToPadding="false"
+                        android:outlineProvider="bounds">
 
                         <TextView
                             style="@style/TextAppearance.AppCompat.Medium"
@@ -50,106 +52,120 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0"/>
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/important_card"
+                        <LinearLayout
+                            android:id="@+id/displayed_recommendations"
+                            android:animateLayoutChanges="true"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="12dp"
-                            android:layout_marginTop="12dp"
-                            android:visibility="gone"
-                            app:cardBackgroundColor="@color/lightPink"
-                            app:cardCornerRadius="@dimen/card_corner_radius"
-                            app:cardElevation="@dimen/card_elevation"
-                            tools:visibility="visible">
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="28dp"
+                            android:clipToPadding="false"
+                            android:outlineProvider="bounds"
+                            tools:visibility="gone"
+                            android:orientation="vertical">
 
-                            <LinearLayout
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/important_card"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:orientation="vertical">
+                                android:layout_marginHorizontal="12dp"
+                                android:layout_marginTop="12dp"
+                                android:visibility="gone"
+                                app:cardBackgroundColor="@color/lightPink"
+                                app:cardCornerRadius="@dimen/card_corner_radius"
+                                app:cardElevation="@dimen/card_elevation"
+                                tools:visibility="visible">
 
-                                <TextView
-                                    style="@style/TextAppearance.AppCompat.Large"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:drawableStart="@drawable/ic_error_outline_black_24dp"
-                                    android:drawablePadding="4dp"
-                                    android:text="@string/important"
-                                    android:textColor="@color/important"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/important_recommendation_text"
-                                    style="@style/TextAppearance.AppCompat.Medium"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
-                                    tools:text="important recommendation text" />
-                            </LinearLayout>
+                                    android:orientation="vertical">
 
-                        </androidx.cardview.widget.CardView>
+                                    <TextView
+                                        style="@style/TextAppearance.AppCompat.Large"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawableStart="@drawable/ic_error_outline_black_24dp"
+                                        android:drawablePadding="4dp"
+                                        android:text="@string/important"
+                                        android:textColor="@color/important"
+                                        android:textStyle="bold" />
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/recommendation_card"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="12dp"
-                            app:cardCornerRadius="12dp"
-                            app:cardElevation="@dimen/card_elevation"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                                    <TextView
+                                        android:id="@+id/important_recommendation_text"
+                                        style="@style/TextAppearance.AppCompat.Medium"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="8dp"
+                                        tools:text="important recommendation text" />
+                                </LinearLayout>
 
-                            <LinearLayout
+                            </androidx.cardview.widget.CardView>
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/recommendation_card"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp"
-                                android:orientation="vertical">
+                                android:layout_margin="12dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="@dimen/card_elevation"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-                                <TextView
-                                    style="@style/TextAppearance.AppCompat.Large"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:drawableStart="@drawable/ic_subject_black_24dp"
-                                    android:drawablePadding="4dp"
-                                    android:text="@string/recommendations"
-                                    android:textColor="@color/textColorOnLight"
-                                    android:textStyle="bold" />
+                                    android:layout_margin="8dp"
+                                    android:orientation="vertical">
 
-                                <TextView
-                                    android:id="@+id/recommendation_text"
-                                    style="@style/TextAppearance.AppCompat.Medium"
+                                    <TextView
+                                        style="@style/TextAppearance.AppCompat.Large"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:drawableStart="@drawable/ic_subject_black_24dp"
+                                        android:drawablePadding="4dp"
+                                        android:text="@string/recommendations"
+                                        android:textColor="@color/textColorOnLight"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/recommendation_text"
+                                        style="@style/TextAppearance.AppCompat.Medium"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="12dp"
+                                        tools:text="recommendation text" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/empty_recommendation_layout"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="12dp"
-                                    tools:text="recommendation text" />
-                            </LinearLayout>
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="8dp"
+                                    android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/empty_recommendation_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="8dp"
-                                android:orientation="vertical">
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
 
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
+                    </RelativeLayout>
 
                 </androidx.core.widget.NestedScrollView>
 
-                <TextView
-                    android:id="@+id/chosen_date_empty"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="match_parent"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/done_recommendation_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/mainAccent"
+                    android:src="@drawable/ic_done" >
+                </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/empty_recommendation_card"
@@ -158,10 +174,12 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="12dp"
                     android:layout_marginBottom="12dp"
-                    android:layout_marginTop="44dp"
+                    android:layout_marginTop="40dp"
+                    android:visibility="gone"
+                    android:animateLayoutChanges="true"
                     app:cardCornerRadius="@dimen/card_corner_radius"
                     app:cardElevation="@dimen/card_elevation"
-                    tools:visibility="visible">
+                    tools:visibility="invisible">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -201,18 +219,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/done_recommendation_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/mainAccent"
-                    android:src="@drawable/ic_done" >
-                </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
             </RelativeLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

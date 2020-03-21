@@ -1,5 +1,6 @@
 package ru.poas.patientassistant.client.patient.ui.recommendations
 
+import android.animation.LayoutTransition
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -16,19 +17,18 @@ import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.patient.vo.Recommendation
+import ru.poas.patientassistant.client.utils.ANIMATION_DURATION
+import ru.poas.patientassistant.client.utils.crossfadeViews
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-
 class RecommendationsFragment : Fragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<RecommendationsViewModel> { viewModelFactory }
-
     private lateinit var binding: RecommendationsFragmentBinding
-
     private lateinit var picker: DatePickerDialog
 
     override fun onAttach(context: Context) {
@@ -48,6 +48,8 @@ class RecommendationsFragment : Fragment() {
                 container, false)
 
         setupRecommendationsDatePickerDialog()
+
+        setupHeightChangeAnimations()
 
         //Set onRefresh and onClick listeners
         with(binding) {
@@ -73,6 +75,18 @@ class RecommendationsFragment : Fragment() {
         requireActivity().toolbar.title = getString(R.string.endopro)
 
         return binding.root
+    }
+
+    private fun setupHeightChangeAnimations() {
+        binding.recommendationCard.layoutTransition = LayoutTransition().apply {
+            enableTransitionType(LayoutTransition.CHANGING)
+            setDuration(ANIMATION_DURATION)
+        }
+
+        binding.importantCard.layoutTransition = LayoutTransition().apply {
+            enableTransitionType(LayoutTransition.CHANGING)
+            setDuration(ANIMATION_DURATION)
+        }
     }
 
     private fun setupRecommendationsDatePickerDialog() {
@@ -148,12 +162,11 @@ class RecommendationsFragment : Fragment() {
 
     private fun updateRecommendationViewForDate(date: Calendar?) {
         binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
-        binding.chosenDateEmpty.text = binding.chosenDate.text
         binding.doneRecommendationButton.visibility = GONE
 
         with(viewModel) {
             try {
-                binding.displayedRecommendations.fullScroll(FOCUS_UP)
+                binding.scrollView.fullScroll(FOCUS_UP)
 
 
                 val millisPassedFromOperation =
@@ -171,27 +184,22 @@ class RecommendationsFragment : Fragment() {
                 with(binding) {
                     //If recommendation found, set it to view
                     if (recommendation?.recommendationUnit != null) {
-                        chosenDate.visibility = VISIBLE
-                        chosenDateEmpty.visibility = GONE
                         refreshRecommendationConfirm(recommendation.recommendationUnit.id)
+
                         recommendationText.text = recommendation.recommendationUnit.content
-                        displayedRecommendations.visibility = VISIBLE
-                        emptyRecommendationCard.visibility = GONE
-                        importantCard.visibility =
-                            if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
-                                binding.importantRecommendationText.text =
-                                    recommendation.recommendationUnit.importantContent
-                                VISIBLE
-                            } else {
-                                GONE
-                            }
+                        crossfadeViews(displayedRecommendations, emptyRecommendationCard)
+
+                        importantCard.visibility = if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
+                            binding.importantRecommendationText.text =
+                                recommendation.recommendationUnit.importantContent
+                            VISIBLE
+                        } else {
+                            GONE
+                        }
                     }
                     //Else show view with empty recommendation text
                     else {
-                        chosenDate.visibility = GONE
-                        chosenDateEmpty.visibility = VISIBLE
-                        displayedRecommendations.visibility = GONE
-                        emptyRecommendationCard.visibility = VISIBLE
+                        crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                     }
                 }
             }
