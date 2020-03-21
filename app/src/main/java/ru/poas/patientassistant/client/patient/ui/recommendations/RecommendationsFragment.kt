@@ -109,6 +109,8 @@ class RecommendationsFragment : Fragment() {
     private fun setupViewModel() {
         with(viewModel) {
 
+            refreshRecommendationsInfo()
+
             recommendationsList.observe(viewLifecycleOwner, Observer {
                 updateRecommendationViewForDate(selectedDate)
             })
