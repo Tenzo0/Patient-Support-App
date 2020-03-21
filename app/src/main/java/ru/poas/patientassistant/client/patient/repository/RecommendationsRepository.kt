@@ -30,16 +30,8 @@ class RecommendationsRepository @Inject constructor(
     val isRecommendationConfirmed: LiveData<Boolean>
         get() = _isRecommendationConfirmed
 
-    private var _operationDate = MutableLiveData<Calendar>()
-    val operationDate: LiveData<Calendar>
-        get() = _operationDate
-
-    private var databaseDateFormat: SimpleDateFormat
-
     init {
         _isRecommendationConfirmed.value = true
-        _operationDate.value = Calendar.getInstance()
-        databaseDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale("ru", "RU"))
     }
 
     /**
@@ -52,7 +44,6 @@ class RecommendationsRepository @Inject constructor(
                 .body()
             userRecommendation?.let {
                 UserPreferences.saveUserRecommendation(it)
-                _operationDate.value?.time = databaseDateFormat.parse(it.operationDate)!!
             }
         }
     }

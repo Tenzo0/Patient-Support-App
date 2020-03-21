@@ -58,7 +58,7 @@ class RecommendationsFragment : Fragment() {
 
             doneRecommendationButton.setOnClickListener {
                 viewModel.confirmRecommendation(
-                    getCurrentRecommendation(viewModel.selectedDate.value)?.recommendationUnit?.id!!
+                    getCurrentRecommendation(viewModel.selectedDate)?.recommendationUnit?.id!!
                 )
                 Snackbar.make(binding.root, "Рекомендация выполнена!", Snackbar.LENGTH_SHORT).show()
                 Timber.i("Рекомендация выполнена")
@@ -78,12 +78,12 @@ class RecommendationsFragment : Fragment() {
     private fun setupRecommendationsDatePickerDialog() {
 
         //Select date with DatePickerDialog
-        with(viewModel.selectedDate.value!!) {
+        with(viewModel.selectedDate) {
             picker = DatePickerDialog(
                 requireActivity(),
                 DatePickerDialog.OnDateSetListener { _, year, month, day ->
                     viewModel.updateSelectedDate(year, month, day)
-                    updateRecommendationViewForDate(viewModel.selectedDate.value)
+                    updateRecommendationViewForDate(viewModel.selectedDate)
                 }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_WEEK)
             )
         }
@@ -93,7 +93,7 @@ class RecommendationsFragment : Fragment() {
         with(viewModel) {
 
             recommendationsList.observe(viewLifecycleOwner, Observer {
-                updateRecommendationViewForDate(selectedDate.value)
+                updateRecommendationViewForDate(selectedDate)
             })
 
             isProgressShow.observe(viewLifecycleOwner, Observer {
@@ -101,10 +101,10 @@ class RecommendationsFragment : Fragment() {
             })
 
             isRecommendationConfirmed.observe(viewLifecycleOwner, Observer {
-                val selectedDate = selectedDate.value
+                val selectedDate = selectedDate
                 val currentDate = Calendar.getInstance()
                 val isEqualDates =
-                    (selectedDate?.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
+                    (selectedDate.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
 
                 binding.doneRecommendationButton.visibility =  if (it == false && isEqualDates)
                     VISIBLE
@@ -128,7 +128,7 @@ class RecommendationsFragment : Fragment() {
         var recommendation: Recommendation? = null
         try {
             val millisPassedFromOperation =
-                date!!.timeInMillis - viewModel.operationDate.value!!.timeInMillis
+                date!!.timeInMillis - viewModel.operationDate.timeInMillis
             val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
 
             Timber.i("$daysPassedFromOperation days passed since operation date")
@@ -157,10 +157,10 @@ class RecommendationsFragment : Fragment() {
 
 
                 val millisPassedFromOperation =
-                    date.timeInMillis - operationDate.value!!.timeInMillis
+                    date.timeInMillis - operationDate.timeInMillis
                 val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
 
-                Timber.i("$daysPassedFromOperation days passed since operation date")
+                Timber.i("$daysPassedFromOperation days passed since operation date (${viewModel.operationDate.get(Calendar.DATE)})")
 
                 //Find recommendation by days passed from operation date
                 val recommendation = recommendationsList
@@ -215,12 +215,12 @@ class RecommendationsFragment : Fragment() {
             }
             R.id.chevron_left -> {
                 viewModel.decSelectedDate()
-                updateRecommendationViewForDate(viewModel.selectedDate.value)
+                updateRecommendationViewForDate(viewModel.selectedDate)
                 true
             }
             R.id.chevron_right -> {
                 viewModel.incSelectedDate()
-                updateRecommendationViewForDate(viewModel.selectedDate.value)
+                updateRecommendationViewForDate(viewModel.selectedDate)
                 true
             }
             else -> false

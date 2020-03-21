@@ -11,6 +11,7 @@ import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -19,17 +20,19 @@ class RecommendationsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val recommendationsList: LiveData<List<Recommendation>> = recommendationsRepository.recommendationsList
-    val operationDate: LiveData<Calendar> = recommendationsRepository.operationDate
     val isRecommendationConfirmed: LiveData<Boolean> = recommendationsRepository.isRecommendationConfirmed
 
-    private var _selectedDate = MutableLiveData<Calendar>()
-    val selectedDate: LiveData<Calendar>
+    private var _operationDate: Calendar = Calendar.getInstance()
+    val operationDate: Calendar
+        get() = _operationDate
+
+    private var _selectedDate: Calendar = Calendar.getInstance()
+    val selectedDate: Calendar
         get() = _selectedDate
 
     init {
-        _selectedDate.value = Calendar.getInstance()
+        _operationDate.timeInMillis = 0
     }
-
     fun confirmRecommendation(recommendationUnitId: Long) {
         viewModelScope.launch {
             try {
@@ -52,16 +55,16 @@ class RecommendationsViewModel @Inject constructor(
     }
 
     fun updateSelectedDate(year: Int, month: Int, day: Int) {
-        _selectedDate.value!!.set(year, month, day)
-        Timber.i("selected date is changed: ${_selectedDate.value!!.get(Calendar.DAY_OF_MONTH)}")
+        _selectedDate.set(year, month, day)
+        Timber.i("selected date is changed: ${_selectedDate.get(Calendar.DAY_OF_MONTH)}")
     }
 
     fun incSelectedDate() {
-        _selectedDate.value!!.add(Calendar.DATE, 1)
+        _selectedDate.add(Calendar.DATE, 1)
     }
 
     fun decSelectedDate() {
-        _selectedDate.value!!.add(Calendar.DATE, -1)
+        _selectedDate.add(Calendar.DATE, -1)
     }
 
     fun refreshRecommendationsInfo() {
@@ -83,6 +86,12 @@ class RecommendationsViewModel @Inject constructor(
                     UserPreferences.getRecommendationId()
                 )
 
+
+                UserPreferences.getOperationDate()?.let {
+                    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                    _operationDate.time = DATABASE_DATE_FORMAT.parse(it)
+                }
+
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
@@ -103,5 +112,9 @@ class RecommendationsViewModel @Inject constructor(
                 Timber.e(e)
             }
         }
+    }
+
+    companion object {
+        val DATABASE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale("ru", "RU"))
     }
 }
