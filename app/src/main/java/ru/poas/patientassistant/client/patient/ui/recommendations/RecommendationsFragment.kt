@@ -1,11 +1,14 @@
 package ru.poas.patientassistant.client.patient.ui.recommendations
 
 import android.animation.LayoutTransition
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.*
 import android.view.View.*
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -184,6 +187,7 @@ class RecommendationsFragment : Fragment() {
                 with(binding) {
                     //If recommendation found, set it to view
                     if (recommendation?.recommendationUnit != null) {
+                        scrollView.setScrollingEnabled(true)
                         refreshRecommendationConfirm(recommendation.recommendationUnit.id)
 
                         recommendationText.text = recommendation.recommendationUnit.content
@@ -199,6 +203,7 @@ class RecommendationsFragment : Fragment() {
                     }
                     //Else show view with empty recommendation text
                     else {
+                        scrollView.setScrollingEnabled(false)
                         crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                     }
                 }
@@ -240,10 +245,41 @@ class RecommendationsFragment : Fragment() {
         inflater.inflate(R.menu.recommendations_fragment_menu, menu)
     }
 
+
+
     companion object {
         private val recommendationsFragmentDateFormat = SimpleDateFormat(
             "d MMMM",
             Locale("ru", "RU")
         )
     }
+}
+class LockableNestedScrollView
+    @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0):
+    NestedScrollView(context, attrs, defStyleAttr)
+{
+    // true if we can scroll (not locked)
+    // false if we cannot scroll (locked)
+    private var isScrollable = true;
+
+    fun setScrollingEnabled(enabled: Boolean) {
+        isScrollable = enabled;
+    }
+
+    fun isScrollable(): Boolean = isScrollable
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent) =
+        when (event.action) {
+            MotionEvent.ACTION_DOWN ->
+                // if we can scroll pass the event to the superclass
+                isScrollable && super.onTouchEvent(event);
+            else ->
+                super.onTouchEvent(event);
+        }
+
+     override fun onInterceptTouchEvent(event: MotionEvent) =
+         // Don't do anything with intercepted touch events if
+         // we are not scrollable
+         isScrollable && super.onInterceptTouchEvent(event)
 }

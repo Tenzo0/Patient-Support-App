@@ -24,7 +24,7 @@
                 android:clipToPadding="false"
                 android:outlineProvider="bounds">
 
-                <androidx.core.widget.NestedScrollView
+                <ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -49,8 +49,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="8dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0"/>
+                            android:layout_height="wrap_content"/>
 
                         <LinearLayout
                             android:id="@+id/displayed_recommendations"
@@ -153,7 +152,7 @@
 
                     </RelativeLayout>
 
-                </androidx.core.widget.NestedScrollView>
+                </ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/done_recommendation_button"
