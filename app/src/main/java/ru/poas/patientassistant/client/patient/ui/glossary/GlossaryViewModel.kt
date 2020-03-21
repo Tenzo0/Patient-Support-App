@@ -15,14 +15,6 @@ class GlossaryViewModel @Inject constructor(
 
     val glossaryItemsList: LiveData<List<GlossaryItem>> = glossaryRepository.glossaryItemsList
 
-    /**
-     * Cancel all coroutines when the ViewModel is cleared
-     */
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
-
     fun refreshGlossary() {
         viewModelScope.launch {
             _isProgressShow.value = true
@@ -43,7 +35,7 @@ class GlossaryViewModel @Inject constructor(
     }
 
     /**
-     * Variable that tells the Fragment to navigate to a specific [GlossaryDetailsFragment]
+     * Variable that tells the Fragment to navigate to the [GlossaryDetailsFragment]
      */
     private val _navigateToDefinitionDetails = MutableLiveData<GlossaryItem>()
 
@@ -64,7 +56,7 @@ class GlossaryViewModel @Inject constructor(
     }
 
     /**
-     * Navigation for the DefinitionDetails Fragment.
+     * Navigation for the [GlossaryDetailsFragment].
      */
     fun onDefinitionClicked(glossaryItem: GlossaryItem) {
         _navigateToDefinitionDetails.value = glossaryItem
