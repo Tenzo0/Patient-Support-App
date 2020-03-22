@@ -22,8 +22,7 @@
         android:layout_marginBottom="2dp"
         android:onClick="@{() -> clickListener.onClick(glossaryItem)}"
         android:orientation="vertical"
-        android:padding="8dp"
-        app:cardElevation="@dimen/card_elevation">
+        android:padding="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
