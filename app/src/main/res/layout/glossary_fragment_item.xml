@@ -23,7 +23,7 @@
         android:onClick="@{() -> clickListener.onClick(glossaryItem)}"
         android:orientation="vertical"
         android:padding="8dp"
-        app:cardElevation="2dp">
+        app:cardElevation="@dimen/card_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,13 +52,15 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/glossary_title_icon" />
+                app:srcCompat="@drawable/glossary_title_icon"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/open_glossary_icon"
                 android:layout_width="16.25dp"
                 android:layout_height="26dp"
                 android:layout_marginEnd="16dp"
+                android:contentDescription="@string/know_more"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
