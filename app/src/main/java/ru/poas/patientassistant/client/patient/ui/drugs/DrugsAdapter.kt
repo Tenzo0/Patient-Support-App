@@ -56,12 +56,12 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
         }
 
         override fun areContentsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {
-            return oldItem.description == newItem.description
-                    && oldItem.dose == newItem.dose
-                    && oldItem.manufacturer == newItem.manufacturer
-                    && oldItem.name == newItem.name
+            return oldItem.dose == newItem.dose
                     && oldItem.doseTypeName == newItem.doseTypeName
+                    && oldItem.timeOfMedicationReception == newItem.timeOfMedicationReception
+                    && oldItem.name == newItem.name
+                    && oldItem.description == newItem.description
+                    && oldItem.manufacturer == newItem.manufacturer
         }
-
     }
 }
