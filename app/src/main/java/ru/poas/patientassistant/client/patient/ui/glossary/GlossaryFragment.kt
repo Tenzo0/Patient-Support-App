@@ -57,6 +57,7 @@ class GlossaryFragment : Fragment() {
         binding.glossaryViewModel = viewModel
         setupGlossaryViewModel()
 
+        viewModel.refreshGlossary()
         return binding.root
     }
 
