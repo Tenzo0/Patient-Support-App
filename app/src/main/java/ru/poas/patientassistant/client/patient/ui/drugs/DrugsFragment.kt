@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsFragmentBinding
@@ -41,7 +42,7 @@ class DrugsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.drugs_fragment, container, false)
         adapter = DrugsAdapter()
         binding.drugsList.adapter = adapter
-
+        binding.drugsList.itemAnimator = DefaultItemAnimator()
         //Setup date navigation
         setupRecommendationsDatePickerDialog()
 

@@ -1,4 +1,4 @@
-package ru.poas.patientassistant.client.patient.repository
+package ru.poas.patientassistant.client.patient.domain
 
 data class DrugItem (
     val id: Long,

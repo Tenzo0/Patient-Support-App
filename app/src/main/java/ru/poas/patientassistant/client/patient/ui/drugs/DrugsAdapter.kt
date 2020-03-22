@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsItemBinding
-import ru.poas.patientassistant.client.patient.repository.DrugItem
+import ru.poas.patientassistant.client.patient.domain.DrugItem
 
 class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
     DrugDiffCallback()
@@ -16,10 +16,16 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
     class ViewHolder(private val binding: DrugsItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DrugItem) {
             with(binding) {
+
                 drugDosageType.text = item.doseTypeName
-                drugDose.text = item.dose.toString()
+                drugDose.text =
+                    if (item.dose % 1 == 0.toDouble()) {
+                        item.dose.toInt().toString()
+                    }
+                    else
+                        item.dose.toString()
                 drugTitle.text = item.name
-                drugTime.text = item.timeOfMedicationReception
+                drugTime.text = item.timeOfMedicationReception.take(5)
             }
         }
         companion object {
@@ -46,11 +52,15 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
 
     class DrugDiffCallback: DiffUtil.ItemCallback<DrugItem>() {
         override fun areItemsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {
-            return oldItem == newItem
+            return oldItem.description == newItem.description
+                    && oldItem.dose == newItem.dose
+                    && oldItem.manufacturer == newItem.manufacturer
+                    && oldItem.name == newItem.name
+                    && oldItem.doseTypeName == newItem.doseTypeName
         }
 
     }

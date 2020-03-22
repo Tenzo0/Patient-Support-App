@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
-import ru.poas.patientassistant.client.patient.repository.DrugItem
+import ru.poas.patientassistant.client.patient.domain.DrugItem
 import ru.poas.patientassistant.client.patient.repository.DrugsRepository
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel

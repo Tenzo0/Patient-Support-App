@@ -3,8 +3,7 @@ package ru.poas.patientassistant.client.patient.db.drugs
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.poas.patientassistant.client.patient.repository.DrugItem
-import ru.poas.patientassistant.client.patient.vo.Medicament
+import ru.poas.patientassistant.client.patient.domain.DrugItem
 
 @Entity(tableName = "drugs_database")
 data class DrugEntity(

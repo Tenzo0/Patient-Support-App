@@ -7,8 +7,8 @@ import kotlinx.coroutines.withContext
 import ru.poas.patientassistant.client.patient.api.DrugsNetwork
 import ru.poas.patientassistant.client.patient.db.drugs.DrugsDatabase
 import ru.poas.patientassistant.client.patient.db.drugs.asDomainObject
+import ru.poas.patientassistant.client.patient.domain.DrugItem
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
-import timber.log.Timber
 import javax.inject.Inject
 
 class DrugsRepository @Inject constructor(
