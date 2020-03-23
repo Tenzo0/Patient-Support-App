@@ -1,8 +1,12 @@
 package ru.poas.patientassistant.client
 
 import android.app.Application
+import android.app.NotificationManager
+import android.content.Context
 import ru.poas.patientassistant.client.di.AppComponent
 import ru.poas.patientassistant.client.di.DaggerAppComponent
+import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
+import ru.poas.patientassistant.client.utils.createChannel
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -25,5 +29,8 @@ open class B2DocApplication: Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
+        val notificationManager = applicationContext
+            .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createChannel(NOTIFICATION_CHANNEL)
     }
 }

@@ -88,5 +88,5 @@
     <string name="today">Сегодня</string>
     <string name="accept_drug_button">принять лекарство</string>
     <string name="know_more">Узнать больше</string>
-
+    <string name="time_to_apply_drugs">Время принять лекарство!</string>
 </resources>

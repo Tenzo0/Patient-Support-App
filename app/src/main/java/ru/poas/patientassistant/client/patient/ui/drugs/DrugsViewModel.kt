@@ -7,6 +7,7 @@ import okhttp3.Credentials
 import ru.poas.patientassistant.client.patient.domain.DrugItem
 import ru.poas.patientassistant.client.patient.repository.DrugsRepository
 import ru.poas.patientassistant.client.preferences.UserPreferences
+import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_DATE_FORMAT
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,9 +68,5 @@ class DrugsViewModel @Inject constructor(
             }
             _isProgressShow.value = false
         }
-    }
-
-    companion object {
-        val DATABASE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale("ru", "RU"))
     }
 }

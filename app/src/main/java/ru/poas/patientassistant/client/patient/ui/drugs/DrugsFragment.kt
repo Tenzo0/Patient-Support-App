@@ -1,7 +1,9 @@
 package ru.poas.patientassistant.client.patient.ui.drugs
 
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -13,9 +15,16 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsFragmentBinding
+import ru.poas.patientassistant.client.patient.domain.drugsStartFromDate
+import ru.poas.patientassistant.client.receivers.AlarmReceiver
+import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_DATE_FORMAT
+import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_TIME_FORMAT
+import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+
 
 class DrugsFragment : Fragment() {
 
@@ -56,6 +65,8 @@ class DrugsFragment : Fragment() {
         })
         viewModel.refreshDrugs()
 
+        setupDrugsNotifications()
+
         setHasOptionsMenu(true)
 
         return binding.root
@@ -80,6 +91,38 @@ class DrugsFragment : Fragment() {
             }
             else -> false
         }
+    }
+
+    private fun setupDrugsNotifications() {
+        viewModel.drugsList.observe(viewLifecycleOwner, Observer {
+
+            //setup notifications only for drugs that begin in current date
+            val drugsStartFromCurrentDate = it.drugsStartFromDate(Date())
+
+            for (drug in drugsStartFromCurrentDate) {
+
+                //Get trigger time for notification from drug item
+                @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                val triggerTime = DATABASE_TIME_FORMAT.parse(drug.timeOfMedicationReception).time +
+                        DATABASE_DATE_FORMAT.parse(drug.dateOfMedicationReception).time
+
+                //Create intent that contains notification type and current drug item
+                val notificationPendingIntent: PendingIntent = PendingIntent
+                    .getBroadcast(
+                        context,
+                        drug.id.toInt(),
+                        Intent(context, AlarmReceiver::class.java).apply {
+                            putExtra("type", "notification")
+                            putExtra("notificationType", "drugNotification")
+                            putExtra("DrugItemBundle", Bundle().apply { putParcelable("DrugItem", drug) })
+                        },
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+
+                //Set exact alarm for current drug
+                setExactAlarmAndAllowWhileIdle(context!!, triggerTime, notificationPendingIntent)
+            }
+        })
     }
 
     private fun setupRecommendationsDatePickerDialog() {
