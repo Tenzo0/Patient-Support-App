@@ -9,7 +9,6 @@ import ru.poas.patientassistant.client.patient.repository.DrugsRepository
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_DATE_FORMAT
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -28,7 +27,7 @@ class DrugsViewModel @Inject constructor(
 
     fun updateDrugsListForSelectedDate() {
         _drugsListForSelectedDate.value = drugsList.value?.filter {
-            it.dateOfMedicationReception == DATABASE_DATE_FORMAT.format(selectedDate.time)
+            it.dateOfDrugReception == DATABASE_DATE_FORMAT.format(selectedDate.time)
         }
     }
 

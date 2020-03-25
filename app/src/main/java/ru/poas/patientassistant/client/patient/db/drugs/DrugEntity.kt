@@ -25,9 +25,16 @@ fun DrugEntity.asDomainObject(): DrugItem =
         doseTypeName,
         dateOfMedicationReception,
         timeOfMedicationReception,
+        drugUnitId,
         name,
         description,
         manufacturer
     )
 
 fun List<DrugEntity>.asDomainObject(): List<DrugItem> = map { it.asDomainObject() }
+
+@Entity(tableName = "drugs_acceptance_database")
+data class DrugsAcceptanceEntity(
+    @PrimaryKey val id: Long,
+    @ColumnInfo val isAccepted: Boolean = false
+)

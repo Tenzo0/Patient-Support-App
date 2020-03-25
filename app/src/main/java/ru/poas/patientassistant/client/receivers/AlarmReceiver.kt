@@ -9,10 +9,13 @@ import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugItem
+import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
 
 class AlarmReceiver : BroadcastReceiver() {
+
+    private var drugNotificationsActualVersion: Long = 0
 
     override fun onReceive(context: Context, intent: Intent) {
         val intentExtras = intent.extras
@@ -33,14 +36,19 @@ class AlarmReceiver : BroadcastReceiver() {
         val notification: Notification? =
             when(bundle.getString("notificationType")) {
                 "drugNotification" -> {
-                    val drugItem: DrugItem? = bundle.getBundle("DrugItemBundle")?.getParcelable("DrugItem")
-                    if (drugItem != null) {
-                        notificationId = drugItem.id.toInt()
+                    val drugItem: DrugNotificationItem? = bundle
+                        .getBundle("DrugNotificationItemBundle")?.getParcelable("DrugNotificationItem")
 
+                    //check received drug item on null and
+                    //check is drugItem contain actual notification info
+                    if (drugItem != null && drugItem.version >= drugNotificationsActualVersion) {
+                        notificationId = drugItem.id.toInt()
+                        drugNotificationsActualVersion = drugItem.version // set current version as actual
                         //create Drug notification
                         createDrugNotification(context, drugItem)
                     }
-                    else null
+                    else
+                        null
                 }
                 else -> null
             }
@@ -53,7 +61,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun createDrugNotification(context: Context, drugItem: DrugItem?): Notification? =
+    private fun createDrugNotification(context: Context, drugItem: DrugNotificationItem?): Notification? =
         if (drugItem != null) {
             NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)

@@ -24,4 +24,15 @@ class DrugsRepository @Inject constructor(
             drugs?.asDatabaseModel()?.let { drugsDatabase.drugsDao.insert(it) }
         }
     }
+
+    suspend fun acceptDrugById(id: Long) {
+        withContext(Dispatchers.IO) {
+            drugsDatabase.drugsDao.acceptDrugById(id)
+        }
+    }
+
+    suspend fun isDrugAcceptedById(id: Long): LiveData<Boolean> =
+        withContext(Dispatchers.IO) {
+            drugsDatabase.drugsDao.isDrugAcceptedById(id)
+        }
 }

@@ -1,10 +1,7 @@
 package ru.poas.patientassistant.client.patient.db.drugs
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface DrugsDao {
@@ -22,4 +19,10 @@ interface DrugsDao {
 
     @Query("delete from drugs_database")
     fun clear()
+
+    @Query("update drugs_acceptance_database set isAccepted = 1 where id = :id")
+    fun acceptDrugById(id: Long)
+
+    @Query("select isAccepted from drugs_acceptance_database where id = :id")
+    fun isDrugAcceptedById(id: Long): LiveData<Boolean>
 }

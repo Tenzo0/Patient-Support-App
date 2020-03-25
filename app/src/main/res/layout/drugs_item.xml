@@ -117,10 +117,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
+                android:id="@+id/drug_accept_button"
                 android:contentDescription="@string/accept_drug_button"
                 style="@style/Widget.AppCompat.ButtonBar"
                 android:background="@color/mainPrimaryLight"
                 android:src="@drawable/ic_done_64dp"
+                android:visibility="invisible"
                 android:alpha="0.8"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"/>

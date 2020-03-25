@@ -18,6 +18,7 @@ import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.login.ui.LoginActivity
+import ru.poas.patientassistant.client.preferences.PatientPreferences
 
 
 class PatientActivity : AppCompatActivity() {
@@ -51,6 +52,8 @@ class PatientActivity : AppCompatActivity() {
 
         //Setup menu in NavDrawer with navigation
         setupNavDrawerWithNavController()
+
+        PatientPreferences.init(this)
     }
 
     private fun setupNavDrawerWithNavController() {

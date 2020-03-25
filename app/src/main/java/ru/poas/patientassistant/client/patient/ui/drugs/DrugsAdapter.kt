@@ -25,9 +25,10 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
                     else
                         item.dose.toString()
                 drugTitle.text = item.name
-                drugTime.text = item.timeOfMedicationReception.take(5)
+                drugTime.text = item.timeOfDrugReception.take(5)
             }
         }
+
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -58,8 +59,7 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
         override fun areContentsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {
             return oldItem.dose == newItem.dose
                     && oldItem.doseTypeName == newItem.doseTypeName
-                    && oldItem.timeOfMedicationReception == newItem.timeOfMedicationReception
-                    && oldItem.name == newItem.name
+                    && oldItem.timeOfDrugReception == newItem.timeOfDrugReception
                     && oldItem.description == newItem.description
                     && oldItem.manufacturer == newItem.manufacturer
         }
