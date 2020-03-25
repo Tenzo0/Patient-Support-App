@@ -23,6 +23,9 @@ interface DrugsDao {
     @Query("update drugs_acceptance_database set isAccepted = 1 where id = :id")
     fun acceptDrugById(id: Long)
 
+    @Query("delete from drugs_database where dateOfMedicationReception = :date")
+    fun deleteByDate(date: String)
+
     @Query("select isAccepted from drugs_acceptance_database where id = :id")
     fun isDrugAcceptedById(id: Long): LiveData<Boolean>
 }
