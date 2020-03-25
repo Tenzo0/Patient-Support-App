@@ -8,15 +8,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import ru.poas.patientassistant.client.R
-import ru.poas.patientassistant.client.patient.domain.DrugItem
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
 import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
-import timber.log.Timber
 
 class AlarmReceiver : BroadcastReceiver() {
-
-    private var drugNotificationsActualVersion: Long = PatientPreferences.getActualNotificationVersion()
 
     override fun onReceive(context: Context, intent: Intent) {
         val intentExtras = intent.extras
@@ -25,7 +21,10 @@ class AlarmReceiver : BroadcastReceiver() {
         intentExtras?.getString("type")?.let {
             when(it) {
                 //If intent contain notification then create and deliver one
-                "notification" -> createAndDeliverNotification(context, intentExtras)
+                "notification" -> {
+                    PatientPreferences.init(context)
+                    createAndDeliverNotification(context, intentExtras)
+                }
             }
         }
     }
@@ -40,11 +39,13 @@ class AlarmReceiver : BroadcastReceiver() {
                     val drugItem: DrugNotificationItem? = bundle
                         .getBundle("DrugNotificationItemBundle")?.getParcelable("DrugNotificationItem")
 
+                    val drugNotificationsActualVersion = PatientPreferences.getActualDrugNotificationVersion()
+
                     //check received drug item on null and
                     //check is drugItem contain actual notification info
-                    if (drugItem != null && drugItem.version >= drugNotificationsActualVersion) {
+                    if (drugItem != null && drugItem.version == drugNotificationsActualVersion) {
                         notificationId = drugItem.id.toInt()
-                        drugNotificationsActualVersion = drugItem.version // set current version as actual
+
                         //create Drug notification
                         createDrugNotification(context, drugItem)
                     }

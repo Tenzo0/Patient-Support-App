@@ -102,8 +102,8 @@ class DrugsFragment : Fragment() {
                 val drugsStartFromCurrentDate = it.drugsStartFromDate(Date())
 
                 //update actual info about notifications version
-                val currentVersion = PatientPreferences.getActualNotificationVersion() + 1
-                PatientPreferences.updateActualNotificationVersion(currentVersion)
+                val currentVersion = PatientPreferences.getActualDrugNotificationVersion() + 1
+                PatientPreferences.updateActualDrugNotificationsVersion(currentVersion)
 
                 for (drug in drugsStartFromCurrentDate) {
 
