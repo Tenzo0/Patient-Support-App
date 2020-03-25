@@ -21,8 +21,8 @@ import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NO
 import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION_ITEM
 import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.NOTIFICATION_ALARM
 import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.NOTIFICATION_TYPE
-import ru.poas.patientassistant.client.utils.DateConstants
-import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_DATE_FORMAT
+import ru.poas.patientassistant.client.utils.DateUtils
+import ru.poas.patientassistant.client.utils.DateUtils.DATABASE_DATE_FORMAT
 import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import java.util.*
@@ -100,7 +100,7 @@ class DrugsViewModel @Inject constructor(
 
                     //Get trigger time for notification from drug item
                     @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                    val triggerTime = DateConstants.DATABASE_TIME_FORMAT.parse(drug.timeOfDrugReception).time +
+                    val triggerTime = DateUtils.DATABASE_TIME_FORMAT.parse(drug.timeOfDrugReception).time +
                             DATABASE_DATE_FORMAT.parse(drug.dateOfDrugReception).time
 
                     //Create intent that contains notification type and current drug item

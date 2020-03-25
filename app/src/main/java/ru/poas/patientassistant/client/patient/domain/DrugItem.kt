@@ -1,7 +1,7 @@
 package ru.poas.patientassistant.client.patient.domain
 
-import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_DATE_FORMAT
-import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_TIME_FORMAT
+import ru.poas.patientassistant.client.utils.DateUtils.DATABASE_DATE_FORMAT
+import ru.poas.patientassistant.client.utils.DateUtils.DATABASE_TIME_FORMAT
 import java.util.*
 
 data class DrugItem(
