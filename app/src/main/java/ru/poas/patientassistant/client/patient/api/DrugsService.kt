@@ -7,6 +7,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.Path
 import ru.poas.patientassistant.client.patient.vo.Medicament
 import ru.poas.patientassistant.client.utils.NetworkUrlConstants
 
@@ -15,11 +17,27 @@ interface DrugsService {
     @GET("patient/medicament/get/all/units")
     suspend fun getAllUnitsAssignedToPatient(@Header("Authorization") credentials: String):
             Response<List<Medicament>>
+
+    @GET("patient/medicament/get/units/{date}")
+    suspend fun getAllUnitsAssignedToPatientAnyDate(
+        @Header("Authorization") credentials: String,
+        @Path("date") date: String
+    ): Response<List<Medicament>>
+
+    @GET("patient/medicament/get/units/{firstDate}/{lastDate}")
+    suspend fun getAllUnitsAssignedToPatientByDateRange(
+        @Header("Authorization") credentials: String,
+        @Path("firstDate") firstDate: String,
+        @Path("lastDate") lastDate: String
+    ): Response<List<Medicament>>
+
+    @POST("patient/medicament/unit/{unitID}/confirm")
+    suspend fun confirmMedicamentUnit(
+        @Header("Authorization") credentials: String,
+        @Path("unitID") unitID: Long
+    ): Response<Unit>
 }
 
-/**
- * Main entry point for network access
- */
 object DrugsNetwork {
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
@@ -31,6 +49,5 @@ object DrugsNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val drugsService = retrofit.create(
-        DrugsService::class.java)
+    val drugsService = retrofit.create(DrugsService::class.java)
 }
