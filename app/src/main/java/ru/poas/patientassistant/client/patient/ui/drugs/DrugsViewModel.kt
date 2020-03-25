@@ -15,6 +15,12 @@ import ru.poas.patientassistant.client.patient.repository.DrugsRepository
 import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.receivers.AlarmReceiver
+import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.ALARM_TYPE
+import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION
+import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION_BUNDLE
+import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION_ITEM
+import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.NOTIFICATION_ALARM
+import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.NOTIFICATION_TYPE
 import ru.poas.patientassistant.client.utils.DateConstants
 import ru.poas.patientassistant.client.utils.DateConstants.DATABASE_DATE_FORMAT
 import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
@@ -103,11 +109,11 @@ class DrugsViewModel @Inject constructor(
                             context,
                             drug.id.toInt(),
                             Intent(context, AlarmReceiver::class.java).apply {
-                                putExtra("type", "notification")
-                                putExtra("notificationType", "drugNotification")
-                                putExtra("DrugNotificationItemBundle", Bundle().apply {
+                                putExtra(ALARM_TYPE, NOTIFICATION_ALARM)
+                                putExtra(NOTIFICATION_TYPE, DRUG_NOTIFICATION)
+                                putExtra(DRUG_NOTIFICATION_BUNDLE, Bundle().apply {
                                     putParcelable(
-                                        "DrugNotificationItem",
+                                        DRUG_NOTIFICATION_ITEM,
                                         drug.asNotificationItem(currentVersion)
                                     )
                                 })

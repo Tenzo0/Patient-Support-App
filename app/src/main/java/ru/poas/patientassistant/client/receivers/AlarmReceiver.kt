@@ -11,6 +11,7 @@ import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
 import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
+import timber.log.Timber
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -18,11 +19,10 @@ class AlarmReceiver : BroadcastReceiver() {
         val intentExtras = intent.extras
 
         //Get type of received intent information
-        intentExtras?.getString("type")?.let {
+        intentExtras?.getInt(ALARM_TYPE)?.let {
             when(it) {
                 //If intent contain notification then create and deliver one
-                "notification" -> {
-                    PatientPreferences.init(context)
+                NOTIFICATION_ALARM -> {
                     createAndDeliverNotification(context, intentExtras)
                 }
             }
@@ -32,12 +32,14 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun createAndDeliverNotification(context: Context, bundle: Bundle) {
         var notificationId = 0
 
+        PatientPreferences.init(context)
+
         //Create notification
         val notification: Notification? =
-            when(bundle.getString("notificationType")) {
-                "drugNotification" -> {
+            when(bundle.getInt(NOTIFICATION_TYPE)) {
+                DRUG_NOTIFICATION -> {
                     val drugItem: DrugNotificationItem? = bundle
-                        .getBundle("DrugNotificationItemBundle")?.getParcelable("DrugNotificationItem")
+                        .getBundle(DRUG_NOTIFICATION_BUNDLE)?.getParcelable(DRUG_NOTIFICATION_ITEM)
 
                     val drugNotificationsActualVersion = PatientPreferences.getActualDrugNotificationVersion()
 
@@ -72,4 +74,16 @@ class AlarmReceiver : BroadcastReceiver() {
                 .build()
         }
         else null
+
+    companion object {
+        const val ALARM_TYPE = "T"
+        const val NOTIFICATION_ALARM = 0
+
+        const val NOTIFICATION_TYPE = "N"
+
+        //Drug notifications
+        const val DRUG_NOTIFICATION = 0
+        const val DRUG_NOTIFICATION_BUNDLE = "DrugNotificationBundle"
+        const val DRUG_NOTIFICATION_ITEM = "DrugNotificationItem"
+    }
 }
