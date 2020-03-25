@@ -10,12 +10,13 @@ import androidx.core.app.NotificationCompat
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugItem
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
+import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
 
 class AlarmReceiver : BroadcastReceiver() {
 
-    private var drugNotificationsActualVersion: Long = 0
+    private var drugNotificationsActualVersion: Long = PatientPreferences.getActualNotificationVersion()
 
     override fun onReceive(context: Context, intent: Intent) {
         val intentExtras = intent.extras

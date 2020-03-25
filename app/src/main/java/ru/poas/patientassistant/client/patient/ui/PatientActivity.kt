@@ -53,7 +53,7 @@ class PatientActivity : AppCompatActivity() {
         //Setup menu in NavDrawer with navigation
         setupNavDrawerWithNavController()
 
-        PatientPreferences.init(this)
+        PatientPreferences.init(applicationContext)
     }
 
     private fun setupNavDrawerWithNavController() {
