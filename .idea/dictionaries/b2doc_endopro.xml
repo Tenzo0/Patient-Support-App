@@ -2,6 +2,7 @@
   <dictionary name="b2doc-endopro">
     <words>
       <w>coroutine</w>
+      <w>subcomponents</w>
     </words>
   </dictionary>
 </component>
