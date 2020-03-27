@@ -39,8 +39,8 @@ class DrugsWorker private constructor(
             }
             
         } catch (e: HttpException) {
-            Timber.e("$e")
-            return Result.failure()
+            Timber.e("Network error: $e")
+            return Result.retry()
         } catch (e: KotlinNullPointerException) {
             Timber.e("NullPointerException at DrugsWorker: phone=${UserPreferences.getPhone()}")
             return Result.failure()
