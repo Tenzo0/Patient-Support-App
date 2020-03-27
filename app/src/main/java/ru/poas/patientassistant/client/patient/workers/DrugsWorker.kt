@@ -1,8 +1,7 @@
 package ru.poas.patientassistant.client.patient.workers
 
 import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import okhttp3.Credentials
 import org.joda.time.LocalDate.fromDateFields
 import retrofit2.HttpException
@@ -13,6 +12,7 @@ import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import timber.log.Timber
 import java.lang.Exception
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class DrugsWorker private constructor(
@@ -48,7 +48,6 @@ class DrugsWorker private constructor(
             Timber.e("unexpected worker exception! $e")
             return Result.failure()
         }
-        Timber.i("all work has been done")
         return Result.success()
     }
 
@@ -59,4 +58,23 @@ class DrugsWorker private constructor(
             return DrugsWorker(appContext, params, drugsRepository)
         }
     }
+}
+
+fun setupDrugsWorker(applicationContext: Context) {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+        .build()
+
+    val repeatingRequest = PeriodicWorkRequestBuilder<DrugsWorker>(
+        15, TimeUnit.MINUTES)
+        .setConstraints(constraints)
+        .build()
+
+    WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+        "B2Doc drugs list and notifications update",
+        ExistingPeriodicWorkPolicy.REPLACE,
+        repeatingRequest
+    )
+
+    Timber.i("drugs worker work started!")
 }

@@ -8,6 +8,7 @@ import androidx.work.WorkManager
 import ru.poas.patientassistant.client.di.AppComponent
 import ru.poas.patientassistant.client.di.AppWorkerFactory
 import ru.poas.patientassistant.client.di.DaggerAppComponent
+import ru.poas.patientassistant.client.receivers.BootReceiver.Companion.enableBootReceiver
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import ru.poas.patientassistant.client.utils.createChannel
 import timber.log.Timber
@@ -46,5 +47,7 @@ open class B2DocApplication: Application() {
                 .setWorkerFactory(workerFactory)
                 .build()
         )
+
+        enableBootReceiver(this)
     }
 }

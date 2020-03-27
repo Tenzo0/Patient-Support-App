@@ -6,7 +6,10 @@ import androidx.room.*
 @Dao
 interface DrugsDao {
     @Query("select * from drugs_database")
-    fun getAll(): LiveData<List<DrugEntity>>
+    fun getAllLiveData(): LiveData<List<DrugEntity>>
+
+    @Query("select * from drugs_database")
+    fun getAll(): List<DrugEntity>
 
     @Query("select * from drugs_database where id = :id")
     fun getById(id: Long): LiveData<DrugEntity>

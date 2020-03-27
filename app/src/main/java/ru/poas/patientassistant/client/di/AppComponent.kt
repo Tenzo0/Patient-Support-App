@@ -9,6 +9,7 @@ import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.patient.di.DrugsComponent
 import ru.poas.patientassistant.client.patient.di.GlossaryComponent
 import ru.poas.patientassistant.client.patient.di.RecommendationsComponent
+import ru.poas.patientassistant.client.receivers.BootReceiver
 import javax.inject.Singleton
 
 /**
@@ -32,6 +33,7 @@ interface AppComponent {
     }
 
     fun inject(application: B2DocApplication)
+    fun inject(bootReceiver: BootReceiver)
 
     fun glossaryComponent(): GlossaryComponent.Factory
     fun recommendationsComponent(): RecommendationsComponent.Factory

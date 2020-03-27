@@ -1,5 +1,6 @@
 package ru.poas.patientassistant.client.patient.repository
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -33,7 +34,14 @@ class DrugsRepository @Inject constructor(
     private val context: Context,
     private val drugsDatabase: DrugsDatabase) {
 
-    val drugsList: LiveData<List<DrugItem>> = map(drugsDatabase.drugsDao.getAll()) { it.asDomainObject() }
+    val drugsList: LiveData<List<DrugItem>> = map(drugsDatabase.drugsDao.getAllLiveData()) { it.asDomainObject() }
+
+    suspend fun refreshNotificationsFromDatabase() {
+        withContext(Dispatchers.IO) {
+            val drugs = drugsDatabase.drugsDao.getAll().asDomainObject()
+            updateNotifications(drugs)
+        }
+    }
 
     suspend fun refreshDrugs(credentials: String) {
         withContext(Dispatchers.IO) {
@@ -97,6 +105,7 @@ class DrugsRepository @Inject constructor(
             drugsDatabase.drugsDao.isDrugAcceptedById(id)
         }
 
+    @SuppressLint("BinaryOperationInTimber")
     @Synchronized
     suspend fun updateNotifications(drugsList: List<DrugItem>?) {
         withContext(Dispatchers.IO) {
@@ -106,9 +115,11 @@ class DrugsRepository @Inject constructor(
                 val drugsStartFromCurrentDate = drugsList.drugsStartFromDate(Date())
 
                 //update actual info about notifications version
+                PatientPreferences.init(context)
                 val currentVersion = PatientPreferences.getActualDrugNotificationVersion() + 1
                 PatientPreferences.updateActualDrugNotificationsVersion(currentVersion)
-                Timber.i("current stable version of drug notifications is $currentVersion")
+                Timber.i("current stable version of drug notifications is $currentVersion, " +
+                        "actual drugs list size is ${drugsStartFromCurrentDate.size}")
 
                 for (drug in drugsStartFromCurrentDate) {
                     //Get trigger time for notification from drug item
@@ -144,8 +155,6 @@ class DrugsRepository @Inject constructor(
                         notificationPendingIntent
                     )
                 }
-
-                Timber.i("drugs list updated: drugsList size = ${drugsStartFromCurrentDate.size}")
             }
         }
     }
