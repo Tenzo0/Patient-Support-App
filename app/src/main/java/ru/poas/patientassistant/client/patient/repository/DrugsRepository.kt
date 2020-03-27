@@ -19,6 +19,7 @@ import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
 import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.receivers.AlarmReceiver
 import ru.poas.patientassistant.client.utils.DateUtils
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
 import timber.log.Timber
 import java.util.*
@@ -93,17 +94,12 @@ class DrugsRepository @Inject constructor(
         }
     }
 
-    suspend fun confirmDrug(credentials: String, id: Long, unitID: Long) {
+    suspend fun confirmDrug(credentials: String, id: Long, unitId: Long) {
         withContext(Dispatchers.IO) {
-            DrugsNetwork.drugsService.confirmMedicamentUnit(credentials, unitID)
-            drugsDatabase.drugsDao.acceptDrugById(id)
+            DrugsNetwork.drugsService.confirmMedicamentUnit(credentials, unitId)
+            drugsDatabase.drugsDao.confirmDrugById(id, databaseSimpleDateFormat.format(Date()))
         }
     }
-
-    suspend fun isDrugConfirmedById(id: Long): LiveData<Boolean> =
-        withContext(Dispatchers.IO) {
-            drugsDatabase.drugsDao.isDrugAcceptedById(id)
-        }
 
     @SuppressLint("BinaryOperationInTimber")
     @Synchronized

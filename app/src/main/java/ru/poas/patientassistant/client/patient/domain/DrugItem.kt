@@ -1,10 +1,8 @@
 package ru.poas.patientassistant.client.patient.domain
 
 import org.joda.time.DateTime
-import org.joda.time.LocalDate
 import org.joda.time.MutableDateTime
 import ru.poas.patientassistant.client.utils.DateUtils
-import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
 import java.util.*
 
 data class DrugItem(
@@ -17,8 +15,7 @@ data class DrugItem(
     val name: String = "",
     val description: String = "",
     val manufacturer: String = "",
-    val isAccepted: Boolean = false,
-    val isNeededToAccept: Boolean = false
+    val realDateTimeOfMedicationReception: String?
 )
 
 fun DrugItem.asNotificationItem(version: Long): DrugNotificationItem = DrugNotificationItem(

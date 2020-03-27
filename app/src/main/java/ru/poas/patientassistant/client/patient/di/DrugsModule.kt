@@ -11,20 +11,12 @@ import ru.poas.patientassistant.client.patient.ui.drugs.DrugsAdapter
 import ru.poas.patientassistant.client.patient.ui.drugs.DrugsViewModel
 import javax.inject.Singleton
 
-@Module(includes = [DrugsModule.DrugsViewModelModule::class])
-object DrugsModule {
+@Module
+abstract class DrugsModule {
 
-    @Module
-    abstract class DrugsViewModelModule {
-        @Binds
-        @IntoMap
-        @ViewModelKey(DrugsViewModel::class)
-        abstract fun bindViewModel(viewModel: DrugsViewModel): ViewModel
-    }
+    @Binds
+    @IntoMap
+    @ViewModelKey(DrugsViewModel::class)
+    abstract fun bindViewModel(viewModel: DrugsViewModel): ViewModel
 
-    @JvmStatic
-    @Provides
-    fun provideDrugsAdapter(): DrugsAdapter {
-        return DrugsAdapter()
-    }
 }

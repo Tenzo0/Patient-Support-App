@@ -1,6 +1,7 @@
 package ru.poas.patientassistant.client.patient.ui.drugs
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -8,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsItemBinding
 import ru.poas.patientassistant.client.patient.domain.DrugItem
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
+import java.util.*
 
-class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
-    DrugDiffCallback()
-) {
+class DrugsAdapter(private val viewModel: DrugsViewModel) :
+    ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(DrugDiffCallback()) {
 
-    class ViewHolder(private val binding: DrugsItemBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: DrugsItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DrugItem) {
             with(binding) {
 
@@ -26,24 +28,34 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
                         item.dose.toString()
                 drugTitle.text = item.name
                 drugTime.text = item.timeOfDrugReception.take(5)
-            }
-        }
 
-        companion object {
-            fun from(parent: ViewGroup): ViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = DrugsItemBinding.inflate(
-                    layoutInflater, parent,false
-                )
-                return ViewHolder(binding)
+                /*
+                    TODO it doesn't consider situation when local device date is different from server date
+                 */
+                if (databaseSimpleDateFormat.format(Date()) == item.dateOfDrugReception &&
+                            item.realDateTimeOfMedicationReception == null) {
+                    drugAcceptButton.visibility = View.VISIBLE
+                    drugAcceptButton.setOnClickListener {
+                        viewModel.confirmDrug(item.id, item.drugUnitId)
+                    }
+                }
+                else drugAcceptButton.visibility = View.GONE
             }
         }
+    }
+
+    private fun createViewHolderFrom(parent: ViewGroup): ViewHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = DrugsItemBinding.inflate(
+            layoutInflater, parent,false
+        )
+        return ViewHolder(binding)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         LayoutInflater.from(parent.context)
             .inflate(R.layout.drugs_item, parent, false)
-        return ViewHolder.from(parent)
+        return createViewHolderFrom(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -57,11 +69,7 @@ class DrugsAdapter: ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(
         }
 
         override fun areContentsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {
-            return oldItem.dose == newItem.dose
-                    && oldItem.doseTypeName == newItem.doseTypeName
-                    && oldItem.timeOfDrugReception == newItem.timeOfDrugReception
-                    && oldItem.description == newItem.description
-                    && oldItem.manufacturer == newItem.manufacturer
+            return oldItem == newItem
         }
     }
 }

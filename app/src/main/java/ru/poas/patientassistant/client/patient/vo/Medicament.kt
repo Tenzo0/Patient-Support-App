@@ -17,7 +17,9 @@ data class Medicament (
         @Json(name = "id") val id: Long,
         @Json(name = "name") val name: String,
         @Json(name = "description") val description: String,
-        @Json(name = "manufacturer") val manufacturer: String
+        @Json(name = "manufacturer") val manufacturer: String,
+        @Json(name = "realDateTimeOfMedicationReception")
+        val realDateTimeOfMedicationReception: String?
     )
 }
 
@@ -30,7 +32,8 @@ fun Medicament.asDatabaseModel(): DrugEntity = DrugEntity(
     medicamentUnit.id,
     medicamentUnit.name,
     medicamentUnit.description,
-    medicamentUnit.manufacturer
+    medicamentUnit.manufacturer,
+    medicamentUnit.realDateTimeOfMedicationReception
 )
 
 fun List<Medicament>.asDatabaseModel(): List<DrugEntity> = map { it.asDatabaseModel() }

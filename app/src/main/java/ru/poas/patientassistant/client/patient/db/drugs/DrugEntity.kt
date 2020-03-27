@@ -15,7 +15,8 @@ data class DrugEntity(
     @ColumnInfo val drugUnitId: Long,
     @ColumnInfo val name: String,
     @ColumnInfo val description: String,
-    @ColumnInfo val manufacturer: String
+    @ColumnInfo val manufacturer: String,
+    @ColumnInfo val realDateTimeOfMedicationReception: String?
 )
 
 fun DrugEntity.asDomainObject(): DrugItem =
@@ -28,13 +29,8 @@ fun DrugEntity.asDomainObject(): DrugItem =
         drugUnitId,
         name,
         description,
-        manufacturer
+        manufacturer,
+        realDateTimeOfMedicationReception
     )
 
 fun List<DrugEntity>.asDomainObject(): List<DrugItem> = map { it.asDomainObject() }
-
-@Entity(tableName = "drugs_acceptance_database")
-data class DrugsAcceptanceEntity(
-    @PrimaryKey val id: Long,
-    @ColumnInfo val isAccepted: Boolean = false
-)

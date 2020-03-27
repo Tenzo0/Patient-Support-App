@@ -69,4 +69,25 @@ class DrugsViewModel @Inject constructor(
             _isProgressShow.value = false
         }
     }
+
+    fun confirmDrug(id: Long, unitId: Long) {
+        viewModelScope.launch {
+            _isProgressShow.value = true
+            try {
+                drugsRepository.confirmDrug(
+                    Credentials.basic(
+                        UserPreferences.getPhone()!!,
+                        UserPreferences.getPassword()!!
+                    ),
+                    id,
+                    unitId
+                )
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } catch (e: Exception) {
+                _eventNetworkError.value = true
+            }
+            _isProgressShow.value = false
+        }
+    }
 }

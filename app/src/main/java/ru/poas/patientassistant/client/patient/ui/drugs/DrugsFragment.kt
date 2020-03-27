@@ -23,7 +23,7 @@ class DrugsFragment : Fragment() {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<DrugsViewModel> { viewModelFactory }
     private lateinit var binding: DrugsFragmentBinding
-    @Inject lateinit var adapter: DrugsAdapter
+    private lateinit var adapter: DrugsAdapter
     private lateinit var picker: DatePickerDialog
 
     override fun onAttach(context: Context) {
@@ -41,6 +41,7 @@ class DrugsFragment : Fragment() {
     ): View? {
         //Setup list of drugs
         binding = DataBindingUtil.inflate(inflater, R.layout.drugs_fragment, container, false)
+        adapter = DrugsAdapter(viewModel)
         binding.drugsList.adapter = adapter
         binding.drugsList.itemAnimator = DefaultItemAnimator()
 
