@@ -1,5 +1,9 @@
 package ru.poas.patientassistant.client.patient.repository
 
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
 import kotlinx.coroutines.Dispatchers
@@ -8,11 +12,25 @@ import ru.poas.patientassistant.client.patient.api.DrugsNetwork
 import ru.poas.patientassistant.client.patient.db.drugs.DrugsDatabase
 import ru.poas.patientassistant.client.patient.db.drugs.asDomainObject
 import ru.poas.patientassistant.client.patient.domain.DrugItem
+import ru.poas.patientassistant.client.patient.domain.asNotificationItem
+import ru.poas.patientassistant.client.patient.domain.drugsStartFromDate
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
+import ru.poas.patientassistant.client.preferences.PatientPreferences
+import ru.poas.patientassistant.client.receivers.AlarmReceiver
 import ru.poas.patientassistant.client.utils.DateUtils
+import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
+
+/**
+ * [DrugsRepository] has methods for working with Drugs network service, notifications service
+ *  and database. When any refresh method is called it immediately updates all notifications
+ *  which were upload from the server for chosen date range.
+ */
 class DrugsRepository @Inject constructor(
+    private val context: Context,
     private val drugsDatabase: DrugsDatabase) {
 
     val drugsList: LiveData<List<DrugItem>> = map(drugsDatabase.drugsDao.getAll()) { it.asDomainObject() }
@@ -22,7 +40,11 @@ class DrugsRepository @Inject constructor(
             val drugs = DrugsNetwork.drugsService
                 .getAllUnitsAssignedToPatient(credentials).body()
             drugsDatabase.drugsDao.clear()
-            drugs?.asDatabaseModel()?.let { drugsDatabase.drugsDao.insert(it) }
+
+            val drugsEntitiesList = drugs!!.asDatabaseModel()
+            drugsDatabase.drugsDao.insert(drugsEntitiesList)
+
+            updateNotifications(drugsEntitiesList.asDomainObject())
         }
     }
 
@@ -32,40 +54,99 @@ class DrugsRepository @Inject constructor(
                 .getAllUnitsAssignedToPatientAnyDate(credentials, date).body()
             drugsDatabase.drugsDao.deleteByDate(date)
 
-            drugs?.asDatabaseModel()?.let { drugsDatabase.drugsDao.insert(it) }
+            val drugsEntitiesList = drugs!!.asDatabaseModel()
+            drugsDatabase.drugsDao.insert(drugsEntitiesList)
+
+            updateNotifications(drugsEntitiesList.asDomainObject())
         }
     }
 
     suspend fun refreshDrugsByDateRange(credentials: String, firstDate: String, lastDate: String) {
         withContext(Dispatchers.IO) {
+            //Get updates from server
             val drugs = DrugsNetwork.drugsService
                 .getAllUnitsAssignedToPatientByDateRange(credentials, firstDate, lastDate).body()
 
-            var date = firstDate
-            val countDays = DateUtils.getCountDaysBetween(firstDate, lastDate)
-            for (i in 0 until countDays) {
-                drugsDatabase.drugsDao.deleteByDate(date)
-                date = DateUtils.getIncDate(date)
+            //Update values in database
+            var dateForDelete = firstDate
+            val daysCount = DateUtils.getDaysCountBetween(firstDate, lastDate)
+            for (i in 0..daysCount) {
+                //delete entities associated with this date
+                drugsDatabase.drugsDao.deleteByDate(dateForDelete)
+
+                //inc date by one day in each iteration
+                dateForDelete = DateUtils.getDatePlusDays(dateForDelete, 1)
             }
 
-            drugs?.asDatabaseModel()?.let { drugsDatabase.drugsDao.insert(it) }
+            val drugsEntitiesList = drugs!!.asDatabaseModel()
+            drugsDatabase.drugsDao.insert(drugsEntitiesList)
+
+            updateNotifications(drugsEntitiesList.asDomainObject())
         }
     }
 
-    suspend fun confirmDrug(credentials: String, unitID: Long) {
+    suspend fun confirmDrug(credentials: String, id: Long, unitID: Long) {
         withContext(Dispatchers.IO) {
             DrugsNetwork.drugsService.confirmMedicamentUnit(credentials, unitID)
-        }
-    }
-
-    suspend fun acceptDrugById(id: Long) {
-        withContext(Dispatchers.IO) {
             drugsDatabase.drugsDao.acceptDrugById(id)
         }
     }
 
-    suspend fun isDrugAcceptedById(id: Long): LiveData<Boolean> =
+    suspend fun isDrugConfirmedById(id: Long): LiveData<Boolean> =
         withContext(Dispatchers.IO) {
             drugsDatabase.drugsDao.isDrugAcceptedById(id)
         }
+
+    @Synchronized
+    suspend fun updateNotifications(drugsList: List<DrugItem>?) {
+        withContext(Dispatchers.IO) {
+            Timber.i("updating drug notifications")
+            if (!drugsList.isNullOrEmpty()) {
+                //setup notifications only for drugs that begin in current date
+                val drugsStartFromCurrentDate = drugsList.drugsStartFromDate(Date())
+
+                //update actual info about notifications version
+                val currentVersion = PatientPreferences.getActualDrugNotificationVersion() + 1
+                PatientPreferences.updateActualDrugNotificationsVersion(currentVersion)
+                Timber.i("current stable version of drug notifications is $currentVersion")
+
+                for (drug in drugsStartFromCurrentDate) {
+                    //Get trigger time for notification from drug item
+                    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                    val triggerTime = DateUtils.databaseSimpleTimeFormat.parse(drug.timeOfDrugReception).time +
+                            DateUtils.databaseSimpleDateFormat.parse(drug.dateOfDrugReception).time
+
+                    //Create intent that contains notification type and current drug item
+                    val notificationPendingIntent: PendingIntent = PendingIntent
+                        .getBroadcast(
+                            context,
+                            drug.id.toInt(),
+                            Intent(context, AlarmReceiver::class.java).apply {
+                                putExtra(AlarmReceiver.ALARM_TYPE, AlarmReceiver.NOTIFICATION_ALARM)
+                                putExtra(
+                                    AlarmReceiver.NOTIFICATION_TYPE,
+                                    AlarmReceiver.DRUG_NOTIFICATION
+                                )
+                                putExtra(AlarmReceiver.DRUG_NOTIFICATION_BUNDLE, Bundle().apply {
+                                    putParcelable(
+                                        AlarmReceiver.DRUG_NOTIFICATION_ITEM,
+                                        drug.asNotificationItem(currentVersion)
+                                    )
+                                })
+                            },
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+
+                    //Set exact alarm for current drug
+                    setExactAlarmAndAllowWhileIdle(
+                        context,
+                        triggerTime,
+                        notificationPendingIntent
+                    )
+                }
+
+                Timber.i("drugs list updated: drugsList size = ${drugsStartFromCurrentDate.size}")
+            }
+        }
+    }
 }

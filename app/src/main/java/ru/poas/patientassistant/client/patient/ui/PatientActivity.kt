@@ -14,12 +14,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
-import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.login.ui.LoginActivity
+import ru.poas.patientassistant.client.patient.workers.DrugsWorker
 import ru.poas.patientassistant.client.preferences.PatientPreferences
-
+import ru.poas.patientassistant.client.preferences.UserPreferences
+import java.util.concurrent.TimeUnit
 
 class PatientActivity : AppCompatActivity() {
 
@@ -29,6 +31,7 @@ class PatientActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_patient)
         drawerLayout = binding.drawerLayout
 
@@ -52,6 +55,8 @@ class PatientActivity : AppCompatActivity() {
 
         //Setup menu in NavDrawer with navigation
         setupNavDrawerWithNavController()
+
+        setupNotificationWorker()
 
         PatientPreferences.init(this)
     }
@@ -100,5 +105,22 @@ class PatientActivity : AppCompatActivity() {
         navController.navigate(R.id.loginActivity, null, navOptions.build())
         //Finish session with this activity
         finish()
+    }
+
+    private fun setupNotificationWorker() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+            .build()
+
+        val repeatingRequest = PeriodicWorkRequestBuilder<DrugsWorker>(
+            15, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            "B2Doc drugs list and notifications update",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            repeatingRequest
+        )
     }
 }

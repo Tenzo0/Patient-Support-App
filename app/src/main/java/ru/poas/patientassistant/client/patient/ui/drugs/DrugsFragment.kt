@@ -54,7 +54,6 @@ class DrugsFragment : Fragment() {
         })
         viewModel.drugsList.observe(viewLifecycleOwner, Observer {
             viewModel.updateDrugsListForSelectedDate()
-            viewModel.updateDrugsNotifications(requireActivity().applicationContext, it)
         })
         viewModel.refreshDrugs()
 

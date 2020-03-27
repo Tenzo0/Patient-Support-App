@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.android.AndroidInjectionModule
+import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.patient.di.DrugsComponent
 import ru.poas.patientassistant.client.patient.di.GlossaryComponent
 import ru.poas.patientassistant.client.patient.di.RecommendationsComponent
@@ -19,6 +20,7 @@ import javax.inject.Singleton
         AppModule::class,
         AndroidInjectionModule::class,
         ViewModelBuilderModule::class,
+        DrugsWorkerModule::class,
         PatientSubcomponentsModule::class
     ]
 )
@@ -28,6 +30,8 @@ interface AppComponent {
     interface Factory {
         fun create(@BindsInstance applicationContext: Context): AppComponent
     }
+
+    fun inject(application: B2DocApplication)
 
     fun glossaryComponent(): GlossaryComponent.Factory
     fun recommendationsComponent(): RecommendationsComponent.Factory

@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
 
+        <provider
+            android:authorities="${applicationId}.workmanager-init"
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:exported="false"
+            tools:node="remove"/>
+        
         <!-- Receivers -->
         <receiver
             android:name=".receivers.AlarmReceiver"
@@ -37,7 +43,6 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

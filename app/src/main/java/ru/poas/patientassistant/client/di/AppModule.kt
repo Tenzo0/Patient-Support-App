@@ -33,8 +33,8 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun bindDrugsRepository(database: DrugsDatabase): DrugsRepository {
-        return DrugsRepository(database)
+    fun bindDrugsRepository(context: Context, database: DrugsDatabase): DrugsRepository {
+        return DrugsRepository(context.applicationContext, database)
     }
 
     @JvmStatic

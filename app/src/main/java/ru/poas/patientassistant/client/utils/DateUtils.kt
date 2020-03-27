@@ -1,26 +1,33 @@
 package ru.poas.patientassistant.client.utils
 
+import org.joda.time.DateTime
+import org.joda.time.Days
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 object DateUtils{
-    val DATABASE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale("ru", "RU"))
-    val DATABASE_TIME_FORMAT = SimpleDateFormat("HH:mm:ss", Locale("ru", "RU")).apply {
-        timeZone = TimeZone.getTimeZone("GMT")
+    private const val DATABASE_DATE_PATTERN = "yyyy-MM-dd"
+    private const val DATABASE_TIME_PATTERN = "HH:mm:ss"
+    val databaseSimpleDateFormat = SimpleDateFormat(DATABASE_DATE_PATTERN, Locale("ru", "RU"))
+    val databaseSimpleTimeFormat = SimpleDateFormat(DATABASE_TIME_PATTERN, Locale("ru", "RU"))
+        .apply { timeZone = TimeZone.getTimeZone("GMT") }
+    val databaseDateFormatter: DateTimeFormatter by lazy { DateTimeFormat.forPattern(DATABASE_DATE_PATTERN) }
+    val databaseTimeFormatter: DateTimeFormatter by lazy { DateTimeFormat.forPattern(DATABASE_TIME_PATTERN) }
+
+    fun getDaysCountBetween(firstDate: String, lastDate: String): Int {
+        val firstDateInDatabaseFormat = LocalDate
+            .parse(firstDate, databaseDateFormatter)
+        val lastDateInDatabaseFormat = LocalDate
+            .parse(lastDate, databaseDateFormatter)
+        return Days.daysBetween(firstDateInDatabaseFormat, lastDateInDatabaseFormat).days
     }
 
-    fun getCountDaysBetween(firstDate: String, lastDate: String): Long {
-        @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-        val millisBetween = DATABASE_DATE_FORMAT.parse(firstDate).time -
-                DATABASE_DATE_FORMAT.parse(lastDate).time
-        return TimeUnit.DAYS.convert(millisBetween, TimeUnit.MILLISECONDS)
-    }
-
-    fun getIncDate(date: String): String {
-        val parsedDate = DATABASE_DATE_FORMAT.parse(date)
-        val dateTime = LocalDate.fromDateFields(parsedDate).apply { plusDays(1) }
-        return DATABASE_DATE_FORMAT.format(dateTime.toDate())
+    fun getDatePlusDays(date: String, days: Int): String {
+        val resultDate = DateTime.parse(date, databaseDateFormatter)
+            .toMutableDateTime().apply{ addDays(days) }
+        return databaseSimpleDateFormat.format(resultDate.toDate())
     }
 }

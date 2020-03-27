@@ -1,29 +1,14 @@
 package ru.poas.patientassistant.client.patient.ui.drugs
 
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
 import ru.poas.patientassistant.client.patient.domain.DrugItem
-import ru.poas.patientassistant.client.patient.domain.asNotificationItem
-import ru.poas.patientassistant.client.patient.domain.drugsStartFromDate
 import ru.poas.patientassistant.client.patient.repository.DrugsRepository
-import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.receivers.AlarmReceiver
-import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.ALARM_TYPE
-import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION
-import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION_BUNDLE
-import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.DRUG_NOTIFICATION_ITEM
-import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.NOTIFICATION_ALARM
-import ru.poas.patientassistant.client.receivers.AlarmReceiver.Companion.NOTIFICATION_TYPE
-import ru.poas.patientassistant.client.utils.DateUtils
-import ru.poas.patientassistant.client.utils.DateUtils.DATABASE_DATE_FORMAT
-import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import java.util.*
 import javax.inject.Inject
@@ -43,7 +28,7 @@ class DrugsViewModel @Inject constructor(
 
     fun updateDrugsListForSelectedDate() {
         _drugsListForSelectedDate.value = drugsList.value?.filter {
-            it.dateOfDrugReception == DATABASE_DATE_FORMAT.format(selectedDate.time)
+            it.dateOfDrugReception == databaseSimpleDateFormat.format(selectedDate.time)
         }
     }
 
@@ -82,53 +67,6 @@ class DrugsViewModel @Inject constructor(
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false
-        }
-    }
-
-    fun updateDrugsNotifications(context: Context, drugsList: List<DrugItem>) {
-        if (drugsList.isNotEmpty()) {
-            viewModelScope.launch {
-
-                //setup notifications only for drugs that begin in current date
-                val drugsStartFromCurrentDate = drugsList.drugsStartFromDate(Date())
-
-                //update actual info about notifications version
-                val currentVersion = PatientPreferences.getActualDrugNotificationVersion() + 1
-                PatientPreferences.updateActualDrugNotificationsVersion(currentVersion)
-
-                for (drug in drugsStartFromCurrentDate) {
-
-                    //Get trigger time for notification from drug item
-                    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                    val triggerTime = DateUtils.DATABASE_TIME_FORMAT.parse(drug.timeOfDrugReception).time +
-                            DATABASE_DATE_FORMAT.parse(drug.dateOfDrugReception).time
-
-                    //Create intent that contains notification type and current drug item
-                    val notificationPendingIntent: PendingIntent = PendingIntent
-                        .getBroadcast(
-                            context,
-                            drug.id.toInt(),
-                            Intent(context, AlarmReceiver::class.java).apply {
-                                putExtra(ALARM_TYPE, NOTIFICATION_ALARM)
-                                putExtra(NOTIFICATION_TYPE, DRUG_NOTIFICATION)
-                                putExtra(DRUG_NOTIFICATION_BUNDLE, Bundle().apply {
-                                    putParcelable(
-                                        DRUG_NOTIFICATION_ITEM,
-                                        drug.asNotificationItem(currentVersion)
-                                    )
-                                })
-                            },
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-
-                    //Set exact alarm for current drug
-                    setExactAlarmAndAllowWhileIdle(
-                        context,
-                        triggerTime,
-                        notificationPendingIntent
-                    )
-                }
-            }
         }
     }
 }

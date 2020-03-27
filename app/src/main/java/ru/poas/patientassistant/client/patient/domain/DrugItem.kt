@@ -1,7 +1,10 @@
 package ru.poas.patientassistant.client.patient.domain
 
-import ru.poas.patientassistant.client.utils.DateUtils.DATABASE_DATE_FORMAT
-import ru.poas.patientassistant.client.utils.DateUtils.DATABASE_TIME_FORMAT
+import org.joda.time.DateTime
+import org.joda.time.LocalDate
+import org.joda.time.MutableDateTime
+import ru.poas.patientassistant.client.utils.DateUtils
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
 import java.util.*
 
 data class DrugItem(
@@ -30,13 +33,14 @@ fun DrugItem.asNotificationItem(version: Long): DrugNotificationItem = DrugNotif
 
 fun List<DrugItem>.drugsStartFromDate(date: Date): List<DrugItem> =
     this.filter { drug ->
-        val drugDate = DATABASE_DATE_FORMAT.parse(drug.dateOfDrugReception)
-        val drugTime = DATABASE_TIME_FORMAT.parse(drug.timeOfDrugReception)
-
-        val isDrugDateBeforeOrEqualCurrentDate = if (drugDate != null && drugTime != null) {
-            (drugDate.time + drugTime.time) >= date.time
-        } else false
+        val drugDate = DateTime.parse(drug.dateOfDrugReception, DateUtils.databaseDateFormatter)
+        val drugTime = DateTime.parse(drug.timeOfDrugReception, DateUtils.databaseTimeFormatter)
+        val drugDateTime = MutableDateTime()
+            .apply {
+                setDate(drugDate)
+                setTime(drugTime)
+            }.toDate()
 
         //filter
-        isDrugDateBeforeOrEqualCurrentDate
+        drugDateTime >= date
     }
