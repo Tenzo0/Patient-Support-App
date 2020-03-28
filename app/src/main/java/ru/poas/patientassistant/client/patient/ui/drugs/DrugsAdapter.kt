@@ -7,6 +7,7 @@ package ru.poas.patientassistant.client.patient.ui.drugs
 import android.view.LayoutInflater
 import android.view.View.*
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,16 +31,26 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                         item.dose.toString()
                 drugTitle.text = item.name
                 drugTime.text = item.timeOfDrugReception.take(5)
-
+                drugManufacturer.text = item.manufacturer
                 //If drug isn't accepted before
                 if (item.realDateTimeOfMedicationReception == null) {
                     drugIsAcceptedText.visibility = GONE
                     drugIsAcceptedImg.visibility = GONE
+                    drugConstraintLayout.setConstraintSet(ConstraintSet().apply {
+                        clone(binding.drugConstraintLayout)
+                        clear(R.id.innerDrugConstraintLayout, ConstraintSet.END)
+                        connect(R.id.innerDrugConstraintLayout, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+                    })
                 }
                 else
                 {
                     drugIsAcceptedText.visibility = VISIBLE
                     drugIsAcceptedImg.visibility = VISIBLE
+                    drugConstraintLayout.setConstraintSet(ConstraintSet().apply {
+                        clone(binding.drugConstraintLayout)
+                        clear(R.id.innerDrugConstraintLayout, ConstraintSet.END)
+                        connect(R.id.innerDrugConstraintLayout, ConstraintSet.END, R.id.drug_accept_button, ConstraintSet.START)
+                    })
                 }
 
                 //If drug's acceptance is necessary today
@@ -47,12 +58,15 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                     viewModel.currentServerDate == item.dateOfDrugReception)
                 {
                     drugAcceptButton.visibility = VISIBLE
+                    drugAcceptButton.isClickable = true
                     drugAcceptButton.setOnClickListener {
                         viewModel.confirmDrug(item.id)
                     }
                 } else {
-                    drugAcceptButton.visibility = GONE
+                    drugAcceptButton.isClickable = false
+                    drugAcceptButton.visibility = INVISIBLE
                 }
+                invalidateAll()
             }
         }
     }

@@ -9,33 +9,39 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:layout_marginBottom="12dp"
         android:orientation="vertical"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/drugConstraintLayout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:paddingVertical="8dp"
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="8dp">
+                android:id="@+id/innerDrugConstraintLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/drug_accept_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/drug_icon"
                     android:layout_width="35dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/drug_icon"
                     android:layout_marginStart="16dp"
                     android:alpha="0.8"
+                    android:src="@drawable/drug_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/drug_title"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/drug_title"
-                    app:layout_constraintBottom_toBottomOf="@id/drug_title"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -45,9 +51,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
                     android:gravity="center_vertical"
-                    android:maxLines="2"
                     android:text="@string/medicament"
-                    app:layout_constraintBottom_toTopOf="@+id/drug_dose"
+                    app:layout_constraintBottom_toTopOf="@+id/drug_manufacturer"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@id/drug_icon"
@@ -55,21 +60,37 @@
                     app:layout_constraintVertical_chainStyle="spread" />
 
                 <TextView
+                    android:id="@+id/drug_manufacturer"
                     style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center_vertical"
+                    android:textSize="20sp"
+                    android:text="@string/manufacturer"
+                    app:layout_constraintBottom_toTopOf="@+id/drug_dose"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/drug_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/drug_title"
+                    app:layout_constraintVertical_chainStyle="spread" />
+
+                <TextView
                     android:id="@+id/drug_dose"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceListItem"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/medicine_time_uncheangable"
-                    app:layout_constraintStart_toStartOf="@+id/drug_title"
-                    app:layout_constraintTop_toBottomOf="@+id/drug_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/drug_manufacturer"
+                    app:layout_constraintTop_toBottomOf="@+id/drug_manufacturer"
                     tools:text="1000" />
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
                     android:id="@+id/drug_dosage_type"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -81,15 +102,16 @@
                     tools:text="мг" />
 
                 <TextView
-                    style="@style/TextAppearance.AppCompat.Medium"
                     android:id="@+id/medicine_time_uncheangable"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/time_of_take_drug"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/drug_dose"
-                    app:layout_constraintTop_toBottomOf="@+id/drug_dose" />
+                    android:textSize="20sp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/drug_dose"
+                    app:layout_constraintStart_toEndOf="@+id/drug_dosage_type"
+                    app:layout_constraintTop_toTopOf="@+id/drug_dose" />
 
                 <TextView
                     android:id="@+id/drug_time"
@@ -104,58 +126,49 @@
                     android:textStyle="bold"
                     android:typeface="normal"
                     app:layout_constraintBottom_toBottomOf="@+id/medicine_time_uncheangable"
-                    app:layout_constraintStart_toEndOf="@+id/medicine_time_uncheangable"
-                    app:layout_constraintTop_toTopOf="@+id/medicine_time_uncheangable" />
-
-                <!--
-                <TextView
-                    android:id="@+id/medicine_is_taken"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_done_outlined_64dp"
-                    android:text="@string/accept_drug"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/drug_time" /> -->
+                    app:layout_constraintStart_toEndOf="@+id/medicine_time_uncheangable" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
                 android:id="@+id/drug_accept_button"
-                android:contentDescription="@string/accept_drug_button"
                 style="@style/Widget.AppCompat.ButtonBar"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:alpha="0.8"
                 android:background="@color/mainPrimaryLight"
+                android:contentDescription="@string/accept_drug_button"
                 android:src="@drawable/ic_done_64dp"
                 android:visibility="invisible"
-                android:alpha="0.8"
-                android:layout_width="80dp"
-                android:layout_alignParentEnd="true"
-                android:layout_height="match_parent"
-                tools:visibility="visible"/>
-            
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
             <TextView
                 android:id="@+id/drug_is_accepted_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="8dp"
                 android:text="@string/drug_is_accepted"
+                android:textColor="@color/green"
                 android:visibility="invisible"
-                android:gravity="center"/>
+                app:layout_constraintEnd_toEndOf="@+id/drug_is_accepted_img"
+                app:layout_constraintStart_toStartOf="@+id/drug_is_accepted_img"
+                app:layout_constraintTop_toBottomOf="@+id/drug_is_accepted_img" />
 
             <ImageView
                 android:id="@+id/drug_is_accepted_img"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="8dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_done_outlined_64dp"
                 android:tint="@color/green"
-                android:visibility="invisible"
-                android:src="@drawable/ic_done_outlined_64dp"/>
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/innerDrugConstraintLayout"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
 </layout>

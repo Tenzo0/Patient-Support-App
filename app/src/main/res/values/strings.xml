@@ -78,7 +78,7 @@
     <!-- DrugsFragment -->
     <string name="medicament">Препарат</string>
     <string name="test_drug_dosage">1000 мг</string>
-    <string name="time_of_take_drug">В </string>
+    <string name="time_of_take_drug">в </string>
     <string name="test_drug_time">13:00</string>
     <string name="accept_drug">Лекарство принято</string>
     <string name="today_icon">today icon</string>
@@ -95,8 +95,9 @@
     <string name="time_to_apply_drugs">Время принять лекарство!</string>
 
     <string name="about">Приложение было разработано лабораторией V.I.S.D.O.M</string>
-    <string name="drug_is_accepted">Лекарство принято</string>
+    <string name="drug_is_accepted">Принято</string>
 
     <string name="today_recommendations">Рекомендации</string>
     <string name="open_today_recommendations">"Посмотрите Ваши рекомендации на сегодня!"</string>
+    <string name="manufacturer">Производитель</string>
 </resources>
