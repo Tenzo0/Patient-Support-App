@@ -78,11 +78,7 @@ class GlossaryFragment : Fragment() {
 
         //set onSwipeRefresh view updating
         with(binding.glossarySwipeRefresh) {
-            setColorSchemeResources(
-                R.color.mainPrimary,
-                R.color.green,
-                R.color.red
-            )
+            setColorSchemeResources(R.color.mainPrimary)
             setOnRefreshListener {
                 viewModel.refreshGlossary()
             }

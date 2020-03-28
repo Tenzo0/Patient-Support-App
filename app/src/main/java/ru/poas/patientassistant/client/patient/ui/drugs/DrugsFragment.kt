@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
+import com.google.android.material.snackbar.Snackbar
 import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsFragmentBinding
@@ -62,6 +63,20 @@ class DrugsFragment : Fragment() {
         })
         viewModel.refreshDrugs()
 
+        //set onSwipeRefresh view updating
+        with(binding.drugsSwipeRefresh) {
+            setColorSchemeResources(R.color.mainPrimary)
+            setOnRefreshListener {
+                viewModel.refreshDrugs()
+            }
+        }
+        viewModel.isProgressShow.observe(viewLifecycleOwner, Observer<Boolean>{isProgress ->
+            binding.drugsSwipeRefresh.isRefreshing = isProgress
+        })
+        viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
+            if(isNetworkError) onNetworkError()
+        })
+
         setHasOptionsMenu(true)
 
         return binding.root
@@ -108,6 +123,18 @@ class DrugsFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.date_navigation_menu, menu)
+    }
+
+    private fun onNetworkError() {
+        if (!viewModel.isNetworkErrorShown.value!!) {
+            Snackbar.make(binding.root, getString(R.string.network_error), Snackbar.LENGTH_SHORT)
+                .setAction(R.string.update) {
+                    binding.drugsSwipeRefresh.isRefreshing = true
+                    viewModel.refreshDrugs()
+                }
+                .show()
+            viewModel.onNetworkErrorShown()
+        }
     }
 
     companion object {

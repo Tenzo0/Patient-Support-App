@@ -61,6 +61,7 @@ class RecommendationsFragment : Fragment() {
         //Set onRefresh and onClick listeners
         with(binding) {
 
+            swipeRefreshLayout.setColorSchemeResources(R.color.mainPrimary)
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.refreshRecommendationsInfo()
             }
