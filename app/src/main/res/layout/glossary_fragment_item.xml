@@ -23,9 +23,12 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="8dp"
         android:onClick="@{() -> clickListener.onClick(glossaryItem)}"
         android:orientation="vertical"
+        android:layout_marginHorizontal="8dp"
+        app:cardElevation="@dimen/card_elevation"
+        app:cardCornerRadius="@dimen/card_corner_radius"
         android:padding="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
