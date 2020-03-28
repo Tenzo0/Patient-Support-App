@@ -98,9 +98,9 @@ class DrugsRepository @Inject constructor(
         }
     }
 
-    suspend fun confirmDrug(credentials: String, id: Long, unitId: Long) {
+    suspend fun confirmDrug(credentials: String, id: Long) {
         withContext(Dispatchers.IO) {
-            DrugsNetwork.drugsService.confirmMedicamentUnit(credentials, unitId)
+            DrugsNetwork.drugsService.confirmMedicamentUnit(credentials, id)
             drugsDatabase.drugsDao.confirmDrugById(id, databaseSimpleDateFormat.format(Date()))
         }
     }

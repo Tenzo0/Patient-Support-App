@@ -36,7 +36,8 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                     drugIsAcceptedText.visibility = GONE
                     drugIsAcceptedImg.visibility = GONE
                 }
-                else  {
+                else
+                {
                     drugIsAcceptedText.visibility = VISIBLE
                     drugIsAcceptedImg.visibility = VISIBLE
                 }
@@ -47,7 +48,7 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                 {
                     drugAcceptButton.visibility = VISIBLE
                     drugAcceptButton.setOnClickListener {
-                        viewModel.confirmDrug(item.id, item.drugUnitId)
+                        viewModel.confirmDrug(item.id)
                     }
                 } else {
                     drugAcceptButton.visibility = GONE

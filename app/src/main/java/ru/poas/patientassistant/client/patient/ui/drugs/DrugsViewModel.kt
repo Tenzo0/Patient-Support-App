@@ -83,7 +83,7 @@ class DrugsViewModel @Inject constructor(
         }
     }
 
-    fun confirmDrug(id: Long, unitId: Long) {
+    fun confirmDrug(id: Long) {
         viewModelScope.launch {
             _isProgressShow.value = true
             try {
@@ -92,8 +92,7 @@ class DrugsViewModel @Inject constructor(
                         UserPreferences.getPhone()!!,
                         UserPreferences.getPassword()!!
                     ),
-                    id,
-                    unitId
+                    id
                 )
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false

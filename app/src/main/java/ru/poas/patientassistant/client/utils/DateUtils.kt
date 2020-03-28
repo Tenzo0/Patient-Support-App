@@ -14,14 +14,18 @@ import org.joda.time.format.DateTimeFormatter
 import ru.poas.patientassistant.client.login.api.SyncNetwork.syncService
 import ru.poas.patientassistant.client.preferences.DatePreferences
 import ru.poas.patientassistant.client.preferences.UserPreferences
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
 object DateUtils{
     private const val DATABASE_DATE_PATTERN = "yyyy-MM-dd"
     private const val DATABASE_TIME_PATTERN = "HH:mm:ss"
+    private const val DATABASE_DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
     val databaseSimpleDateFormat = SimpleDateFormat(DATABASE_DATE_PATTERN, Locale("ru", "RU"))
     val databaseSimpleTimeFormat = SimpleDateFormat(DATABASE_TIME_PATTERN, Locale("ru", "RU"))
+        .apply { timeZone = TimeZone.getTimeZone("GMT") }
+    val databaseSimpleDateTimeFormat = SimpleDateFormat(DATABASE_DATETIME_PATTERN, Locale("ru", "RU"))
         .apply { timeZone = TimeZone.getTimeZone("GMT") }
     val databaseDateFormatter: DateTimeFormatter by lazy { DateTimeFormat.forPattern(DATABASE_DATE_PATTERN) }
     val databaseTimeFormatter: DateTimeFormatter by lazy { DateTimeFormat.forPattern(DATABASE_TIME_PATTERN) }
@@ -41,10 +45,24 @@ object DateUtils{
     }
 
     suspend fun syncDateWithServer(context: Context) {
-        val date = syncService.getServerTime(
-            Credentials.basic(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
-        ).body()?.take(10)
-        DatePreferences.init(context)
-        DatePreferences.setActualServerDate(date)
+        try {
+            val date = databaseSimpleDateFormat.format(
+                databaseSimpleDateTimeFormat
+                    .parse(
+                        syncService.getServerTime(
+                            Credentials.basic(
+                                UserPreferences.getPhone()!!,
+                                UserPreferences.getPassword()!!
+                            )
+                        )
+                            .body()!!.take(19)
+                    )!!
+            )
+            DatePreferences.init(context)
+            DatePreferences.setActualServerDate(date)
+        }
+        catch (e: NullPointerException) {
+            Timber.e("syncDateWithServer null pointer exception")
+        }
     }
 }
