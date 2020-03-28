@@ -25,10 +25,7 @@ import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.patient.vo.Recommendation
-import ru.poas.patientassistant.client.utils.ANIMATION_DURATION
-import ru.poas.patientassistant.client.utils.crossfadeViews
-import ru.poas.patientassistant.client.utils.hideView
-import ru.poas.patientassistant.client.utils.revealView
+import ru.poas.patientassistant.client.utils.*
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -133,9 +130,9 @@ class RecommendationsFragment : Fragment() {
                     (selectedDate.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
 
                 if (it == false && isEqualDates)
-                    revealView(binding.doneRecommendationButton)
+                    revealNotVisibleView(binding.doneRecommendationButton)
                 else {
-                    hideView(binding.doneRecommendationButton)
+                    hideVisibleView(binding.doneRecommendationButton)
                 }
             })
 
