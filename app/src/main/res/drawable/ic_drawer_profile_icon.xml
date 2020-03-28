@@ -1,0 +1,25 @@
+<vector android:height="221.40575dp" android:viewportHeight="315"
+    android:viewportWidth="313" android:width="220dp"
+    xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:pathData="M81,0L232,0A81,81 0,0 1,313 81L313,234A81,81 0,0 1,232 315L81,315A81,81 0,0 1,0 234L0,81A81,81 0,0 1,81 0z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:endX="156.5" android:endY="315"
+                android:startX="156.5" android:startY="0" android:type="linear">
+                <item android:color="#FFFFFFFF" android:offset="0"/>
+                <item android:color="#FFCEFFFF" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:fillColor="#ffffff" android:fillType="evenOdd" android:pathData="M255.715,92H273.71C211.751,139.369 171.855,213.579 171.855,297C171.855,303.051 172.065,309.053 172.478,315H140.232C140.645,309.053 140.855,303.051 140.855,297C140.855,213.579 100.959,139.369 39,92H55.995C76.557,125.588 113.589,148 155.855,148C198.121,148 235.153,125.588 255.715,92Z"/>
+    <path android:fillType="evenOdd" android:pathData="M255.715,92H273.71C211.751,139.369 171.855,213.579 171.855,297C171.855,303.051 172.065,309.053 172.478,315H140.232C140.645,309.053 140.855,303.051 140.855,297C140.855,213.579 100.959,139.369 39,92H55.995C76.557,125.588 113.589,148 155.855,148C198.121,148 235.153,125.588 255.715,92Z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:endX="156.355" android:endY="315"
+                android:startX="156.355" android:startY="92" android:type="linear">
+                <item android:color="#FFAC79FF" android:offset="0.229167"/>
+                <item android:color="#FFE4B7FF" android:offset="0.505208"/>
+                <item android:color="#BC4DA9FF" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:fillColor="#AC79FF" android:pathData="M156,106m-31,0a31,31 0,1 1,62 0a31,31 0,1 1,-62 0"/>
+</vector>
