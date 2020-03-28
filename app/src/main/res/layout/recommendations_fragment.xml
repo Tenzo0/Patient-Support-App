@@ -159,7 +159,7 @@
                 android:layout_alignParentBottom="true"
                 app:backgroundTint="@color/mainAccent"
                 android:visibility="invisible"
-                android:src="@drawable/ic_done" >
+                android:src="@drawable/ic_done_outlined_64dp" >
             </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
             <androidx.cardview.widget.CardView

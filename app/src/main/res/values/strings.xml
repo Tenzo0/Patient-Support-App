@@ -95,4 +95,5 @@
     <string name="time_to_apply_drugs">Время принять лекарство!</string>
 
     <string name="about">Приложение было разработано лабораторией V.I.S.D.O.M</string>
+    <string name="drug_is_accepted">Лекарство принято</string>
 </resources>

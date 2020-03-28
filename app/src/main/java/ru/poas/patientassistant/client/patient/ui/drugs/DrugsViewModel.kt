@@ -9,10 +9,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
+import retrofit2.HttpException
 import ru.poas.patientassistant.client.patient.domain.DrugItem
 import ru.poas.patientassistant.client.patient.repository.DrugsRepository
+import ru.poas.patientassistant.client.preferences.DatePreferences
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
+import ru.poas.patientassistant.client.utils.DateUtils.syncDateWithServer
 import ru.poas.patientassistant.client.viewmodel.BaseViewModel
 import java.util.*
 import javax.inject.Inject
@@ -24,6 +27,10 @@ class DrugsViewModel @Inject constructor(
     private var _selectedDate = Calendar.getInstance()
     val selectedDate: Calendar
         get() = _selectedDate
+
+    private var _currentServerDate: String? = DatePreferences.getActualServerDate()
+    val currentServerDate: String?
+        get() = _currentServerDate
 
     val drugsList = drugsRepository.drugsList
     private var _drugsListForSelectedDate = MutableLiveData<List<DrugItem>>()
@@ -55,7 +62,7 @@ class DrugsViewModel @Inject constructor(
         updateDrugsListForSelectedDate()
     }
 
-    fun refreshDrugs() {
+    fun refreshDrugs(context: Context) {
         viewModelScope.launch {
             _isProgressShow.value = true
             try {
@@ -67,7 +74,9 @@ class DrugsViewModel @Inject constructor(
                 )
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
-            } catch (e: Exception) {
+                syncDateWithServer(context)
+                _currentServerDate = DatePreferences.getActualServerDate()
+            } catch (e: HttpException) {
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false

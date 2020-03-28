@@ -16,15 +16,14 @@
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardElevation="@dimen/card_elevation">
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:paddingVertical="8dp">
 
                 <ImageView
@@ -113,7 +112,7 @@
                     android:id="@+id/medicine_is_taken"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_done"
+                    android:drawableEnd="@drawable/ic_done_outlined_64dp"
                     android:text="@string/accept_drug"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/drug_time" /> -->
@@ -129,9 +128,34 @@
                 android:visibility="invisible"
                 android:alpha="0.8"
                 android:layout_width="80dp"
-                android:layout_height="match_parent"/>
+                android:layout_alignParentEnd="true"
+                android:layout_height="match_parent"
+                tools:visibility="visible"/>
+            
+            <TextView
+                android:id="@+id/drug_is_accepted_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp"
+                android:text="@string/drug_is_accepted"
+                android:visibility="invisible"
+                android:gravity="center"/>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/drug_is_accepted_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="8dp"
+                android:tint="@color/green"
+                android:visibility="invisible"
+                android:src="@drawable/ic_done_outlined_64dp"/>
+
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 </layout>

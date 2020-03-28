@@ -40,8 +40,9 @@ class DrugsWorker private constructor(
                     currentDate,
                     DateUtils.getDatePlusDays(currentDate, 2)
                 )
+
+                DateUtils.syncDateWithServer(applicationContext)
             }
-            
         } catch (e: HttpException) {
             Timber.e("Network error: $e")
             return Result.retry()

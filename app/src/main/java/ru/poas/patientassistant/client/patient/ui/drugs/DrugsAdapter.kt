@@ -5,7 +5,7 @@
 package ru.poas.patientassistant.client.patient.ui.drugs
 
 import android.view.LayoutInflater
-import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsItemBinding
 import ru.poas.patientassistant.client.patient.domain.DrugItem
-import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
-import java.util.*
 
 class DrugsAdapter(private val viewModel: DrugsViewModel) :
     ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(DrugDiffCallback()) {
@@ -33,17 +31,27 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                 drugTitle.text = item.name
                 drugTime.text = item.timeOfDrugReception.take(5)
 
-                /*
-                    TODO it doesn't consider situation when local device date is different from server date
-                 */
-                if (databaseSimpleDateFormat.format(Date()) == item.dateOfDrugReception &&
-                            item.realDateTimeOfMedicationReception == null) {
-                    drugAcceptButton.visibility = View.VISIBLE
+                //If drug isn't accepted before
+                if (item.realDateTimeOfMedicationReception == null) {
+                    drugIsAcceptedText.visibility = GONE
+                    drugIsAcceptedImg.visibility = GONE
+                }
+                else  {
+                    drugIsAcceptedText.visibility = VISIBLE
+                    drugIsAcceptedImg.visibility = VISIBLE
+                }
+
+                //If drug's acceptance is necessary today
+                if (item.realDateTimeOfMedicationReception == null &&
+                    viewModel.currentServerDate == item.dateOfDrugReception)
+                {
+                    drugAcceptButton.visibility = VISIBLE
                     drugAcceptButton.setOnClickListener {
                         viewModel.confirmDrug(item.id, item.drugUnitId)
                     }
+                } else {
+                    drugAcceptButton.visibility = GONE
                 }
-                else drugAcceptButton.visibility = View.GONE
             }
         }
     }

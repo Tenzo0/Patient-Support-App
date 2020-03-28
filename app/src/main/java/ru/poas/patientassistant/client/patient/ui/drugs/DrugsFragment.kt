@@ -61,13 +61,13 @@ class DrugsFragment : Fragment() {
         viewModel.drugsList.observe(viewLifecycleOwner, Observer {
             viewModel.updateDrugsListForSelectedDate()
         })
-        viewModel.refreshDrugs()
+        viewModel.refreshDrugs(requireContext())
 
         //set onSwipeRefresh view updating
         with(binding.drugsSwipeRefresh) {
             setColorSchemeResources(R.color.mainPrimary)
             setOnRefreshListener {
-                viewModel.refreshDrugs()
+                viewModel.refreshDrugs(requireContext())
             }
         }
         viewModel.isProgressShow.observe(viewLifecycleOwner, Observer<Boolean>{isProgress ->
@@ -130,7 +130,7 @@ class DrugsFragment : Fragment() {
             Snackbar.make(binding.root, getString(R.string.network_error), Snackbar.LENGTH_SHORT)
                 .setAction(R.string.update) {
                     binding.drugsSwipeRefresh.isRefreshing = true
-                    viewModel.refreshDrugs()
+                    viewModel.refreshDrugs(requireContext())
                 }
                 .show()
             viewModel.onNetworkErrorShown()

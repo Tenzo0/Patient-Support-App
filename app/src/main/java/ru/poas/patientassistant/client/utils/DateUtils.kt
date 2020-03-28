@@ -4,11 +4,16 @@
 
 package ru.poas.patientassistant.client.utils
 
+import android.content.Context
+import okhttp3.Credentials
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import ru.poas.patientassistant.client.login.api.SyncNetwork.syncService
+import ru.poas.patientassistant.client.preferences.DatePreferences
+import ru.poas.patientassistant.client.preferences.UserPreferences
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,5 +38,13 @@ object DateUtils{
         val resultDate = DateTime.parse(date, databaseDateFormatter)
             .toMutableDateTime().apply{ addDays(days) }
         return databaseSimpleDateFormat.format(resultDate.toDate())
+    }
+
+    suspend fun syncDateWithServer(context: Context) {
+        val date = syncService.getServerTime(
+            Credentials.basic(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
+        ).body()?.take(10)
+        DatePreferences.init(context)
+        DatePreferences.setActualServerDate(date)
     }
 }

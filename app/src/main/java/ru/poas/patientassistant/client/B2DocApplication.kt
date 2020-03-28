@@ -12,6 +12,7 @@ import androidx.work.WorkManager
 import ru.poas.patientassistant.client.di.AppComponent
 import ru.poas.patientassistant.client.di.AppWorkerFactory
 import ru.poas.patientassistant.client.di.DaggerAppComponent
+import ru.poas.patientassistant.client.preferences.DatePreferences
 import ru.poas.patientassistant.client.receivers.BootReceiver.Companion.enableBootReceiver
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import ru.poas.patientassistant.client.utils.createChannel
@@ -53,5 +54,7 @@ open class B2DocApplication: Application() {
         )
 
         enableBootReceiver(this)
+
+        DatePreferences.init(this)
     }
 }
