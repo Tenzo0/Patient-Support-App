@@ -157,6 +157,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                app:backgroundTint="@color/mainAccent"
                 android:visibility="invisible"
                 android:src="@drawable/ic_done" >
             </com.google.android.material.floatingactionbutton.FloatingActionButton>

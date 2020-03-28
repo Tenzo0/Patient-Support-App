@@ -10,7 +10,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
-    <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+    <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat</item>
         <item name="colorPrimary">@color/mainPrimary</item>
         <item name="colorPrimaryDark">@color/mainPrimaryDark</item>

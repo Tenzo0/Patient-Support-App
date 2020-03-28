@@ -9,15 +9,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:theme="@style/Theme.AppCompat.DayNight">
+        android:layout_height="match_parent">
 
         <TextView
             style="@style/TextAppearance.AppCompat.Medium"
             android:id="@+id/current_day"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#FAFAFA"
             android:layout_marginTop="8dp"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
