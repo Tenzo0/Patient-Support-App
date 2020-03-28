@@ -40,7 +40,8 @@
                         style="@style/TextAppearance.AppCompat.Medium"
                         android:id="@+id/chosen_date"
                         android:text="@string/today"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:gravity="center"
                         android:layout_marginTop="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -156,7 +157,6 @@
                 android:layout_marginBottom="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:background="@color/mainAccent"
                 android:visibility="invisible"
                 android:src="@drawable/ic_done" >
             </com.google.android.material.floatingactionbutton.FloatingActionButton>

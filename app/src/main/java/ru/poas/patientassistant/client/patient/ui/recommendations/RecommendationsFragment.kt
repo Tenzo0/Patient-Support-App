@@ -20,12 +20,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_patient.*
+import kotlinx.android.synthetic.main.recommendations_fragment.*
 import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.utils.ANIMATION_DURATION
 import ru.poas.patientassistant.client.utils.crossfadeViews
+import ru.poas.patientassistant.client.utils.hideView
+import ru.poas.patientassistant.client.utils.revealView
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -129,10 +132,10 @@ class RecommendationsFragment : Fragment() {
                 val isEqualDates =
                     (selectedDate.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
 
-                binding.doneRecommendationButton.visibility =  if (it == false && isEqualDates)
-                    VISIBLE
+                if (it == false && isEqualDates)
+                    revealView(binding.doneRecommendationButton)
                 else {
-                    GONE
+                    hideView(binding.doneRecommendationButton)
                 }
             })
 
