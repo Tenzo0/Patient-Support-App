@@ -124,16 +124,7 @@ class RecommendationsFragment : Fragment() {
             })
 
             isRecommendationConfirmed.observe(viewLifecycleOwner, Observer {
-                val selectedDate = selectedDate
-                val currentDate = Calendar.getInstance()
-                val isEqualDates =
-                    (selectedDate.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
-
-                if (it == false && isEqualDates)
-                    revealNotVisibleView(binding.doneRecommendationButton)
-                else {
-                    hideVisibleView(binding.doneRecommendationButton)
-                }
+                updateRecommendationButton()
             })
 
             isNetworkErrorShown.observe(viewLifecycleOwner, Observer {
@@ -168,6 +159,18 @@ class RecommendationsFragment : Fragment() {
         return recommendation
     }
 
+    private fun updateRecommendationButton() {
+        val selectedDate = viewModel.selectedDate
+        val currentDate = Calendar.getInstance()
+        val isEqualDates =
+            (selectedDate.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
+        if (viewModel.isRecommendationConfirmed.value == false && isEqualDates &&
+            binding.emptyRecommendationCard.visibility != VISIBLE)
+            revealNotVisibleView(binding.doneRecommendationButton)
+        else {
+            hideVisibleView(binding.doneRecommendationButton)
+        }
+    }
 
     private fun updateRecommendationViewForDate(date: Calendar?) {
         binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
@@ -175,7 +178,7 @@ class RecommendationsFragment : Fragment() {
         with(viewModel) {
             try {
                 binding.scrollView.fullScroll(FOCUS_UP)
-
+                updateRecommendationButton()
 
                 val millisPassedFromOperation =
                     date.timeInMillis - operationDate.timeInMillis
@@ -194,10 +197,8 @@ class RecommendationsFragment : Fragment() {
                     if (recommendation?.recommendationUnit != null) {
                         scrollView.setScrollingEnabled(true)
                         refreshRecommendationConfirm(recommendation.recommendationUnit.id)
-
                         recommendationText.text = recommendation.recommendationUnit.content
                         crossfadeViews(displayedRecommendations, emptyRecommendationCard)
-
                         importantCard.visibility = if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
                             binding.importantRecommendationText.text =
                                 recommendation.recommendationUnit.importantContent
