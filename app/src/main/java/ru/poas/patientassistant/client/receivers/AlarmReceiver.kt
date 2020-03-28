@@ -10,7 +10,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
 import ru.poas.patientassistant.client.preferences.PatientPreferences
@@ -72,7 +74,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun createDrugNotification(context: Context, drugItem: DrugNotificationItem?): Notification? =
         if (drugItem != null) {
             NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.notification_img)
                 .setContentTitle(context.getString(R.string.time_to_apply_drugs))
                 .setContentText("${drugItem.name} ${drugItem.dose} ${drugItem.doseTypeName}")
                 .build()

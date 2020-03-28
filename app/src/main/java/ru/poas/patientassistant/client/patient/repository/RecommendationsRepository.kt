@@ -110,7 +110,7 @@ class RecommendationsRepository @Inject constructor(
 
     private fun createAndDeliverNotification(context: Context) {
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.notification_img)
             .setContentTitle(context.getString(R.string.today_recommendations))
             .setContentText(context.getString(R.string.open_today_recommendations))
             .build()
