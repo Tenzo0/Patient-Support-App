@@ -17,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
+        android:theme="@style/MainTheme"
         android:usesCleartextTraffic="true">
 
         <provider
@@ -43,7 +44,6 @@
         <!-- Activities -->
         <activity
             android:name=".login.ui.LoginActivity"
-            android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,8 +53,7 @@
 
         <activity
             android:name=".patient.ui.PatientActivity"
-            android:label="@string/endopro"
-            android:theme="@style/MainTheme"/>
+            android:label="@string/endopro"/>
     </application>
 
 </manifest>
