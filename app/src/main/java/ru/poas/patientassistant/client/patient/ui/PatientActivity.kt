@@ -39,13 +39,14 @@ class PatientActivity : AppCompatActivity() {
         //Set action bar which changes own menu depending on fragment
         setSupportActionBar(binding.toolbar)
 
-        //Set navigation drawer with 4 top level destinations
+        //Set navigation drawer with 5 top level destinations
         navController = findNavController(R.id.main_nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration.Builder(
             R.id.recommendationsFragment,
             R.id.profileFragment,
             R.id.glossaryFragment,
-            R.id.medicinesFragment)
+            R.id.medicinesFragment,
+            R.id.aboutFragment)
             .setOpenableLayout(drawerLayout)
             .build()
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)

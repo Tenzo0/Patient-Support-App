@@ -5,6 +5,7 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     app:startDestination="@+id/recommendationsFragment">
 
@@ -57,5 +58,10 @@
         android:id="@+id/loginActivity"
         android:name="ru.poas.patientassistant.client.login.ui.LoginActivity"
         android:label="LoginActivity" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="ru.poas.patientassistant.client.patient.ui.about.AboutFragment"
+        android:label="О приложении"
+        tools:layout="@layout/about_fragment" />
 
 </navigation>

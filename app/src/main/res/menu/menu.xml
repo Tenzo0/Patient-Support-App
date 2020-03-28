@@ -27,7 +27,7 @@
         <group android:id="@+id/service_group">
             <item
                 android:title="@string/about_app"
-                android:id="@+id/aboutAppFragment"/>
+                android:id="@+id/aboutFragment"/>
 
             <item
                 android:title="@string/exit"
