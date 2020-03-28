@@ -18,6 +18,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import kotlinx.android.synthetic.main.drawer_header.view.*
+import kotlinx.android.synthetic.main.nav_header.view.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
 import ru.poas.patientassistant.client.login.ui.LoginActivity
@@ -57,6 +59,11 @@ class PatientActivity : AppCompatActivity() {
 
         //Setup menu in NavDrawer with navigation
         setupNavDrawerWithNavController()
+
+        binding.navView.getHeaderView(0).apply {
+            name.text = UserPreferences.getUserFullName()
+            role.text = "Пациент"
+        }
 
         setupDrugsWorker(applicationContext)
     }
