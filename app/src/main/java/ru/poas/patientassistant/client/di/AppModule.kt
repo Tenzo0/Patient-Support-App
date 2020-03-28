@@ -30,7 +30,7 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun bindGRecommendationsRepository(database: RecommendationsDatabase): RecommendationsRepository {
+    fun bindRecommendationsRepository(database: RecommendationsDatabase): RecommendationsRepository {
         return RecommendationsRepository(database)
     }
 

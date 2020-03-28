@@ -13,6 +13,7 @@ import kotlinx.coroutines.*
 import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.patient.repository.DrugsRepository
 import ru.poas.patientassistant.client.patient.workers.setupDrugsWorker
+import ru.poas.patientassistant.client.patient.workers.setupRecommendationWorker
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,6 +32,7 @@ class BootReceiver : BroadcastReceiver() {
             }
 
             setupDrugsWorker(context.applicationContext)
+            setupRecommendationWorker(context.applicationContext)
         }
     }
 

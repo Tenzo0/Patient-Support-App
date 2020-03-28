@@ -24,6 +24,7 @@ import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
 import ru.poas.patientassistant.client.login.ui.LoginActivity
 import ru.poas.patientassistant.client.patient.workers.setupDrugsWorker
+import ru.poas.patientassistant.client.patient.workers.setupRecommendationWorker
 import ru.poas.patientassistant.client.preferences.UserPreferences
 
 class PatientActivity : AppCompatActivity() {
@@ -66,6 +67,7 @@ class PatientActivity : AppCompatActivity() {
         }
 
         setupDrugsWorker(applicationContext)
+        setupRecommendationWorker(applicationContext)
     }
 
     private fun setupNavDrawerWithNavController() {

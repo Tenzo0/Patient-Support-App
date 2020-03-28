@@ -25,7 +25,7 @@ import javax.inject.Singleton
         AppModule::class,
         AndroidInjectionModule::class,
         ViewModelBuilderModule::class,
-        DrugsWorkerModule::class,
+        AppWorkerModule::class,
         PatientSubcomponentsModule::class
     ]
 )

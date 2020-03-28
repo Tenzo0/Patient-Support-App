@@ -96,4 +96,7 @@
 
     <string name="about">Приложение было разработано лабораторией V.I.S.D.O.M</string>
     <string name="drug_is_accepted">Лекарство принято</string>
+
+    <string name="today_recommendations">Рекомендации</string>
+    <string name="open_today_recommendations">"Посмотрите Ваши рекомендации на сегодня!"</string>
 </resources>

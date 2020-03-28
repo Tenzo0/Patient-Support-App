@@ -35,4 +35,7 @@ interface RecommendationsDao {
 
     @Query("delete from recommendations_database")
     fun clear()
+
+    @Query("select case when count(id) == 0 then cast (0 as BIT) else cast (1 as BIT) end from recommendations_database where day = :day")
+    fun isRecommendationExist(day: Int): Boolean
 }

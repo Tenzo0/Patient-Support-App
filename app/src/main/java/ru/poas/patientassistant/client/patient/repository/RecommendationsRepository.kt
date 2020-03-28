@@ -5,11 +5,15 @@
 package ru.poas.patientassistant.client.patient.repository
 
 import android.accounts.NetworkErrorException
+import android.app.NotificationManager
+import android.content.Context
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.api.RecommendationNetwork
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationConfirmKeyEntity
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationsDatabase
@@ -18,6 +22,7 @@ import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
+import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -91,5 +96,34 @@ class RecommendationsRepository @Inject constructor(
             Timber.i("getIsRecommendationConfirmedById repo ${database.recommendationsDao
                 .getIsRecommendationConfirmedById(recommendationUnitId)} with recUnitId $recommendationUnitId")
         }
+    }
+
+    suspend fun deliverNotificationIfRecommendationExist(context: Context, day: Int) {
+        withContext(Dispatchers.IO) {
+            if(database.recommendationsDao.isRecommendationExist(day)) {
+                Timber.i("trying to create and deliver recommendation notification")
+                createAndDeliverNotification(context)
+            }
+            else Timber.i("no recommendations found in database for notification")
+        }
+    }
+
+    private fun createAndDeliverNotification(context: Context) {
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(context.getString(R.string.today_recommendations))
+            .setContentText(context.getString(R.string.open_today_recommendations))
+            .build()
+
+        //Deliver notification
+        notification?.let {
+            val notificationManager = context
+                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(notificationId, notification)
+        }
+    }
+
+    companion object {
+        val notificationId = "recommendationNotification".hashCode()
     }
 }
