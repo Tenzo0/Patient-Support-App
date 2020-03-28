@@ -11,9 +11,9 @@
     <color name="black">#000000</color>
     <color name="gray">#22000000</color>
 
-    <color name="loginPrimary">#2658a0</color>
-    <color name="loginBackgroundGradientBegin">#00538c</color>
-    <color name="loginBackgroundGradientEnd">#50cbe2</color>
+    <color name="loginPrimary">#1565C0</color>
+    <color name="loginBackgroundGradientBegin">#42A5F5</color>
+    <color name="loginBackgroundGradientEnd">#BBDEFB</color>
 
 
     <color name="defaultGradientBackgroundStart">#FFFFFF</color>
@@ -25,7 +25,7 @@
     <color name="mainPrimaryLight">#ECEFF1</color>
     <color name="mainPrimaryDark">#2f73aa</color>
     <color name="mainBackground">#e8eaf1</color> -->
-    <color name="mainPrimary">#42A5F5</color>
+    <color name="mainPrimary">#1565C0</color>
     <color name="mainPrimaryLight">#DDEDFD</color>
     <color name="mainPrimaryDark">#D5E6FA</color>
     <color name="mainBackground">#F2F6FF</color>
