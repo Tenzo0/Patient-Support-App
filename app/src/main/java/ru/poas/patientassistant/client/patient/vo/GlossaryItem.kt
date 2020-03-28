@@ -6,6 +6,7 @@ package ru.poas.patientassistant.client.patient.vo
 
 import com.squareup.moshi.Json
 import ru.poas.patientassistant.client.patient.db.glossary.GlossaryEntity
+import ru.poas.patientassistant.client.utils.parseServerContent
 
 data class GlossaryItem(
     @field:Json(name = "content") val content: String,
@@ -18,7 +19,7 @@ fun GlossaryItem.asDatabaseModel(): GlossaryEntity = GlossaryEntity(
     id,
     shortTitle,
     title,
-    content
+    parseServerContent(content)
 )
 
 fun List<GlossaryItem>.asDatabaseModel(): List<GlossaryEntity> = map { it.asDatabaseModel() }

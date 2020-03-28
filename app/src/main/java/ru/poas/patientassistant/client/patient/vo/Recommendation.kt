@@ -6,6 +6,7 @@ package ru.poas.patientassistant.client.patient.vo
 
 import com.squareup.moshi.Json
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationEntity
+import ru.poas.patientassistant.client.utils.parseServerContent
 
 data class Recommendation(
     @Json(name = "id") val id: Long,
@@ -33,5 +34,3 @@ fun Recommendation.asDatabaseModel(): RecommendationEntity =
     )
 
 fun List<Recommendation>.asDatabaseModel(): List<RecommendationEntity> = map { it.asDatabaseModel() }
-
-private fun parseServerContent(content: String): String = content.replace('|', '\n')
