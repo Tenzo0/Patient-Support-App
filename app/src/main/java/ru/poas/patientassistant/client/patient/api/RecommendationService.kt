@@ -47,6 +47,6 @@ object RecommendationNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val recommendationService = retrofit.create(
+    val recommendationService: RecommendationService = retrofit.create(
         RecommendationService::class.java)
 }

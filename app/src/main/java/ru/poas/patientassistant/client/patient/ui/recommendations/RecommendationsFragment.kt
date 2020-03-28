@@ -25,11 +25,14 @@ import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.patient.vo.Recommendation
+import ru.poas.patientassistant.client.preferences.DatePreferences
 import ru.poas.patientassistant.client.utils.*
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.time.milliseconds
 
 class RecommendationsFragment : Fragment() {
 
@@ -162,11 +165,11 @@ class RecommendationsFragment : Fragment() {
 
     private fun updateRecommendationButton() {
         val selectedDate = viewModel.selectedDate
-        val currentDate = Calendar.getInstance()
+        val currentDate = DatePreferences.getActualServerDate()
         val isEqualDates =
-            (selectedDate.get(Calendar.DATE) == currentDate.get(Calendar.DATE))
-        if (viewModel.isRecommendationConfirmed.value == false && isEqualDates &&
-            binding.emptyRecommendationCard.visibility != VISIBLE)
+            (databaseSimpleDateFormat.format(selectedDate.timeInMillis) == currentDate)
+        if (viewModel.isRecommendationConfirmed.value == false && isEqualDates
+            && binding.emptyRecommendationCard.visibility != VISIBLE)
             revealNotVisibleView(binding.doneRecommendationButton)
         else {
             hideVisibleView(binding.doneRecommendationButton)
