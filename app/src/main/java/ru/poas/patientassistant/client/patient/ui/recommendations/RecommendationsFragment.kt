@@ -171,7 +171,6 @@ class RecommendationsFragment : Fragment() {
 
     private fun updateRecommendationViewForDate(date: Calendar?) {
         binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
-        binding.doneRecommendationButton.visibility = GONE
 
         with(viewModel) {
             try {
