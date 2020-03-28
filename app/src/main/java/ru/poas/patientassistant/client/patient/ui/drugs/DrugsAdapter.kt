@@ -21,36 +21,15 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
     inner class ViewHolder(private val binding: DrugsItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DrugItem) {
             with(binding) {
-
-                drugDosageType.text = item.doseTypeName
-                drugDose.text =
-                    if (item.dose % 1 == 0.toDouble()) {
-                        item.dose.toInt().toString()
-                    }
-                    else
-                        item.dose.toString()
-                drugTitle.text = item.name
-                drugTime.text = item.timeOfDrugReception.take(5)
-                drugManufacturer.text = item.manufacturer
                 //If drug isn't accepted before
                 if (item.realDateTimeOfMedicationReception == null) {
                     drugIsAcceptedText.visibility = GONE
                     drugIsAcceptedImg.visibility = GONE
-                    drugConstraintLayout.setConstraintSet(ConstraintSet().apply {
-                        clone(binding.drugConstraintLayout)
-                        clear(R.id.innerDrugConstraintLayout, ConstraintSet.END)
-                        connect(R.id.innerDrugConstraintLayout, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-                    })
                 }
                 else
                 {
                     drugIsAcceptedText.visibility = VISIBLE
                     drugIsAcceptedImg.visibility = VISIBLE
-                    drugConstraintLayout.setConstraintSet(ConstraintSet().apply {
-                        clone(binding.drugConstraintLayout)
-                        clear(R.id.innerDrugConstraintLayout, ConstraintSet.END)
-                        connect(R.id.innerDrugConstraintLayout, ConstraintSet.END, R.id.drug_accept_button, ConstraintSet.START)
-                    })
                 }
 
                 //If drug's acceptance is necessary today
@@ -64,9 +43,20 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                     }
                 } else {
                     drugAcceptButton.isClickable = false
-                    drugAcceptButton.visibility = INVISIBLE
+                    drugAcceptButton.visibility = GONE
                 }
-                invalidateAll()
+
+                //Set text from item
+                drugDosageType.text = item.doseTypeName
+                drugDose.text =
+                    if (item.dose % 1 == 0.toDouble()) {
+                        item.dose.toInt().toString()
+                    }
+                    else
+                        item.dose.toString()
+                drugTitle.text = item.name
+                drugTime.text = item.timeOfDrugReception.take(5)
+                drugManufacturer.text = item.manufacturer
             }
         }
     }
