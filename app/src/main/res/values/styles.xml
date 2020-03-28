@@ -22,6 +22,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="snackbarStyle">@style/snackbarStyle</item>
         <item name="backgroundColor">@color/white</item>
+        <item name="android:windowBackground">@color/veryLightGray</item>
         <item name="android:actionMenuTextColor">@color/textColorOnLight</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
