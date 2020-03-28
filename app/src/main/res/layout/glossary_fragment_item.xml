@@ -27,7 +27,6 @@
         android:onClick="@{() -> clickListener.onClick(glossaryItem)}"
         android:orientation="vertical"
         android:layout_marginHorizontal="12dp"
-        app:cardElevation="@dimen/card_elevation"
         app:cardCornerRadius="@dimen/card_corner_radius"
         android:padding="8dp">
 
