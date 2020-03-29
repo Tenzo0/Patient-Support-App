@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -55,7 +56,7 @@ class PatientActivity : AppCompatActivity() {
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            window.statusBarColor = Color.BLACK
+            window.statusBarColor = ContextCompat.getColor(this, R.color.mainPrimary)
         }
 
         //Setup menu in NavDrawer with navigation

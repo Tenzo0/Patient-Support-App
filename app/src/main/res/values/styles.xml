@@ -4,6 +4,10 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="LoginTheme" parent="MainTheme">
+        <item name="android:windowBackground">@drawable/gradient_background</item>
+    </style>
+
     <style name="MainTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat</item>
         <item name="colorPrimary">@color/mainPrimary</item>

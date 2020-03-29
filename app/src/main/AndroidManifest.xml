@@ -44,6 +44,7 @@
         <!-- Activities -->
         <activity
             android:name=".login.ui.LoginActivity"
+            android:theme="@style/LoginTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
