@@ -29,8 +29,6 @@ class RecommendationsWorker private constructor(
         //Try to deliver notification if it is not delivered today yet
         if (lastRecommendationsNotificationDate == null || lastRecommendationsNotificationDate != currentDate) {
             try {
-                PatientPreferences.updateLastDeliveredRecommendationNotificationDate(currentDate)
-
                 UserPreferences.init(applicationContext)
                 val operationDate = UserPreferences.getOperationDate()
                 val recommendationDay = getDaysCountBetween(operationDate!!, currentDate)
@@ -38,6 +36,7 @@ class RecommendationsWorker private constructor(
                 recommendationsRepository.deliverNotificationIfRecommendationExist(
                     applicationContext, recommendationDay
                 )
+                PatientPreferences.updateLastDeliveredRecommendationNotificationDate(currentDate)
             } catch (e: NullPointerException) {
                 Timber.e("recommendation worker NPE: (user isn't authorized?) " +
                         "UserPreferences.getOperationDate() = ${UserPreferences.getOperationDate()}")
