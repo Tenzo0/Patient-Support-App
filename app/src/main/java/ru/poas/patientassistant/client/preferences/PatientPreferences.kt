@@ -12,6 +12,8 @@ object PatientPreferences {
 
     private const val PREFERENCES_NAME = "user_preferences"
     private const val ACTUAL_DRUG_NOTIFICATIONS_VERSION = "actual_notification_version"
+    private const val LAST_RECOMMENDATION_NOTIFICATION_DELIVER_DATE = "last_rec_notification"
+
 
     fun init(context: Context) {
         patientPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -25,5 +27,16 @@ object PatientPreferences {
         }
     }
 
+    fun updateLastDeliveredRecommendationNotificationDate(date: String) {
+        val editor: SharedPreferences.Editor = patientPreferences.edit()
+        with(editor) {
+            putString(LAST_RECOMMENDATION_NOTIFICATION_DELIVER_DATE, date)
+            apply()
+        }
+    }
+
     fun getActualDrugNotificationVersion() = patientPreferences.getLong(ACTUAL_DRUG_NOTIFICATIONS_VERSION, 0)
+
+    fun getLastDeliveredRecommendationNotificationDate() = patientPreferences
+        .getString(LAST_RECOMMENDATION_NOTIFICATION_DELIVER_DATE, null)
 }

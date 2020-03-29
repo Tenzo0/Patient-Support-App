@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.*
 import ru.poas.patientassistant.client.patient.repository.RecommendationsRepository
+import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import ru.poas.patientassistant.client.utils.DateUtils.getDaysCountBetween
@@ -21,19 +22,27 @@ class RecommendationsWorker private constructor(
     @SuppressLint("BinaryOperationInTimber")
     override suspend fun doWork(): Result {
         Timber.i("recommendation worker work start now")
-        try {
-            UserPreferences.init(applicationContext)
-            val operationDate = UserPreferences.getOperationDate()
-            val currentDate = databaseSimpleDateFormat.format(Date())
-            val recommendationDay = getDaysCountBetween(operationDate!!, currentDate)
-            Timber.i("recommendations day = $recommendationDay")
-            recommendationsRepository.deliverNotificationIfRecommendationExist(
-                applicationContext, recommendationDay
-            )
-        } catch (e: NullPointerException) {
-            Timber.e("recommendation worker NPE: UserPreferences.getOperationDate() " +
-                    "= ${UserPreferences.getOperationDate()}")
-            return Result.failure()
+        PatientPreferences.init(applicationContext)
+        val lastRecommendationsNotificationDate = PatientPreferences.getLastDeliveredRecommendationNotificationDate()
+        val currentDate = databaseSimpleDateFormat.format(Date())
+
+        //Try to deliver notification if it is not delivered today yet
+        if (lastRecommendationsNotificationDate == null || lastRecommendationsNotificationDate != currentDate) {
+            try {
+                PatientPreferences.updateLastDeliveredRecommendationNotificationDate(currentDate)
+
+                UserPreferences.init(applicationContext)
+                val operationDate = UserPreferences.getOperationDate()
+                val recommendationDay = getDaysCountBetween(operationDate!!, currentDate)
+                Timber.i("recommendation day = $recommendationDay")
+                recommendationsRepository.deliverNotificationIfRecommendationExist(
+                    applicationContext, recommendationDay
+                )
+            } catch (e: NullPointerException) {
+                Timber.e("recommendation worker NPE: (user isn't authorized?) " +
+                        "UserPreferences.getOperationDate() = ${UserPreferences.getOperationDate()}")
+                return Result.failure()
+            }
         }
         return Result.success()
     }
@@ -56,7 +65,7 @@ fun setupRecommendationWorker(applicationContext: Context) {
     //Default trigger time in minutes (8:00 am as minutes)
     val defaultTriggerTime = 8 * 60
 
-    //Trigger hour in minutes (time elapsed to the nearest 8:00)
+    //Trigger hour in minutes (time elapsed to the nearest 8:00 am)
     val triggerTime =
         if(currentMinuteOfDay <= defaultTriggerTime)
             defaultTriggerTime - currentMinuteOfDay
