@@ -54,14 +54,13 @@ class AlarmReceiver : BroadcastReceiver() {
                         .getBundle(DRUG_NOTIFICATION_BUNDLE)?.getParcelable(DRUG_NOTIFICATION_ITEM)
 
                     val drugNotificationsActualVersion = PatientPreferences.getActualDrugNotificationVersion()
-
+                    Timber.i("${databaseSimpleTimeFormat.parse(drugItem!!.timeOfDrugReception)!!.time} ${MutableDateTime().apply {addMinutes(30)}.toDate().time}"+
+                            "${databaseSimpleTimeFormat.parse(drugItem.timeOfDrugReception)!!.time} ${MutableDateTime().apply {addMinutes(-30)}.toDate().time}")
                     //check received drug item on null and
                     //check is drugItem contain actual notification info
+                    val currentCalendar = Calendar.getInstance()
                     if (drugItem != null && drugItem.version == drugNotificationsActualVersion &&
-                            drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date()) && //the same dates
-                            //time is +-30 min
-                            databaseSimpleTimeFormat.parse(drugItem.timeOfDrugReception)!!.time <= MutableDateTime().apply {addMinutes(30)}.toDate().time &&
-                            databaseSimpleTimeFormat.parse(drugItem.timeOfDrugReception)!!.time >= MutableDateTime().apply {addMinutes(-30)}.toDate().time)
+                            drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date())) //the same dates)
                     {
                         notificationId = drugItem.id.toInt()
 
