@@ -114,7 +114,7 @@ class RecommendationsRepository @Inject constructor(
             Intent(context, PatientActivity::class.java).apply { putExtra("fragment", "Recommendations") },
             PendingIntent.FLAG_UPDATE_CURRENT)
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.notification_img)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentIntent(startDrugFragmentIntent)
             .setAutoCancel(true)
             .setContentTitle(context.getString(R.string.today_recommendations))
