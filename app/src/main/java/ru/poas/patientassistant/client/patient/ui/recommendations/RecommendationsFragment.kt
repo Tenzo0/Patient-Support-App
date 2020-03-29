@@ -40,6 +40,7 @@ class RecommendationsFragment : Fragment() {
     private val viewModel by viewModels<RecommendationsViewModel> { viewModelFactory }
     private lateinit var binding: RecommendationsFragmentBinding
     private lateinit var picker: DatePickerDialog
+    private var isCurrentItemContainRecommendation: Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -169,7 +170,7 @@ class RecommendationsFragment : Fragment() {
         val isEqualDates =
             (databaseSimpleDateFormat.format(selectedDate.timeInMillis) == currentDate)
         if (viewModel.isRecommendationConfirmed.value == false && isEqualDates
-            && binding.emptyRecommendationCard.visibility != VISIBLE)
+            && isCurrentItemContainRecommendation)
             revealNotVisibleView(binding.doneRecommendationButton)
         else {
             hideVisibleView(binding.doneRecommendationButton)
@@ -198,6 +199,7 @@ class RecommendationsFragment : Fragment() {
                 with(binding) {
                     //If recommendation found, set it to view
                     if (recommendation?.recommendationUnit != null) {
+                        isCurrentItemContainRecommendation = true
                         scrollView.setScrollingEnabled(true)
                         refreshRecommendationConfirm(recommendation.recommendationUnit.id)
                         recommendationText.text = recommendation.recommendationUnit.content
@@ -212,6 +214,7 @@ class RecommendationsFragment : Fragment() {
                     }
                     //Else show view with empty recommendation text
                     else {
+                        isCurrentItemContainRecommendation = false
                         scrollView.setScrollingEnabled(false)
                         crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                     }
