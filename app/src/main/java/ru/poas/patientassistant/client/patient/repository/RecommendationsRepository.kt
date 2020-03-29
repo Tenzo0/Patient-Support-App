@@ -6,7 +6,9 @@ package ru.poas.patientassistant.client.patient.repository
 
 import android.accounts.NetworkErrorException
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +20,7 @@ import ru.poas.patientassistant.client.patient.api.RecommendationNetwork
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationConfirmKeyEntity
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationsDatabase
 import ru.poas.patientassistant.client.patient.db.recommendations.asDomainModel
+import ru.poas.patientassistant.client.patient.ui.PatientActivity
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
@@ -107,8 +110,13 @@ class RecommendationsRepository @Inject constructor(
     }
 
     private fun createAndDeliverNotification(context: Context) {
+        val startDrugFragmentIntent = PendingIntent.getActivity(context, 0,
+            Intent(context, PatientActivity::class.java).apply { putExtra("fragment", "Recommendations") },
+            PendingIntent.FLAG_UPDATE_CURRENT)
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
             .setSmallIcon(R.drawable.notification_img)
+            .setContentIntent(startDrugFragmentIntent)
+            .setAutoCancel(true)
             .setContentTitle(context.getString(R.string.today_recommendations))
             .setContentText(context.getString(R.string.open_today_recommendations))
             .build()

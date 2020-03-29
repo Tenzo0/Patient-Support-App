@@ -6,6 +6,7 @@ package ru.poas.patientassistant.client.receivers
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
+import ru.poas.patientassistant.client.patient.ui.PatientActivity
 import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
@@ -73,8 +75,13 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun createDrugNotification(context: Context, drugItem: DrugNotificationItem?): Notification? =
         if (drugItem != null) {
+            val startDrugFragmentIntent = PendingIntent.getActivity(context, 0,
+            Intent(context, PatientActivity::class.java).apply { putExtra("fragment", "Drugs") },
+            PendingIntent.FLAG_UPDATE_CURRENT)
             NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.notification_img)
+                .setContentIntent(startDrugFragmentIntent)
+                .setAutoCancel(true)
                 .setContentTitle(context.getString(R.string.time_to_apply_drugs))
                 .setContentText("${drugItem.name} ${drugItem.dose} ${drugItem.doseTypeName}")
                 .build()

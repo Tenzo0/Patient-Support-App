@@ -49,8 +49,7 @@ class PatientActivity : AppCompatActivity() {
             R.id.recommendationsFragment,
             R.id.profileFragment,
             R.id.glossaryFragment,
-            R.id.medicinesFragment,
-            R.id.aboutFragment)
+            R.id.medicinesFragment)
             .setOpenableLayout(drawerLayout)
             .build()
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
@@ -69,6 +68,14 @@ class PatientActivity : AppCompatActivity() {
 
         setupDrugsWorker(applicationContext)
         setupRecommendationWorker(applicationContext)
+
+        with(navController) {
+            when (intent.getStringExtra("fragment")) {
+                "Drugs" -> navigate(R.id.medicinesFragment)
+                "Recommendations" -> navigate(R.id.recommendationsFragment)
+                "Glossary" -> navigate(R.id.glossaryFragment)
+            }
+        }
     }
 
     private fun setupNavDrawerWithNavController() {
