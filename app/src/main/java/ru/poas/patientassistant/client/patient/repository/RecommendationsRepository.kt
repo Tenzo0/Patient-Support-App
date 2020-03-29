@@ -18,14 +18,12 @@ import ru.poas.patientassistant.client.patient.api.RecommendationNetwork
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationConfirmKeyEntity
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationsDatabase
 import ru.poas.patientassistant.client.patient.db.recommendations.asDomainModel
-import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
+import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class RecommendationsRepository @Inject constructor(

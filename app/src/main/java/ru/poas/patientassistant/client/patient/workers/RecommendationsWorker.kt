@@ -1,17 +1,13 @@
 package ru.poas.patientassistant.client.patient.workers
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.*
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import ru.poas.patientassistant.client.patient.repository.RecommendationsRepository
 import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
-import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateTimeFormat
-import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
 import ru.poas.patientassistant.client.utils.DateUtils.getDaysCountBetween
 import timber.log.Timber
-import kotlin.math.abs
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,18 +18,22 @@ class RecommendationsWorker private constructor(
     private val recommendationsRepository: RecommendationsRepository
 ) : CoroutineWorker(appContext, params) {
 
+    @SuppressLint("BinaryOperationInTimber")
     override suspend fun doWork(): Result {
+        Timber.i("recommendation worker work start now")
         try {
             UserPreferences.init(applicationContext)
             val operationDate = UserPreferences.getOperationDate()
             val currentDate = databaseSimpleDateFormat.format(Date())
             val recommendationDay = getDaysCountBetween(operationDate!!, currentDate)
+            Timber.i("recommendations day = $recommendationDay")
             recommendationsRepository.deliverNotificationIfRecommendationExist(
                 applicationContext, recommendationDay
             )
         } catch (e: NullPointerException) {
-            Timber.e("recommendation worker NPE: UserPreferences.getOperationDate() = ${UserPreferences.getOperationDate()}")
-            Result.failure()
+            Timber.e("recommendation worker NPE: UserPreferences.getOperationDate() " +
+                    "= ${UserPreferences.getOperationDate()}")
+            return Result.failure()
         }
         return Result.success()
     }
@@ -45,23 +45,30 @@ class RecommendationsWorker private constructor(
     }
 }
 
-//TODO increase precision of trigger time
+@SuppressLint("BinaryOperationInTimber")
 fun setupRecommendationWorker(applicationContext: Context) {
-    //Current hour of day in millis
-    val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    //Current hour of day in minutes
+    val calendar = Calendar.getInstance()
+    val currentMinuteOfDay = with(calendar) {
+        get(Calendar.HOUR_OF_DAY) * 60 + get(Calendar.MINUTE)
+    }
 
-    //Trigger hour in millis
+    //Default trigger time in minutes (8:00 am as minutes)
+    val defaultTriggerTime = 8 * 60
+
+    //Trigger hour in minutes (time elapsed to the nearest 8:00)
     val triggerTime =
-        if(currentHour < 8)
-            8 - currentHour
+        if(currentMinuteOfDay <= defaultTriggerTime)
+            defaultTriggerTime - currentMinuteOfDay
         else
-            24 - currentHour + 8
+            24 * 60 - currentMinuteOfDay + defaultTriggerTime
 
-    Timber.i("recommendation worker work starts after $triggerTime hours} ")
+    Timber.i("recommendation worker work starts after $triggerTime minute(s) " +
+            "(now ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)})")
 
-    //Trigger time is 8:00-9:00
+    //Trigger time is after 8:00-8:15
     val repeatingRequest = PeriodicWorkRequestBuilder<RecommendationsWorker>(
-        1, TimeUnit.DAYS, triggerTime.toLong(), TimeUnit.HOURS)
+        1, TimeUnit.MINUTES, triggerTime.toLong(), TimeUnit.MINUTES)
         .build()
 
     WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
