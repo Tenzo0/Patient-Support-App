@@ -6,6 +6,7 @@ package ru.poas.patientassistant.client.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
@@ -48,8 +49,9 @@ object AppModule {
         return Room.databaseBuilder(
             context.applicationContext,
             GlossaryDatabase::class.java,
-            "Glossary.db"
-        ).build()
+            "Glossary.db")
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+            .build()
     }
 
     @JvmStatic
@@ -59,8 +61,9 @@ object AppModule {
         return Room.databaseBuilder(
             context.applicationContext,
             RecommendationsDatabase::class.java,
-            "Recommendations.db"
-        ).build()
+            "Recommendations.db")
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+            .build()
     }
 
     @JvmStatic
@@ -70,8 +73,9 @@ object AppModule {
         return Room.databaseBuilder(
             context.applicationContext,
             DrugsDatabase::class.java,
-            "Drugs.db"
-        ).build()
+            "Drugs.db")
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+            .build()
     }
 
     @Singleton

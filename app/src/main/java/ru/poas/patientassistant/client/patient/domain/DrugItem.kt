@@ -26,9 +26,9 @@ fun DrugItem.asNotificationItem(version: Long): DrugNotificationItem = DrugNotif
     id,
     dose,
     doseTypeName,
+    dateOfDrugReception,
+    timeOfDrugReception,
     name,
-    description,
-    manufacturer,
     version
 )
 

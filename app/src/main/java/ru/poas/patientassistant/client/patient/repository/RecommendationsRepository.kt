@@ -10,6 +10,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -115,8 +116,10 @@ class RecommendationsRepository @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT)
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
             .setSmallIcon(R.drawable.ic_notification)
+            .setColor(ContextCompat.getColor(context, R.color.mainPrimary))
             .setContentIntent(startDrugFragmentIntent)
             .setAutoCancel(true)
+            .setGroup("RecommendationsNotifications")
             .setContentTitle(context.getString(R.string.today_recommendations))
             .setContentText(context.getString(R.string.open_today_recommendations))
             .build()

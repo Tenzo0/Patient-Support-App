@@ -11,9 +11,9 @@ class DrugNotificationItem (
     val id: Long = 0,
     val dose: Double = 0.0,
     val doseTypeName: String = "",
+    val dateOfDrugReception: String = "",
+    val timeOfDrugReception: String = "",
     val name: String = "",
-    val description: String = "",
-    val manufacturer: String = "",
     val version: Long = 0
 ): Parcelable {
     constructor(parcel: Parcel): this(
@@ -31,9 +31,9 @@ class DrugNotificationItem (
             writeLong(id)
             writeDouble(dose)
             writeString(doseTypeName)
+            writeString(dateOfDrugReception)
+            writeString(timeOfDrugReception)
             writeString(name)
-            writeString(description)
-            writeString(manufacturer)
             writeLong(version)
         }
     }

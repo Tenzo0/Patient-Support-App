@@ -14,12 +14,16 @@ import android.os.Bundle
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import org.joda.time.MutableDateTime
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
 import ru.poas.patientassistant.client.patient.ui.PatientActivity
 import ru.poas.patientassistant.client.preferences.PatientPreferences
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
+import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -53,7 +57,12 @@ class AlarmReceiver : BroadcastReceiver() {
 
                     //check received drug item on null and
                     //check is drugItem contain actual notification info
-                    if (drugItem != null && drugItem.version == drugNotificationsActualVersion) {
+                    if (drugItem != null && drugItem.version == drugNotificationsActualVersion &&
+                            drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date()) && //the same dates
+                            //time is +-30 min
+                            databaseSimpleTimeFormat.parse(drugItem.timeOfDrugReception)!!.time <= MutableDateTime().apply {addMinutes(30)}.toDate().time &&
+                            databaseSimpleTimeFormat.parse(drugItem.timeOfDrugReception)!!.time >= MutableDateTime().apply {addMinutes(-30)}.toDate().time)
+                    {
                         notificationId = drugItem.id.toInt()
 
                         //create Drug notification
@@ -80,8 +89,10 @@ class AlarmReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT)
             NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(context, R.color.mainPrimary))
                 .setContentIntent(startDrugFragmentIntent)
                 .setAutoCancel(true)
+                .setGroup("DrugsNotifications")
                 .setContentTitle(context.getString(R.string.time_to_apply_drugs))
                 .setContentText("${drugItem.name} ${drugItem.dose} ${drugItem.doseTypeName}")
                 .build()
