@@ -182,7 +182,6 @@ class RecommendationsFragment : Fragment() {
         with(viewModel) {
             try {
                 binding.scrollView.fullScroll(FOCUS_UP)
-                updateRecommendationButton()
 
                 val millisPassedFromOperation =
                     date.timeInMillis - operationDate.timeInMillis
@@ -217,6 +216,7 @@ class RecommendationsFragment : Fragment() {
                         crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                     }
                 }
+                updateRecommendationButton()
             }
             catch (e: Exception) {
                 Timber.e("first user auth? $e")
