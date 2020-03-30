@@ -42,7 +42,7 @@ class RecommendationsRepository @Inject constructor(
         get() = _isRecommendationConfirmed
 
     init {
-        _isRecommendationConfirmed.value = true
+        _isRecommendationConfirmed.postValue(true)
     }
 
     /**
