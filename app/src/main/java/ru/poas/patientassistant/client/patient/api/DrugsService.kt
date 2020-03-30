@@ -53,5 +53,5 @@ object DrugsNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val drugsService = retrofit.create(DrugsService::class.java)
+    val drugsService: DrugsService = retrofit.create(DrugsService::class.java)
 }

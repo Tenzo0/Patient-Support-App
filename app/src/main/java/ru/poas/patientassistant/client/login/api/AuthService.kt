@@ -41,6 +41,6 @@ object UserNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val userService = retrofit.create(
+    val userService: AuthService = retrofit.create(
         AuthService::class.java)
 }

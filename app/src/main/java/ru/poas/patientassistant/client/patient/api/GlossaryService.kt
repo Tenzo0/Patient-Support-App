@@ -36,6 +36,6 @@ object GlossaryNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val glossaryService = retrofit.create(
+    val glossaryService: GlossaryService = retrofit.create(
         GlossaryService::class.java)
 }
