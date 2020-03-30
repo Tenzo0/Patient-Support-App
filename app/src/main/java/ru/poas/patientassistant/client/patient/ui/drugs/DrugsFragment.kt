@@ -8,6 +8,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -127,12 +128,15 @@ class DrugsFragment : Fragment() {
 
     private fun onNetworkError() {
         if (!viewModel.isNetworkErrorShown.value!!) {
-            Snackbar.make(binding.root, getString(R.string.network_error), Snackbar.LENGTH_SHORT)
-                .setAction(R.string.update) {
+            with(Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)) {
+                view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.lightPink))
+                setAction(R.string.update) {
                     binding.drugsSwipeRefresh.isRefreshing = true
                     viewModel.refreshDrugs(requireContext())
                 }
-                .show()
+                show()
+            }
             viewModel.onNetworkErrorShown()
         }
     }

@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.*
 import android.view.View.*
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -72,10 +73,14 @@ class RecommendationsFragment : Fragment() {
 
             doneRecommendationButton.setOnClickListener {
                 viewModel.confirmRecommendation(
-                    getCurrentRecommendation(viewModel.selectedDate)?.recommendationUnit?.id!!
+                    getCurrentRecommendation(viewModel.selectedDate)!!.recommendationUnit.id
                 )
-                Snackbar.make(binding.root, "Рекомендация выполнена!", Snackbar.LENGTH_SHORT).show()
-                Timber.i("Рекомендация выполнена")
+                with(Snackbar.make(binding.root, R.string.recommendationIsDone, Snackbar.LENGTH_LONG)) {
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    show()
+                }
+                Timber.i(getString(R.string.recommendationIsDone))
             }
         }
 

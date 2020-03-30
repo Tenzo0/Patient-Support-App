@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -98,8 +99,11 @@ class LoginFragment : Fragment() {
 
     private fun onNetworkError() {
         if (!viewModel.isNetworkErrorShown.value!!) {
-            Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)
-                .show()
+            with(Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)) {
+                view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.lightPink))
+                show()
+            }
             viewModel.onNetworkErrorShown()
         }
     }

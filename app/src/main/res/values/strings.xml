@@ -53,11 +53,12 @@
 
     <!--Network -->
     <string name="please_wait">Пожалуйста подождите</string>
-    <string name="network_error">"Network error"</string>
+    <string name="network_error">"Ошибка сети"</string>
     <string name="previous_recommendation">предыдущая рекомендация</string>
     <string name="next_recommendation">следующая рекомендация</string>
     <string name="calendar">календарь</string>
     <string name="update">Обновить</string>
+    <string name="recommendationIsDone">Рекомендация выполнена!</string>
 
     <!-- MainActivity strings -->
     <string name="choose_date">Выбрать дату</string>

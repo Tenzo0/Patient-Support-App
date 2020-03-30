@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -43,13 +44,11 @@ class ChangePasswordFragment : Fragment() {
         //If user accept law about personal data
         binding.nextButton.setOnClickListener {
             if(isCorrectInputData()) {
-                Snackbar.make(binding.root, "Changing password", Snackbar.LENGTH_SHORT)
-                    .show()
                 viewModel.updatePassword(binding.newPassword.text.toString())
             }
         }
 
-        viewModel.isPasswordUpdated.observe(viewLifecycleOwner, Observer<Boolean> {
+        viewModel.isPasswordUpdated.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 Snackbar.make(binding.root, "Password successfully changed", Snackbar.LENGTH_SHORT)
                     .show()
@@ -59,8 +58,11 @@ class ChangePasswordFragment : Fragment() {
                 requireActivity().finish()
             }
             else if (viewModel.eventNetworkError.value == true) {
-                Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)
-                    .show()
+                with(Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)) {
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.lightPink))
+                    show()
+                }
                 viewModel.onNetworkErrorShown()
             }
         })
