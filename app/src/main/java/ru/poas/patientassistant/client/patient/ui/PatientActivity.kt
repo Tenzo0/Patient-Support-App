@@ -36,7 +36,7 @@ class PatientActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        UserPreferences.init(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_patient)
         drawerLayout = binding.drawerLayout
 
