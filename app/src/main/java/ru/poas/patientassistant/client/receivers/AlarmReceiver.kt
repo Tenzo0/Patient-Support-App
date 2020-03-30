@@ -57,7 +57,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
                     //check received drug item on null and
                     //check is drugItem contain actual notification info
-                    val currentCalendar = Calendar.getInstance()
                     if (drugItem != null && drugItem.version == drugNotificationsActualVersion &&
                             drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date())) //the same dates)
                     {

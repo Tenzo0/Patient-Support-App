@@ -47,7 +47,7 @@ class DrugsWorker private constructor(
             Timber.e("Network error: $e")
             return Result.retry()
         } catch (e: KotlinNullPointerException) {
-            Timber.e("NullPointerException at DrugsWorker: phone=${UserPreferences.getPhone()}")
+            Timber.e("NullPointerException at DrugsWorker:\nphone=${UserPreferences.getPhone()}\ndrugsRepository=${drugsRepository}")
             return Result.failure()
         } catch (e: Exception) {
             Timber.e("unexpected worker exception! $e")
