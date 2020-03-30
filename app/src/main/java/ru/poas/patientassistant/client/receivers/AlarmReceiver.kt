@@ -21,6 +21,7 @@ import ru.poas.patientassistant.client.patient.ui.PatientActivity
 import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
+import ru.poas.patientassistant.client.utils.DateUtils.timeIsInRangeOfCurrentTime
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
 import timber.log.Timber
 import java.util.*
@@ -58,7 +59,8 @@ class AlarmReceiver : BroadcastReceiver() {
                     //check received drug item on null and
                     //check is drugItem contain actual notification info
                     if (drugItem != null && drugItem.version == drugNotificationsActualVersion &&
-                            drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date())) //the same dates)
+                            drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date()) //the same dates
+                            && timeIsInRangeOfCurrentTime(30, drugItem.timeOfDrugReception))
                     {
                         notificationId = "Drug".hashCode()
 

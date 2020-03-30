@@ -9,6 +9,7 @@ import okhttp3.Credentials
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.LocalDate
+import org.joda.time.MutableDateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import ru.poas.patientassistant.client.login.api.SyncNetwork.syncService
@@ -63,6 +64,18 @@ object DateUtils{
         }
         catch (e: NullPointerException) {
             Timber.e("syncDateWithServer null pointer exception")
+        }
+    }
+
+    fun timeIsInRangeOfCurrentTime(rangeInMinutes: Int, time: String): Boolean {
+        with(Calendar.getInstance()) {
+            val currentHours = get(Calendar.HOUR_OF_DAY)
+            val currentMinutes = get(Calendar.MINUTE)
+            val currentSeconds = get(Calendar.SECOND)
+            val currentDate = MutableDateTime.parse("$currentHours:$currentMinutes:$currentSeconds")
+            val top = currentDate.apply { addMinutes(rangeInMinutes) }
+            val dateTime = DateTime(databaseSimpleTimeFormat.parse(time))
+            return !dateTime.isAfter(top) && !dateTime.isBefore(dateTime)
         }
     }
 }
