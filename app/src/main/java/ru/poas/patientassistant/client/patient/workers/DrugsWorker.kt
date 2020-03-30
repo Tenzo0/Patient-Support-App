@@ -51,7 +51,7 @@ class DrugsWorker private constructor(
             return Result.failure()
         } catch (e: Exception) {
             Timber.e("unexpected worker exception! $e")
-            return Result.failure()
+            return Result.retry()
         }
         return Result.success()
     }
