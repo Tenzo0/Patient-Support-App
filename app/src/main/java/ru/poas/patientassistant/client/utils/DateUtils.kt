@@ -67,15 +67,10 @@ object DateUtils{
         }
     }
 
-    fun timeIsInRangeOfCurrentTime(rangeInMinutes: Int, time: String): Boolean {
-        with(Calendar.getInstance()) {
-            val currentHours = get(Calendar.HOUR_OF_DAY)
-            val currentMinutes = get(Calendar.MINUTE)
-            val currentSeconds = get(Calendar.SECOND)
-            val currentDate = MutableDateTime.parse("$currentHours:$currentMinutes:$currentSeconds")
-            val top = currentDate.apply { addMinutes(rangeInMinutes) }
-            val dateTime = DateTime(databaseSimpleTimeFormat.parse(time))
-            return !dateTime.isAfter(top) && !dateTime.isBefore(dateTime)
-        }
+    fun isDateInRangeOfCurrent(rangeInMinutes: Int, dateTime: String): Boolean {
+        val currentDate = MutableDateTime.now()
+        val top = currentDate.apply { addMinutes(rangeInMinutes) }
+        val dateTime = DateTime(databaseSimpleDateTimeFormat.parse(dateTime))
+        return !dateTime.isAfter(top) && !dateTime.isBefore(dateTime)
     }
 }

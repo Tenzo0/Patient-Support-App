@@ -11,20 +11,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import org.joda.time.MutableDateTime
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.domain.DrugNotificationItem
 import ru.poas.patientassistant.client.patient.ui.PatientActivity
 import ru.poas.patientassistant.client.preferences.PatientPreferences
-import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
-import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
-import ru.poas.patientassistant.client.utils.DateUtils.timeIsInRangeOfCurrentTime
+import ru.poas.patientassistant.client.utils.DateUtils.isDateInRangeOfCurrent
 import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
-import timber.log.Timber
-import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -59,8 +53,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     //check received drug item on null and
                     //check is drugItem contain actual notification info
                     if (drugItem != null && drugItem.version == drugNotificationsActualVersion &&
-                            drugItem.dateOfDrugReception == databaseSimpleDateFormat.format(Date()) //the same dates
-                            && timeIsInRangeOfCurrentTime(30, drugItem.timeOfDrugReception))
+                        isDateInRangeOfCurrent(30, drugItem.dateOfDrugReception + 'T' + drugItem.timeOfDrugReception))
                     {
                         notificationId = "Drug".hashCode()
 
