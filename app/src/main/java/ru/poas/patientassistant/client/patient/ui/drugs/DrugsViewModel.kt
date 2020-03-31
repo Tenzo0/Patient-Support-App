@@ -76,7 +76,7 @@ class DrugsViewModel @Inject constructor(
                 _isNetworkErrorShown.value = false
                 syncDateWithServer(context)
                 _currentServerDate = DatePreferences.getActualServerDate()
-            } catch (e: HttpException) {
+            } catch (e: Exception) {
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false
