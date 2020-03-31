@@ -122,9 +122,6 @@ class RecommendationsFragment : Fragment() {
 
     private fun setupViewModel() {
         with(viewModel) {
-
-            refreshRecommendationsInfo()
-
             recommendationsList.observe(viewLifecycleOwner, Observer {
                 updateRecommendationViewForDate(selectedDate)
             })
@@ -145,6 +142,8 @@ class RecommendationsFragment : Fragment() {
                         Snackbar.LENGTH_SHORT
                     ).show()
             })
+
+            refreshRecommendationsInfo()
         }
     }
 
