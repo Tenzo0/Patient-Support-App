@@ -54,6 +54,7 @@
     <!--Network -->
     <string name="please_wait">Пожалуйста подождите</string>
     <string name="network_error">"Ошибка сети"</string>
+    <string name="incorrect_auth">"Неверный логин или пароль!"</string>
     <string name="previous_recommendation">предыдущая рекомендация</string>
     <string name="next_recommendation">следующая рекомендация</string>
     <string name="calendar">календарь</string>

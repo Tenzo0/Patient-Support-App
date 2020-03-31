@@ -99,8 +99,19 @@ class LoginFragment : Fragment() {
 
     private fun onNetworkError() {
         if (!viewModel.isNetworkErrorShown.value!!) {
-            with(Snackbar.make(binding.root, R.string.network_error, Snackbar.LENGTH_SHORT)) {
-                view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
+            val errorMessage =
+                if (viewModel.isIncorrectLoginOrPassword)
+                    R.string.incorrect_auth
+                else
+                    R.string.network_error
+
+            with(Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_SHORT)) {
+                view.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.darkGray
+                    )
+                )
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.lightPink))
                 show()
             }

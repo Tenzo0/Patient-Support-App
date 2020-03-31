@@ -30,6 +30,10 @@ class LoginViewModel : BaseViewModel() {
         UNAUTHORIZED, FIRSTLY_AUTHORIZED, AUTHORIZED
     }
 
+    private var _isIncorrectLoginOrPassword = false
+    val isIncorrectLoginOrPassword
+        get() = _isIncorrectLoginOrPassword
+
     private var _isAuthorized = MutableLiveData<LoginType>()
 
     val isAuthorized: LiveData<LoginType>
@@ -79,7 +83,14 @@ class LoginViewModel : BaseViewModel() {
 
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
-            } catch (e: Exception) {
+            } catch (e: KotlinNullPointerException) {
+                Timber.e(e)
+                _isAuthorized.value =
+                    LoginType.UNAUTHORIZED
+                _eventNetworkError.value = true
+                _isIncorrectLoginOrPassword = true
+            }
+            catch (e: Exception) {
                 Timber.e(e)
                 UserPreferences.clear()
                 _roles.value = emptyList()
@@ -87,7 +98,7 @@ class LoginViewModel : BaseViewModel() {
                     LoginType.UNAUTHORIZED
                 _eventNetworkError.value = true
             }
-
+            _isIncorrectLoginOrPassword = false
             // Hide Progress Bar
             _isProgressShow.value = false
         }
