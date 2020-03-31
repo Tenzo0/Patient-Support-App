@@ -26,7 +26,17 @@ class ProfileFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container, false)
 
         with(binding) {
-            patientProfilePhoneNumber.text = UserPreferences.getPhone()
+            patientProfilePhoneNumber.text = StringBuilder().apply {
+                val phone = UserPreferences.getPhone()!!
+                append("+7 (")
+                append(phone.take(3))
+                append(") ")
+                append(phone.subSequence(3, 6))
+                append('-')
+                append(phone.subSequence(6, 8))
+                append('-')
+                append(phone.subSequence(8, 10))
+            }
             profileName.text = UserPreferences.getUserFullName()
             exitButton.setOnClickListener {
                 (requireActivity() as PatientActivity).exit()
