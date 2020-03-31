@@ -18,12 +18,23 @@
             android:clipToPadding="false"
             android:outlineProvider="bounds">
 
+            <TextView
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:id="@+id/chosen_date"
+                android:text="@string/today"
+                android:layout_marginHorizontal="20dp"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <ru.poas.patientassistant.client.patient.ui.recommendations.LockableNestedScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:layout_alignParentTop="true"
+                android:layout_alignTop="@+id/chosen_date"
+                android:layout_marginTop="28dp"
                 android:layout_alignParentBottom="true"
                 android:clipToPadding="false"
                 android:fadeScrollbars="false"
@@ -36,23 +47,12 @@
                     android:clipToPadding="false"
                     android:outlineProvider="bounds">
 
-                    <TextView
-                        style="@style/TextAppearance.AppCompat.Medium"
-                        android:id="@+id/chosen_date"
-                        android:text="@string/today"
-                        android:layout_marginHorizontal="20dp"
-                        android:gravity="center"
-                        android:layout_marginTop="8dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
                     <LinearLayout
                         android:id="@+id/displayed_recommendations"
                         android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="28dp"
                         android:clipToPadding="false"
                         android:outlineProvider="bounds"
                         tools:visibility="gone"
@@ -63,7 +63,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="12dp"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="4dp"
                             android:visibility="gone"
                             app:cardBackgroundColor="@color/lightPink"
                             app:cardCornerRadius="@dimen/card_corner_radius"
@@ -157,8 +157,9 @@
                 android:layout_marginBottom="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                app:backgroundTint="@color/mainPrimaryLight"
+                app:backgroundTint="@color/mainAccent"
                 android:visibility="invisible"
+                tools:visibility="visible"
                 android:src="@drawable/ic_done_64dp" >
             </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
