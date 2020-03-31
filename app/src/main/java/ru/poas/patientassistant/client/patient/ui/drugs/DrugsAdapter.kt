@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.DrugsItemBinding
 import ru.poas.patientassistant.client.patient.domain.DrugItem
+import ru.poas.patientassistant.client.utils.DateUtils.isDateIsGreatOrEqualThatCurrent
+import java.util.*
 
 class DrugsAdapter(private val viewModel: DrugsViewModel) :
     ListAdapter<DrugItem, DrugsAdapter.ViewHolder>(DrugDiffCallback()) {
@@ -32,7 +34,8 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
 
                 //If drug's acceptance is necessary today
                 if (item.realDateTimeOfMedicationReception == null &&
-                    viewModel.currentServerDate == item.dateOfDrugReception)
+                    viewModel.currentServerDate == item.dateOfDrugReception &&
+                    isDateIsGreatOrEqualThatCurrent(item.dateOfDrugReception + 'T' + item.timeOfDrugReception))
                 {
                     drugAcceptButton.visibility = VISIBLE
                     drugAcceptButton.isClickable = true

@@ -73,4 +73,10 @@ object DateUtils{
         val dateTime = DateTime(databaseSimpleDateTimeFormat.parse(dateTime))
         return !dateTime.isAfter(top) && !dateTime.isBefore(dateTime)
     }
+
+    fun isDateIsGreatOrEqualThatCurrent(dateTime: String): Boolean {
+        val currentDate = DateTime.now()
+        val dateTime = DateTime(databaseSimpleDateTimeFormat.parse(dateTime))
+        return !dateTime.isBefore(currentDate)
+    }
 }
