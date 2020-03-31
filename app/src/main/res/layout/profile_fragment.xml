@@ -53,30 +53,15 @@
                 android:layout_marginTop="8dp"
                 tools:text="+7 (960) 887-25-55" />
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/profile_your_doctor" />
-
-            <TextView
-                android:id="@+id/patient_profile_doctor_name"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                tools:text="Доктор" />
-
         </LinearLayout>
 
         <Button
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/exit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            app:strokeColor="@color/black"
+            app:backgroundTint="@color/mainPrimaryLight"
             android:layout_margin="20dp"
             android:padding="10dp"
             android:layout_alignParentBottom="true"
