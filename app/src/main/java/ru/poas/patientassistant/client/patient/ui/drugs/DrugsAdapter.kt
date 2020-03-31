@@ -23,12 +23,10 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
             with(binding) {
                 //If drug isn't accepted before
                 if (item.realDateTimeOfMedicationReception == null) {
-                    drugIsAcceptedText.visibility = GONE
                     drugIsAcceptedImg.visibility = GONE
                 }
                 else
                 {
-                    drugIsAcceptedText.visibility = VISIBLE
                     drugIsAcceptedImg.visibility = VISIBLE
                 }
 
@@ -56,7 +54,14 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
                         item.dose.toString()
                 drugTitle.text = item.name
                 drugTime.text = item.timeOfDrugReception.take(5)
-                drugManufacturer.text = item.manufacturer
+                if (item.manufacturer.isBlank()) {
+                    drugManufacturer.text = ""
+                    drugManufacturer.visibility = GONE
+                } else {
+                    drugManufacturer.text = item.manufacturer
+                    drugManufacturer.visibility = VISIBLE
+                }
+                drugDescription.text = item.description
             }
         }
     }
