@@ -150,7 +150,7 @@
                 android:layout_height="56dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                android:alpha="0.35"
+                android:alpha="0.4"
                 android:src="@drawable/ic_done_outlined_64dp"
                 android:tint="@color/brightGreen"
                 android:visibility="gone"
