@@ -26,14 +26,8 @@ class ProfileFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container, false)
 
         with(binding) {
-            patientProfileDoctorName.text = UserPreferences.getRelatedDoctorName()
             patientProfilePhoneNumber.text = UserPreferences.getPhone()
             profileName.text = UserPreferences.getUserFullName()
-            val doctorName = UserPreferences.getRelatedDoctorName()
-            patientProfileDoctorName.text = if (doctorName.isNullOrBlank())
-                 "не назначен"
-            else
-                doctorName
             exitButton.setOnClickListener {
                 (requireActivity() as PatientActivity).exit()
             }

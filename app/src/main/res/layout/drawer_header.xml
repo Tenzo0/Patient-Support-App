@@ -3,21 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/mainBackground"
-    android:layout_height="wrap_content">
+    android:layout_height="250dp"
+    android:background="@color/mainBackground">
+
+    <ImageView
+        android:layout_width="270dp"
+        android:layout_height="270dp"
+        android:src="@drawable/ic_notification"
+        android:tint="@color/mainPrimaryLight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/b2doc"
         style="@style/TextAppearance.AppCompat.Display1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="26dp"
         android:text="@string/B2doc"
         android:textColor="@color/darkGray"
         android:textStyle="bold"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,11 +46,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/endopro"
+        app:layout_constraintBottom_toTopOf="@+id/role"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline2"
         app:layout_constraintStart_toStartOf="@+id/b2doc"
-        app:layout_constraintTop_toBottomOf="@+id/endopro"
-        tools:text="Адам Сэндлер" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Адам\nРичард\nСэндлер" />
 
     <TextView
         android:id="@+id/role"
@@ -50,16 +59,32 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:paddingBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="@+id/name"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/name"
         tools:text="Пациент" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:alpha="0.1"
         android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/role" />
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="130dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="98dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
