@@ -24,6 +24,7 @@ import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.receivers.AlarmReceiver
 import ru.poas.patientassistant.client.utils.DateUtils
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateTimeFormat
 import ru.poas.patientassistant.client.utils.setExactAlarmAndAllowWhileIdle
 import timber.log.Timber
 import java.util.*
@@ -39,7 +40,11 @@ class DrugsRepository @Inject constructor(
     private val context: Context,
     private val drugsDatabase: DrugsDatabase) {
 
-    val drugsList: LiveData<List<DrugItem>> = map(drugsDatabase.drugsDao.getAllLiveData()) { it.asDomainObject() }
+    val drugsList: LiveData<List<DrugItem>> = map(drugsDatabase.drugsDao.getAllLiveData()) { listOfEntities ->
+        listOfEntities.asDomainObject().sortedWith(compareBy
+            { databaseSimpleDateTimeFormat.parse(it.dateOfDrugReception + 'T' + it.timeOfDrugReception) }
+        )
+    }
 
     suspend fun refreshNotificationsFromDatabase() {
         withContext(Dispatchers.IO) {
