@@ -21,7 +21,7 @@ import timber.log.Timber.DebugTree
 import javax.inject.Inject
 
 
-open class B2DocApplication: Application() {
+open class B2DocApplication: Application(), Configuration.Provider {
 
     @Inject lateinit var workerFactory: AppWorkerFactory
 
@@ -46,15 +46,14 @@ open class B2DocApplication: Application() {
             .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createChannel(NOTIFICATION_CHANNEL)
 
-        WorkManager.initialize(
-            this,
-            Configuration.Builder()
-                .setWorkerFactory(workerFactory)
-                .build()
-        )
-
         enableBootReceiver(this)
 
         DatePreferences.init(this)
     }
+
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.INFO)
+            .setWorkerFactory(workerFactory)
+            .build()
 }
