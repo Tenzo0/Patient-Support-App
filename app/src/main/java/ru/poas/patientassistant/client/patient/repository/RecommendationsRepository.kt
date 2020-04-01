@@ -130,9 +130,21 @@ class RecommendationsRepository @Inject constructor(
                 val operationDate = UserPreferences.getOperationDate()
                 val currentDate = databaseSimpleDateFormat.format(Date())
 
-                for (recommendation in recommendationList) {
-                    val recommendationDay = DateUtils.getDaysCountBetween(operationDate!!, currentDate)
-                    if(database.recommendationsDao.isRecommendationExist(recommendationDay)) {
+                val daysFromOperationDate = DateUtils.getDaysCountBetween(operationDate!!, currentDate)
+                val triggerDay = if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 8)
+                    //If user open app in night time then setup one more notification for morning
+                    daysFromOperationDate - 1
+                    //else start day for notification starts from next day
+                else daysFromOperationDate
+
+                val recommendationListStartsFromCurrentDate = recommendationList.filter {
+                    it.day >= triggerDay
+                }
+
+                Timber.i("updating ${recommendationListStartsFromCurrentDate.size} recommendations notifications")
+                for (recommendation in recommendationListStartsFromCurrentDate) {
+
+                    if(database.recommendationsDao.isRecommendationExist(daysFromOperationDate)) {
                         //Get trigger time for notification from drug item
                         @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                         val triggerTime = databaseSimpleDateFormat
