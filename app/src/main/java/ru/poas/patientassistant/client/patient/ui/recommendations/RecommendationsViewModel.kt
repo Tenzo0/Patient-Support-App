@@ -18,6 +18,7 @@ import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import timber.log.Timber
+import java.security.spec.ECField
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -58,6 +59,9 @@ class RecommendationsViewModel @Inject constructor(
                     ),
                     recommendationUnitId
                 )
+                _operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
+                    databaseSimpleDateFormat.parse(it)!!.time
+                } ?: 0
             }
             catch (e: Exception) {
                 Timber.e(e)

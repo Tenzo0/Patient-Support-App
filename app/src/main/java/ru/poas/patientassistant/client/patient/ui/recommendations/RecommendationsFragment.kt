@@ -27,6 +27,7 @@ import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.RecommendationsFragmentBinding
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.preferences.DatePreferences
+import ru.poas.patientassistant.client.preferences.UserPreferences
 import ru.poas.patientassistant.client.utils.*
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import timber.log.Timber
@@ -188,10 +189,11 @@ class RecommendationsFragment : Fragment() {
 
         with(viewModel) {
             try {
+                UserPreferences.init(requireContext())
                 binding.scrollView.fullScroll(FOCUS_UP)
 
                 val millisPassedFromOperation =
-                    date.timeInMillis - operationDate.timeInMillis
+                    date.timeInMillis - databaseSimpleDateFormat.parse(UserPreferences.getOperationDate()).time
                 val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
 
                 Timber.i("$daysPassedFromOperation days passed since operation date (${viewModel.operationDate.get(Calendar.DATE)})")
