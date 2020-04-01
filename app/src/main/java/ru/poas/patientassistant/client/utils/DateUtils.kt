@@ -27,7 +27,7 @@ object DateUtils{
     val databaseSimpleTimeFormat = SimpleDateFormat(DATABASE_TIME_PATTERN, Locale("ru", "RU"))
         .apply { timeZone = TimeZone.getTimeZone("GMT") }
     val databaseSimpleDateTimeFormat = SimpleDateFormat(DATABASE_DATETIME_PATTERN, Locale("ru", "RU"))
-        .apply { timeZone = TimeZone.getTimeZone("GMT") }
+
     val databaseDateFormatter: DateTimeFormatter by lazy { DateTimeFormat.forPattern(DATABASE_DATE_PATTERN) }
     val databaseTimeFormatter: DateTimeFormatter by lazy { DateTimeFormat.forPattern(DATABASE_TIME_PATTERN) }
 
