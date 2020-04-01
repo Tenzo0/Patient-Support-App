@@ -59,8 +59,6 @@ class RecommendationsFragment : Fragment() {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.recommendations_fragment,
                 container, false)
 
-        setupRecommendationsDatePickerDialog()
-
         setupHeightChangeAnimations()
 
         //Set onRefresh and onClick listeners
@@ -86,10 +84,14 @@ class RecommendationsFragment : Fragment() {
 
         setupViewModel()
 
+        setupRecommendationsDatePickerDialog()
+
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 
         requireActivity().toolbar.title = getString(R.string.endopro)
+
+        updateRecommendationViewForDate(viewModel.selectedDate)
 
         return binding.root
     }

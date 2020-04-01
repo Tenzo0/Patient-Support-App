@@ -61,10 +61,12 @@ class RecommendationsRepository @Inject constructor(
             userRecommendation?.let {
                 UserPreferences.saveUserRecommendation(it)
             }
+
+            refreshRecommendations(credentials, userRecommendation!!.recommendationId)
         }
     }
 
-    suspend fun refreshRecommendations(credentials: String, recommendationId: Long) {
+    private suspend fun refreshRecommendations(credentials: String, recommendationId: Long) {
         withContext(Dispatchers.IO) {
             val recommendations = RecommendationNetwork.recommendationService
                 .getRecommendationListById(credentials, recommendationId)
