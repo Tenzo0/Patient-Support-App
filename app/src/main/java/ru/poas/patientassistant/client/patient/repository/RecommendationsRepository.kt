@@ -131,7 +131,7 @@ class RecommendationsRepository @Inject constructor(
                 val currentDate = databaseSimpleDateFormat.format(Date())
 
                 val daysFromOperationDate = DateUtils.getDaysCountBetween(operationDate!!, currentDate)
-                val triggerDay = if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 8)
+                val triggerDay = if (databaseSimpleTimeFormat.format(Date()).take(2).toInt() < 8)
                     //If user open app in night time then setup one more notification for morning
                     daysFromOperationDate - 1
                     //else start day for notification starts from next day
