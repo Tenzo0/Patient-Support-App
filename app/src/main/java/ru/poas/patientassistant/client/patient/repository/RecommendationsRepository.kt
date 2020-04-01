@@ -29,6 +29,7 @@ import ru.poas.patientassistant.client.receivers.AlarmReceiver
 import ru.poas.patientassistant.client.utils.DateUtils
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormatWithoutTimeZone
 import ru.poas.patientassistant.client.utils.setAlarm
 import timber.log.Timber
 import java.util.*
@@ -131,14 +132,15 @@ class RecommendationsRepository @Inject constructor(
                 val currentDate = databaseSimpleDateFormat.format(Date())
 
                 val daysFromOperationDate = DateUtils.getDaysCountBetween(operationDate!!, currentDate)
-                val triggerDay = if (databaseSimpleTimeFormat.format(Date()).take(2).toInt() < 8)
+                val currentHour = databaseSimpleTimeFormatWithoutTimeZone.format(Date()).take(2)
+                val triggerDay = if (currentHour.toInt() < 8)
                     //If user open app in night time then setup one more notification for morning
                     daysFromOperationDate - 1
                     //else start day for notification starts from next day
                 else daysFromOperationDate
 
                 val recommendationListStartsFromCurrentDate = recommendationList.filter {
-                    it.day >= triggerDay
+                    it.day > triggerDay
                 }
 
                 Timber.i("updating ${recommendationListStartsFromCurrentDate.size} recommendations notifications")
