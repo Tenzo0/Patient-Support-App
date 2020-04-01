@@ -14,7 +14,6 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.poas.patientassistant.client.patient.workers.ChildWorkerFactory
 import ru.poas.patientassistant.client.patient.workers.DrugsWorker
-import ru.poas.patientassistant.client.patient.workers.RecommendationsWorker
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.annotation.AnnotationRetention.RUNTIME
@@ -45,11 +44,6 @@ interface AppWorkerModule {
     @IntoMap
     @CoroutineWorkerKey(DrugsWorker::class)
     fun bindDrugsWorker(factory: DrugsWorker.Factory): ChildWorkerFactory
-
-    @Binds
-    @IntoMap
-    @CoroutineWorkerKey(RecommendationsWorker::class)
-    fun bindRecommendationsWorker(factory: RecommendationsWorker.Factory): ChildWorkerFactory
 }
 
 @Target(AnnotationTarget.FUNCTION)

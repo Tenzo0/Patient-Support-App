@@ -12,14 +12,15 @@ import android.content.pm.PackageManager
 import kotlinx.coroutines.*
 import ru.poas.patientassistant.client.B2DocApplication
 import ru.poas.patientassistant.client.patient.repository.DrugsRepository
+import ru.poas.patientassistant.client.patient.repository.RecommendationsRepository
 import ru.poas.patientassistant.client.patient.workers.setupDrugsWorker
-import ru.poas.patientassistant.client.patient.workers.setupRecommendationWorker
 import timber.log.Timber
 import javax.inject.Inject
 
 class BootReceiver : BroadcastReceiver() {
 
     @Inject lateinit var drugsRepository: DrugsRepository
+    @Inject lateinit var recommendationsRepository: RecommendationsRepository
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
@@ -29,10 +30,10 @@ class BootReceiver : BroadcastReceiver() {
             val refreshNotificationsScope = CoroutineScope(Dispatchers.IO + Job())
             refreshNotificationsScope.launch {
                 drugsRepository.refreshNotificationsFromDatabase()
+                recommendationsRepository.refreshNotificationsFromDatabase()
             }
 
             setupDrugsWorker(context.applicationContext)
-            setupRecommendationWorker(context.applicationContext)
         }
     }
 

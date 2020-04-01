@@ -6,6 +6,7 @@ package ru.poas.patientassistant.client.patient.vo
 
 import com.squareup.moshi.Json
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationEntity
+import ru.poas.patientassistant.client.patient.domain.RecommendationNotificationItem
 import ru.poas.patientassistant.client.utils.parseServerContent
 
 data class Recommendation(
@@ -31,6 +32,13 @@ fun Recommendation.asDatabaseModel(): RecommendationEntity =
         parseServerContent(recommendationUnit.content),
         parseServerContent(recommendationUnit.importantContent),
         parseServerContent(recommendationUnit.message)
+    )
+
+fun Recommendation.asNotificationItem(version: Long): RecommendationNotificationItem =
+    RecommendationNotificationItem(
+        id,
+        day,
+        version
     )
 
 fun List<Recommendation>.asDatabaseModel(): List<RecommendationEntity> = map { it.asDatabaseModel() }

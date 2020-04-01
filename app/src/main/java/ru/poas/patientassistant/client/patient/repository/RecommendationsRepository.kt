@@ -5,32 +5,37 @@
 package ru.poas.patientassistant.client.patient.repository
 
 import android.accounts.NetworkErrorException
-import android.app.NotificationManager
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.patient.api.RecommendationNetwork
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationConfirmKeyEntity
 import ru.poas.patientassistant.client.patient.db.recommendations.RecommendationsDatabase
 import ru.poas.patientassistant.client.patient.db.recommendations.asDomainModel
-import ru.poas.patientassistant.client.patient.ui.PatientActivity
 import ru.poas.patientassistant.client.patient.vo.Recommendation
 import ru.poas.patientassistant.client.patient.vo.RecommendationConfirmKey
 import ru.poas.patientassistant.client.patient.vo.asDatabaseModel
+import ru.poas.patientassistant.client.patient.vo.asNotificationItem
+import ru.poas.patientassistant.client.preferences.PatientPreferences
 import ru.poas.patientassistant.client.preferences.UserPreferences
-import ru.poas.patientassistant.client.utils.NOTIFICATION_CHANNEL
+import ru.poas.patientassistant.client.receivers.AlarmReceiver
+import ru.poas.patientassistant.client.utils.DateUtils
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
+import ru.poas.patientassistant.client.utils.DateUtils.databaseSimpleTimeFormat
+import ru.poas.patientassistant.client.utils.setAlarm
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class RecommendationsRepository @Inject constructor(
+    private val context: Context,
     private val database: RecommendationsDatabase
 ) {
     val recommendationsList: LiveData<List<Recommendation>> =
@@ -67,6 +72,7 @@ class RecommendationsRepository @Inject constructor(
             Timber.i("recommendations refresh with code ${recommendations.code()}")
             database.recommendationsDao.insert(recommendations.body()!!.asDatabaseModel())
             Timber.i("recommendations inserted into database: ${database.recommendationsDao.getAllRecommendations().value}")
+            updateNotifications(recommendations.body())
         }
     }
 
@@ -100,39 +106,71 @@ class RecommendationsRepository @Inject constructor(
         }
     }
 
-    suspend fun deliverNotificationIfRecommendationExist(context: Context, day: Int) {
+    suspend fun refreshNotificationsFromDatabase() {
         withContext(Dispatchers.IO) {
-            if(database.recommendationsDao.isRecommendationExist(day)) {
-                Timber.i("trying to create and deliver recommendation notification")
-                createAndDeliverNotification(context)
+            val recommendationList = database.recommendationsDao.getAll().asDomainModel()
+            updateNotifications(recommendationList)
+        }
+    }
+
+    @SuppressLint("BinaryOperationInTimber")
+    @Synchronized
+    suspend fun updateNotifications(recommendationList: List<Recommendation>?) {
+        withContext(Dispatchers.IO) {
+            Timber.i("updating drug notifications")
+            if (!recommendationList.isNullOrEmpty()) {
+                //update actual info about notifications version
+                PatientPreferences.init(context)
+                val currentVersion = PatientPreferences.getActualRecommendationNotificationVersion() + 1
+                PatientPreferences.updateActualRecommendationsNotificationsVersion(currentVersion)
+
+                UserPreferences.init(context)
+                val operationDate = UserPreferences.getOperationDate()
+                val currentDate = databaseSimpleDateFormat.format(Date())
+
+                for (recommendation in recommendationList) {
+                    val recommendationDay = DateUtils.getDaysCountBetween(operationDate!!, currentDate)
+                    if(database.recommendationsDao.isRecommendationExist(recommendationDay)) {
+                        //Get trigger time for notification from drug item
+                        @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                        val triggerTime = databaseSimpleDateFormat
+                            .parse(DateUtils.getDatePlusDays(operationDate, recommendation.day)).time +
+                                databaseSimpleTimeFormat.parse("08:00:00")!!.time
+                        //Create intent that contains notification type and current drug item
+                        val notificationPendingIntent: PendingIntent = PendingIntent
+                            .getBroadcast(
+                                context,
+                                recommendation.id.toInt(),
+                                Intent(context, AlarmReceiver::class.java).apply {
+                                    putExtra(
+                                        AlarmReceiver.ALARM_TYPE,
+                                        AlarmReceiver.NOTIFICATION_ALARM
+                                    )
+                                    putExtra(
+                                        AlarmReceiver.NOTIFICATION_TYPE,
+                                        AlarmReceiver.RECOMMENDATION_NOTIFICATION
+                                    )
+                                    putExtra(
+                                        AlarmReceiver.RECOMMENDATION_NOTIFICATION_BUNDLE,
+                                        Bundle().apply {
+                                            putParcelable(
+                                                AlarmReceiver.RECOMMENDATION_NOTIFICATION_ITEM,
+                                                recommendation.asNotificationItem(currentVersion)
+                                            )
+                                        })
+                                },
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                            )
+
+                        //Set exact alarm for current drug
+                        setAlarm(
+                            context,
+                            triggerTime,
+                            notificationPendingIntent
+                        )
+                    }
+                }
             }
-            else Timber.i("no recommendations found in database for notification")
         }
-    }
-
-    private fun createAndDeliverNotification(context: Context) {
-        val startDrugFragmentIntent = PendingIntent.getActivity(context, 0,
-            Intent(context, PatientActivity::class.java).apply { putExtra("fragment", "Recommendations") },
-            PendingIntent.FLAG_UPDATE_CURRENT)
-        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setColor(ContextCompat.getColor(context, R.color.mainPrimary))
-            .setContentIntent(startDrugFragmentIntent)
-            .setAutoCancel(true)
-            .setGroup("RecommendationsNotifications")
-            .setContentTitle(context.getString(R.string.today_recommendations))
-            .setContentText(context.getString(R.string.open_today_recommendations))
-            .build()
-
-        //Deliver notification
-        notification?.let {
-            val notificationManager = context
-                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(notificationId, notification)
-        }
-    }
-
-    companion object {
-        val notificationId = "recommendationNotification".hashCode()
     }
 }

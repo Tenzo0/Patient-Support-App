@@ -31,8 +31,8 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun bindRecommendationsRepository(database: RecommendationsDatabase): RecommendationsRepository {
-        return RecommendationsRepository(database)
+    fun bindRecommendationsRepository(context: Context, database: RecommendationsDatabase): RecommendationsRepository {
+        return RecommendationsRepository(context.applicationContext, database)
     }
 
     @JvmStatic

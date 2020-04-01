@@ -53,3 +53,13 @@ fun setExactAlarmAndAllowWhileIdle(context: Context, triggerTime: Long, pendingI
         )
     }
 }
+
+fun setAlarm(context: Context, triggerTime: Long, pendingIntent: PendingIntent) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    alarmManager.set(
+        AlarmManager.RTC_WAKEUP,
+        triggerTime, pendingIntent
+    )
+}
+

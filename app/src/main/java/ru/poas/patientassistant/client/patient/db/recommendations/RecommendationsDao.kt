@@ -15,6 +15,9 @@ interface RecommendationsDao {
     @Query("select * from recommendations_database")
     fun getAllRecommendations(): LiveData<List<RecommendationEntity>>
 
+    @Query("select * from recommendations_database")
+    fun getAll(): List<RecommendationEntity>
+
     @Query("select * from recommendations_database where id = :id")
     fun getById(id: Long): LiveData<RecommendationEntity>
 

@@ -4,7 +4,6 @@
 
 package ru.poas.patientassistant.client.patient.ui
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -20,12 +19,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.drawer_header.view.*
-import kotlinx.android.synthetic.main.nav_header.view.*
 import ru.poas.patientassistant.client.R
 import ru.poas.patientassistant.client.databinding.ActivityPatientBinding
 import ru.poas.patientassistant.client.login.ui.LoginActivity
 import ru.poas.patientassistant.client.patient.workers.setupDrugsWorker
-import ru.poas.patientassistant.client.patient.workers.setupRecommendationWorker
 import ru.poas.patientassistant.client.preferences.UserPreferences
 
 class PatientActivity : AppCompatActivity() {
@@ -67,7 +64,6 @@ class PatientActivity : AppCompatActivity() {
         }
 
         setupDrugsWorker(applicationContext)
-        setupRecommendationWorker(applicationContext)
 
         with(navController) {
             when (intent.getStringExtra("fragment")) {
