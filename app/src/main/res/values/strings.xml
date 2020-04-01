@@ -60,7 +60,7 @@
     <string name="calendar">календарь</string>
     <string name="update">Обновить</string>
     <string name="recommendationIsDone">Рекомендация выполнена!</string>
-
+    <string name="passwordIsChanged">Пароль успешно изменен!</string>
     <!-- MainActivity strings -->
     <string name="choose_date">Выбрать дату</string>
     <string name="recommendations">Рекомендации</string>

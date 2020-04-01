@@ -50,8 +50,11 @@ class ChangePasswordFragment : Fragment() {
 
         viewModel.isPasswordUpdated.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                Snackbar.make(binding.root, "Password successfully changed", Snackbar.LENGTH_SHORT)
-                    .show()
+                with(Snackbar.make(binding.root, R.string.passwordIsChanged, Snackbar.LENGTH_SHORT)) {
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    show()
+                }
                 //Navigate to MainActivity
                 findNavController().navigate(ChangePasswordFragmentDirections.actionChangePasswordFragmentToMainActivity())
                 //Finish LoginActivity
