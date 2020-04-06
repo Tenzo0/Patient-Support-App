@@ -57,12 +57,15 @@ class DrugsRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             val drugs = DrugsNetwork.drugsService
                 .getAllUnitsAssignedToPatient(credentials).body()
-            drugsDatabase.drugsDao.clear()
 
-            val drugsEntitiesList = drugs!!.asDatabaseModel()
-            drugsDatabase.drugsDao.insert(drugsEntitiesList)
+            drugs?.let {
+                drugsDatabase.drugsDao.clear()
 
-            updateNotifications(drugsEntitiesList.asDomainObject())
+                val drugsEntitiesList = drugs.asDatabaseModel()
+                drugsDatabase.drugsDao.insert(drugsEntitiesList)
+
+                updateNotifications(drugsEntitiesList.asDomainObject())
+            }
         }
     }
 
