@@ -231,6 +231,11 @@ class RecommendationsFragment : Fragment() {
             }
             catch (e: Exception) {
                 Timber.e("first user auth? $e")
+                with(binding) {
+                    isCurrentItemContainRecommendation = false
+                    scrollView.setScrollingEnabled(false)
+                    crossfadeViews(emptyRecommendationCard, displayedRecommendations)
+                }
             }
         }
     }
