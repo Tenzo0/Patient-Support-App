@@ -71,27 +71,40 @@ class LoginFragment : Fragment() {
             if (authed == LoginViewModel.LoginType.AUTHORIZED ||
                     authed == LoginViewModel.LoginType.FIRSTLY_AUTHORIZED
             )
-                //TODO choosing role
-                if (viewModel.chosenRole == null) {
-                    viewModel.chosenRole = viewModel.roles.value?.first()
-                    if (viewModel.chosenRole != null)
-                        viewModel.chooseRole(viewModel.chosenRole!!)
-                }
+            //TODO choosing role
+            if (viewModel.chosenRole == null && !viewModel.roles.isNullOrEmpty()) {
+                viewModel.chosenRole = viewModel.roles.first()
+                if (viewModel.chosenRole != null) {
+                    viewModel.chooseRole(viewModel.chosenRole!!)
 
-            //Navigation
-            when (authed) {
-                LoginViewModel.LoginType.FIRSTLY_AUTHORIZED -> {
-                    findNavController().navigate(
-                        LoginFragmentDirections.actionLoginFragmentToDataAgreementFragment()
-                    )
+                    //Navigation
+                    if (viewModel.chosenRole!!.name == "ROLE_PATIENT") when (authed) {
+                        LoginViewModel.LoginType.FIRSTLY_AUTHORIZED -> {
+                            findNavController().navigate(
+                                LoginFragmentDirections.actionLoginFragmentToDataAgreementFragment()
+                            )
+                        }
+                        //If user is authorized
+                        LoginViewModel.LoginType.AUTHORIZED ->
+                        {
+                            //Navigate to MainActivity
+                            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
+                            //Finish LoginActivity
+                            requireActivity().finish()
+                        }
+                    }
                 }
-                //If user is authorized
-                LoginViewModel.LoginType.AUTHORIZED ->
-                {
-                    //Navigate to MainActivity
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
-                    //Finish LoginActivity
-                    requireActivity().finish()
+            }
+            else if (viewModel.roles.isNullOrEmpty()) {
+                with(Snackbar.make(binding.root, "Нет доступных ролей", Snackbar.LENGTH_SHORT)) {
+                    view.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.darkGray
+                        )
+                    )
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.lightPink))
+                    show()
                 }
             }
         })

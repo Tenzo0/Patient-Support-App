@@ -19,9 +19,9 @@ import timber.log.Timber
 
 class LoginViewModel : BaseViewModel() {
 
-    private var _roles = MutableLiveData<List<Role>>(emptyList())
+    private var _roles = emptyList<Role>()
 
-    val roles: LiveData<List<Role>>
+    val roles: List<Role>
         get() = _roles
 
     var chosenRole: Role? = null
@@ -39,15 +39,15 @@ class LoginViewModel : BaseViewModel() {
     val isAuthorized: LiveData<LoginType>
         get() = _isAuthorized
 
-    private var _isPasswordUpdated = MutableLiveData<Boolean>()
-    val isPasswordUpdated: LiveData<Boolean>
-        get() = _isPasswordUpdated
+    private var _isTemporaryPassword = MutableLiveData<Boolean>()
+    val isTemporaryPassword: LiveData<Boolean>
+        get() = _isTemporaryPassword
 
     init {
         _isAuthorized.value =
             LoginType.UNAUTHORIZED
 
-        _isPasswordUpdated.value = UserPreferences.isTemporaryPassword()
+        _isTemporaryPassword.value = UserPreferences.isTemporaryPassword()
 
         if (UserPreferences.getPhone() != null) {
             authUser(UserPreferences.getPhone()!!, UserPreferences.getPassword()!!)
@@ -67,18 +67,20 @@ class LoginViewModel : BaseViewModel() {
                     UserNetwork.userService.login(Credentials.basic(phone, password))
                        .body()
 
-                _roles.value = user!!.roles
-                UserPreferences.saveUser(user, password)
+                user?.roles?.let {
+                    _roles = it
+                }
+                UserPreferences.saveUser(user!!, password)
 
                 if(UserPreferences.isTemporaryPassword()) {
                     _isAuthorized.value =
                         LoginType.FIRSTLY_AUTHORIZED
-                    _isPasswordUpdated.value = false
+                    _isTemporaryPassword.value = true
                 }
                 else {
                     _isAuthorized.value =
                         LoginType.AUTHORIZED
-                    _isPasswordUpdated.value = true
+                    _isTemporaryPassword.value = false
                 }
 
                 _eventNetworkError.value = false
@@ -93,7 +95,7 @@ class LoginViewModel : BaseViewModel() {
             catch (e: Exception) {
                 Timber.e(e)
                 UserPreferences.clear()
-                _roles.value = emptyList()
+                _roles = emptyList<Role>()
                 _isAuthorized.value =
                     LoginType.UNAUTHORIZED
                 _eventNetworkError.value = true
@@ -121,7 +123,7 @@ class LoginViewModel : BaseViewModel() {
                         LoginType.AUTHORIZED
                     _eventNetworkError.value = false
                     _isNetworkErrorShown.value = false
-                    _isPasswordUpdated.value = true
+                    _isTemporaryPassword.value = false
                 }
                 else
                     throw Exception("Response is not correct!")

@@ -48,8 +48,8 @@ class ChangePasswordFragment : Fragment() {
             }
         }
 
-        viewModel.isPasswordUpdated.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
+        viewModel.isTemporaryPassword.observe(viewLifecycleOwner, Observer {
+            if (it == false) {
                 with(Snackbar.make(binding.root, R.string.passwordIsChanged, Snackbar.LENGTH_SHORT)) {
                     view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
