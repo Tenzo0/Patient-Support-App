@@ -1,5 +1,6 @@
 /*
  * Copyright (c) Alexey Barykin 2020.
+ * All rights reserved.
  */
 
 apply plugin: 'com.android.application'
