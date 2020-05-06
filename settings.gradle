@@ -1,2 +1,6 @@
+/*
+ * Copyright (c) Alexey Barykin 2020.
+ */
+
 rootProject.name='B2Doc'
 include ':app'

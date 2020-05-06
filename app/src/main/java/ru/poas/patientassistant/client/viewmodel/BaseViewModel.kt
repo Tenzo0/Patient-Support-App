@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Alexey Barykin 2020. 
+ */
+
 package ru.poas.patientassistant.client.viewmodel
 
 import androidx.lifecycle.LiveData

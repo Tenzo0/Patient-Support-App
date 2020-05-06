@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Alexey Barykin 2020.
+ */
+
 package ru.poas.patientassistant.client.patient.ui
 
 import android.graphics.Color
