@@ -13,11 +13,11 @@
 
         <variable
             name="glossaryItem"
-            type="ru.poas.patientassistant.client.patient.vo.GlossaryItem" />
+            type="ru.alexey.patientassistant.client.patient.vo.GlossaryItem" />
 
         <variable
             name="clickListener"
-            type="ru.poas.patientassistant.client.patient.ui.glossary.ItemClickListener" />
+            type="ru.alexey.patientassistant.client.patient.ui.glossary.ItemClickListener" />
 
     </data>
 

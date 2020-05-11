@@ -11,7 +11,7 @@
 
         <variable
             name="glossaryViewModel"
-            type="ru.poas.patientassistant.client.patient.ui.glossary.GlossaryViewModel" />
+            type="ru.alexey.patientassistant.client.patient.ui.glossary.GlossaryViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

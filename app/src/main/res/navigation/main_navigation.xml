@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/glossaryFragment"
-        android:name="ru.poas.patientassistant.client.patient.ui.glossary.GlossaryFragment"
+        android:name="ru.alexey.patientassistant.client.patient.ui.glossary.GlossaryFragment"
         android:label="@string/glossary" >
         <action
             android:id="@+id/action_glossaryFragment_to_glossaryDetailsFragment"
@@ -28,19 +28,19 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.poas.patientassistant.client.patient.ui.profile.ProfileFragment"
+        android:name="ru.alexey.patientassistant.client.patient.ui.profile.ProfileFragment"
         android:label="@string/profile" />
     <fragment
         android:id="@+id/medicinesFragment"
-        android:name="ru.poas.patientassistant.client.patient.ui.drugs.DrugsFragment"
+        android:name="ru.alexey.patientassistant.client.patient.ui.drugs.DrugsFragment"
         android:label="@string/medicines" />
     <fragment
         android:id="@+id/recommendationsFragment"
-        android:name="ru.poas.patientassistant.client.patient.ui.recommendations.RecommendationsFragment"
+        android:name="ru.alexey.patientassistant.client.patient.ui.recommendations.RecommendationsFragment"
         android:label="@string/recommendations" />
     <fragment
         android:id="@+id/glossaryDetailsFragment"
-        android:name="ru.poas.patientassistant.client.patient.ui.glossary.GlossaryDetailsFragment"
+        android:name="ru.alexey.patientassistant.client.patient.ui.glossary.GlossaryDetailsFragment"
         android:label="@string/glossary" >
 
         <argument
@@ -57,11 +57,11 @@
     </fragment>
     <activity
         android:id="@+id/loginActivity"
-        android:name="ru.poas.patientassistant.client.login.ui.LoginActivity"
+        android:name="ru.alexey.patientassistant.client.login.ui.LoginActivity"
         android:label="LoginActivity" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="ru.poas.patientassistant.client.patient.ui.about.AboutFragment"
+        android:name="ru.alexey.patientassistant.client.patient.ui.about.AboutFragment"
         android:label="О приложении"
         tools:layout="@layout/about_fragment" />
 

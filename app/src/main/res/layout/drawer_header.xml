@@ -26,12 +26,12 @@
         style="@style/TextAppearance.AppCompat.Display1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
         android:layout_marginTop="26dp"
-        android:text="@string/B2doc"
+        android:text="@string/support"
         android:textColor="@color/darkGray"
+        android:layout_marginStart="16dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +40,7 @@
         style="@style/TextAppearance.AppCompat.Large"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/endopro"
+        android:text="@string/for_patient"
         app:layout_constraintEnd_toEndOf="@+id/b2doc"
         app:layout_constraintStart_toStartOf="@+id/b2doc"
         app:layout_constraintTop_toBottomOf="@+id/b2doc" />
