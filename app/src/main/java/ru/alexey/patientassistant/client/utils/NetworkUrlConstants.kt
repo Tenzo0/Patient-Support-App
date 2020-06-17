@@ -6,5 +6,5 @@
 package ru.alexey.patientassistant.client.utils
 
 object NetworkUrlConstants {
-    const val BASE_URL = "TODO" // TODO
+    const val BASE_URL = "https://example.com/" // TODO
 }
