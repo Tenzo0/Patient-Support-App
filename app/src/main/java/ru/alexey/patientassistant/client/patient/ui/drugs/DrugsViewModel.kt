@@ -17,6 +17,7 @@ import ru.alexey.patientassistant.client.preferences.UserPreferences
 import ru.alexey.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
 import ru.alexey.patientassistant.client.utils.DateUtils.syncDateWithServer
 import ru.alexey.patientassistant.client.viewmodel.BaseViewModel
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -77,6 +78,7 @@ class DrugsViewModel @Inject constructor(
                 syncDateWithServer(context)
                 _currentServerDate = DatePreferences.getActualServerDate()
             } catch (e: Exception) {
+                Timber.e(e)
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false
