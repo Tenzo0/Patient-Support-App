@@ -53,6 +53,11 @@ class RecommendationsFragment : Fragment() {
             .inject(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshRecommendationsInfo()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -155,8 +160,6 @@ class RecommendationsFragment : Fragment() {
                         Snackbar.LENGTH_SHORT
                     ).show()
             })
-
-            refreshRecommendationsInfo()
         }
     }
 
