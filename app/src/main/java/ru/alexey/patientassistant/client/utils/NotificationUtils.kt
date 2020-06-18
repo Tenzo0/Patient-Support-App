@@ -13,7 +13,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 
-const val NOTIFICATION_CHANNEL = "B2Doc Endopro notification channel"
+const val NOTIFICATION_CHANNEL = "Notification channel"
 
 /**
  * Creates a Notification channel, for OREO and higher.
