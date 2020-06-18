@@ -55,7 +55,6 @@ class LoginFragment : Fragment() {
                     binding.phoneNumberEditText.rawText,
                     binding.passwordEditText.text.toString()
                 )
-                requireActivity().hideKeyboard()
             }
         }
 
@@ -70,6 +69,7 @@ class LoginFragment : Fragment() {
         })
 
         viewModel.isAuthorized.observe(viewLifecycleOwner, Observer<LoginViewModel.LoginType> { authed ->
+            requireActivity().hideKeyboard()
             if (authed == LoginViewModel.LoginType.AUTHORIZED ||
                     authed == LoginViewModel.LoginType.FIRSTLY_AUTHORIZED
             )

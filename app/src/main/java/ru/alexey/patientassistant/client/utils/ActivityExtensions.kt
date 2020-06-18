@@ -12,10 +12,12 @@ import timber.log.Timber
 
 fun Activity.hideKeyboard() {
     try {
-        val inputMethodManager =
-            this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        val view = (if (this.currentFocus != null) this.currentFocus else this) as View
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        var view: View? = this.currentFocus
+        if (view == null) {
+            view = View(this)
+        }
+        (this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(view.windowToken, 0)
     } catch (e: Exception) {
         Timber.e(e)
     }
