@@ -101,6 +101,7 @@
                         android:id="@+id/password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="12345"
                         android:hint="@string/password"
                         android:inputType="textPassword"
                         android:singleLine="true" />

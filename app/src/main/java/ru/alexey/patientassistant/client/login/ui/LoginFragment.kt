@@ -48,7 +48,6 @@ class LoginFragment : Fragment() {
 
         binding.phoneNumberEditText.isKeepHint = false
         binding.phoneNumberEditText.setText("1234567890")
-        binding.passwordEditText.setText("12345")
         binding.signinButton.setOnClickListener {
             if (checkInputData()) {
                 viewModel.authUser(
