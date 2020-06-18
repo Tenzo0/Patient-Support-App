@@ -103,4 +103,5 @@
     <string name="open_today_recommendations">"Посмотрите Ваши рекомендации на сегодня!"</string>
     <string name="manufacturer">Производитель</string>
     <string name="description">Описание</string>
+    <string name="about">Приложение по поддержке пациента во время реабилитации</string>
 </resources>

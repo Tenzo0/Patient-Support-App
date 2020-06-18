@@ -13,6 +13,7 @@
 
     <TextView
         style="@style/TextAppearance.AppCompat.Large"
+        android:text="@string/about"
         android:gravity="center_horizontal"
         android:layout_margin="12dp"
         android:layout_width="match_parent"
