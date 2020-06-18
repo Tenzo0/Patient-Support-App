@@ -29,7 +29,7 @@ class RecommendationsViewModel @Inject constructor(
     val recommendationsList: LiveData<List<Recommendation>> = recommendationsRepository.recommendationsList
     val isRecommendationConfirmed: LiveData<Boolean> = recommendationsRepository.isRecommendationConfirmed
 
-    val selectedDate = MutableLiveData(Date())
+    val selectedDate = MutableLiveData(Calendar.getInstance().time)
     var operationDate = MutableLiveData<Date?>()
 
     private fun updateOperationDate() {

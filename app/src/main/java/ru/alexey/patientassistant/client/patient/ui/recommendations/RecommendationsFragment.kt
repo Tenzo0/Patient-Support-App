@@ -121,10 +121,10 @@ class RecommendationsFragment : Fragment() {
         //Select date with DatePickerDialog
         with(viewModel.selectedDate.value!!) {
             picker = DatePickerDialog(
-                requireActivity(),
+                requireContext(),
                 DatePickerDialog.OnDateSetListener { _, year, month, date ->
                     viewModel.updateSelectedDate(year, month, date)
-                }, this.year, this.month, this.date
+                }, year + 1900, month, date
             )
         }
     }
@@ -263,6 +263,11 @@ class RecommendationsFragment : Fragment() {
             }
             else -> false
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        picker.dismiss()
     }
 
     //Set calendar icon in top left corner of Toolbar (as menu item)
