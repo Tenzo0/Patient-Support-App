@@ -8,36 +8,33 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mask="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background">
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            style="?android:attr/progressBarStyle"
-            android:indeterminateTint="@color/mainPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="400dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
             app:cardElevation="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_gravity="center">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="420dp">
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/progressbar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:indeterminateTint="@color/mainPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -45,10 +42,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/support"
                     android:textSize="32sp"
-                    android:layout_marginBottom="8dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/app_description"
-                    app:layout_constraintStart_toStartOf="@+id/app_description" />
+                    app:layout_constraintStart_toStartOf="@+id/app_description"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/app_description"
@@ -58,7 +56,8 @@
                     android:text="@string/for_patient"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/phone_number_text_input_layout"
-                    app:layout_constraintStart_toStartOf="@+id/phone_number_text_input_layout" />
+                    app:layout_constraintStart_toStartOf="@+id/phone_number_text_input_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/phone_number_text_input_layout"
@@ -67,19 +66,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/password_text_input_layout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/app_description">
 
                     <br.com.sapereaude.maskedEditText.MaskedEditText
                         android:id="@+id/phone_number_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        mask:allowed_chars="1234567890"
-                        mask:mask="+7 (###) ###-##-##"
                         android:hint="@string/phone_number_text_input_hint"
                         android:inputType="phone"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        mask:allowed_chars="1234567890"
+                        mask:mask="+7 (###) ###-##-##" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -91,7 +93,9 @@
                     android:layout_marginEnd="24dp"
                     app:layout_constraintBottom_toTopOf="@+id/signin_button"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/phone_number_text_input_layout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password_edit_text"
@@ -111,13 +115,14 @@
                     android:layout_marginEnd="24dp"
                     android:text="@string/login_button_text"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="64dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/password_text_input_layout" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
