@@ -5,58 +5,57 @@
 
 package ru.alexey.patientassistant.client.patient.ui.recommendations
 
-import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Credentials
-import ru.alexey.patientassistant.client.preferences.UserPreferences
 import ru.alexey.patientassistant.client.patient.repository.RecommendationsRepository
-import ru.alexey.patientassistant.client.viewmodel.BaseViewModel
 import ru.alexey.patientassistant.client.patient.vo.Recommendation
 import ru.alexey.patientassistant.client.patient.vo.RecommendationConfirmKey
+import ru.alexey.patientassistant.client.preferences.UserPreferences
 import ru.alexey.patientassistant.client.utils.DateUtils.databaseSimpleDateFormat
+import ru.alexey.patientassistant.client.viewmodel.BaseViewModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 class RecommendationsViewModel @Inject constructor(
-    private val context: Context,
     private val recommendationsRepository: RecommendationsRepository
 ) : BaseViewModel() {
 
     val recommendationsList: LiveData<List<Recommendation>> = recommendationsRepository.recommendationsList
     val isRecommendationConfirmed: LiveData<Boolean> = recommendationsRepository.isRecommendationConfirmed
 
-    var operationDate: Calendar = Calendar.getInstance()
+    val selectedDate = MutableLiveData(Date())
+    var operationDate = MutableLiveData<Date?>()
 
-    private var _selectedDate: Calendar = Calendar.getInstance()
-    val selectedDate: Calendar
-        get() = _selectedDate
-
-    init {
-        UserPreferences.init(context)
-        operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
-            databaseSimpleDateFormat.parse(it)!!.time
-        } ?: 0
+    private fun updateOperationDate() {
+        val operationDateAsString = UserPreferences.getOperationDate()
+        if (operationDateAsString != null)
+            operationDate.postValue(databaseSimpleDateFormat.parse(operationDateAsString))
+        Timber.i("OPERATION_DATE:$operationDateAsString")
     }
+
     fun confirmRecommendation(recommendationUnitId: Long) {
         viewModelScope.launch {
             try {
-                recommendationsRepository.confirmRecommendation(
-                    Credentials.basic(
-                        UserPreferences.getPhone()!!,
-                        UserPreferences.getPassword()!!
-                    ),
-                    RecommendationConfirmKey(
-                        UserPreferences.getId(),
-                        UserPreferences.getRecommendationId()
-                    ),
-                    recommendationUnitId
-                )
-                operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
-                    databaseSimpleDateFormat.parse(it)!!.time
-                } ?: 0
+                withContext(Dispatchers.IO) {
+                    recommendationsRepository.confirmRecommendation(
+                        Credentials.basic(
+                            UserPreferences.getPhone()!!,
+                            UserPreferences.getPassword()!!
+                        ),
+                        RecommendationConfirmKey(
+                            UserPreferences.getId(),
+                            UserPreferences.getRecommendationId()
+                        ),
+                        recommendationUnitId
+                    )
+                    updateOperationDate()
+                }
             }
             catch (e: Exception) {
                 Timber.e(e)
@@ -65,28 +64,35 @@ class RecommendationsViewModel @Inject constructor(
     }
 
     fun updateSelectedDate(year: Int, month: Int, day: Int) {
-        _selectedDate.set(year, month, day)
-        Timber.i("selected date is changed: ${_selectedDate.get(Calendar.DAY_OF_MONTH)}")
+        @Suppress("DEPRECATION")
+        selectedDate.value = Date(year, month, day)
     }
 
     fun incSelectedDate() {
-        _selectedDate.add(Calendar.DATE, 1)
+        val newDateInMillis = selectedDate.value!!.time + ONE_DAY_IN_MILLIS
+        if (newDateInMillis >= 0)
+            selectedDate.value = Date(newDateInMillis)
     }
 
     fun decSelectedDate() {
-        _selectedDate.add(Calendar.DATE, -1)
+        val newDateInMillis = selectedDate.value!!.time - ONE_DAY_IN_MILLIS
+        if (newDateInMillis >= 0)
+            selectedDate.value = Date(newDateInMillis)
     }
 
     fun refreshRecommendationsInfo() {
         viewModelScope.launch {
             _isProgressShow.value = true
             try {
-                recommendationsRepository.refreshRecommendationInfo(
-                    Credentials.basic(
-                        UserPreferences.getPhone()!!,
-                        UserPreferences.getPassword()!!
+                withContext(Dispatchers.IO) {
+                    recommendationsRepository.refreshRecommendationInfo(
+                        Credentials.basic(
+                            UserPreferences.getPhone()!!,
+                            UserPreferences.getPassword()!!
+                        )
                     )
-                )
+                    updateOperationDate()
+                }
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
@@ -112,5 +118,6 @@ class RecommendationsViewModel @Inject constructor(
 
     companion object {
         val DATABASE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale("ru", "RU"))
+        private const val ONE_DAY_IN_MILLIS = 86400000
     }
 }

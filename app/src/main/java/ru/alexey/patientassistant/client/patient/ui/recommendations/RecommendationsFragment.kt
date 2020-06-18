@@ -34,7 +34,6 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.ceil
 import kotlin.math.floor
 
 class RecommendationsFragment : Fragment() {
@@ -73,7 +72,7 @@ class RecommendationsFragment : Fragment() {
 
             doneRecommendationButton.setOnClickListener {
                 viewModel.confirmRecommendation(
-                    getCurrentRecommendation(viewModel.selectedDate)!!.recommendationUnit.id
+                    getRecommendationByDate(viewModel.selectedDate.value!!)!!.recommendationUnit.id
                 )
                 with(Snackbar.make(binding.root, R.string.recommendationIsDone, Snackbar.LENGTH_LONG)) {
                     view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.darkGray))
@@ -111,16 +110,16 @@ class RecommendationsFragment : Fragment() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun setupRecommendationsDatePickerDialog() {
 
         //Select date with DatePickerDialog
-        with(viewModel.selectedDate) {
+        with(viewModel.selectedDate.value!!) {
             picker = DatePickerDialog(
                 requireActivity(),
-                DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                    viewModel.updateSelectedDate(year, month, day)
-                    updateRecommendationViewForDate(viewModel.selectedDate)
-                }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DATE)
+                DatePickerDialog.OnDateSetListener { _, year, month, date ->
+                    viewModel.updateSelectedDate(year, month, date)
+                }, this.year, this.month, this.date
             )
         }
     }
@@ -128,11 +127,16 @@ class RecommendationsFragment : Fragment() {
     private fun setupViewModel() {
         with(viewModel) {
             recommendationsList.observe(viewLifecycleOwner, Observer {
-                UserPreferences.getOperationDate()?.let {
-                    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                    viewModel.operationDate.time = RecommendationsViewModel.DATABASE_DATE_FORMAT.parse(it)
-                }
-                updateRecommendationViewForDate(selectedDate)
+                updateRecommendationViewForDate()
+            })
+
+            selectedDate.observe(viewLifecycleOwner, Observer {
+                updateRecommendationViewForDate()
+            })
+
+            operationDate.observe(viewLifecycleOwner, Observer {
+                if (it != null)
+                    updateRecommendationViewForDate()
             })
 
             isProgressShow.observe(viewLifecycleOwner, Observer {
@@ -156,116 +160,86 @@ class RecommendationsFragment : Fragment() {
         }
     }
 
-    private fun getCurrentRecommendation(date: Calendar?): Recommendation? {
+    private fun getRecommendationByDate(date: Date): Recommendation? {
         var recommendation: Recommendation? = null
-        try {
-            val millisPassedFromOperation =
-                date!!.timeInMillis - viewModel.operationDate.timeInMillis
-            val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
+        viewModel.operationDate.value?.let { operationDate ->
+            val millisPassedFromOperation = date.time - operationDate.time
+            val daysPassedFromOperationAsDouble =
+                (millisPassedFromOperation.toDouble() / (1000 * 60 * 60 * 24))
+            val daysPassedFromOperation =
+                if (daysPassedFromOperationAsDouble >= 0) daysPassedFromOperationAsDouble.toInt()
+                else floor(daysPassedFromOperationAsDouble)
 
-            Timber.i("$daysPassedFromOperation days passed since operation date")
-            Timber.i("$millisPassedFromOperation millis passed since operation date")
+            Timber.i("$daysPassedFromOperation days passed since operation date $operationDate")
 
             //Find recommendation by days passed from operation date
-            recommendation = viewModel.recommendationsList
-                .value?.firstOrNull {
-                it.day == daysPassedFromOperation.toInt()
-            }
+            recommendation = viewModel.recommendationsList.value?.firstOrNull { it.day == daysPassedFromOperation }
         }
-        catch (e: Exception) {
-            Timber.e(e)
-        }
+
         return recommendation
     }
 
     private fun updateRecommendationButton() {
-        val selectedDate = viewModel.selectedDate
+        val selectedDate = viewModel.selectedDate.value
         val currentDate = DatePreferences.getActualServerDate()
-        val isEqualDates =
-            (databaseSimpleDateFormat.format(selectedDate.timeInMillis) == currentDate)
-        if (viewModel.isRecommendationConfirmed.value == false && isEqualDates
-            && isCurrentItemContainRecommendation)
+        val isEqualDates = (databaseSimpleDateFormat.format(selectedDate?.time) == currentDate)
+        if (viewModel.isRecommendationConfirmed.value == false && isEqualDates && isCurrentItemContainRecommendation)
             revealNotVisibleView(binding.doneRecommendationButton)
         else {
             hideVisibleView(binding.doneRecommendationButton)
         }
     }
 
-    private fun updateRecommendationViewForDate(date: Calendar?) {
+    private fun updateRecommendationViewForDate() {
 
-        binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
+        val selectedDate = viewModel.selectedDate.value!!
+        binding.chosenDate.text = recommendationsFragmentDateFormat.format(selectedDate.time)
 
         with(viewModel) {
-            try {
-                UserPreferences.init(requireContext())
-                binding.scrollView.fullScroll(FOCUS_UP)
+            //Find recommendation by days passed from operation date
+            val recommendation = getRecommendationByDate(selectedDate)
+            recommendation?.recommendationUnit?.let {
+                val isContentNotBlank = it.content.isNotBlank()
+                val isImportantContentNotBlank = it.importantContent.isNotBlank()
 
-                val millisPassedFromOperation =
-                    date.timeInMillis - databaseSimpleDateFormat.parse(UserPreferences.getOperationDate()).time
-                val daysPassedFromOperation =
-                    (millisPassedFromOperation.toDouble() / (1000 * 60 * 60 * 24))
-                val day =
-                    if (daysPassedFromOperation >= 0) daysPassedFromOperation.toInt()
-                    else floor(daysPassedFromOperation)
-
-                Timber.i(
-                    "$day days passed since operation date (${viewModel.operationDate.get(
-                        Calendar.DATE
-                    )})"
-                )
-
-                //Find recommendation by days passed from operation date
-                val recommendation = recommendationsList
-                    .value?.firstOrNull {
-                        it.day == day
-                    }
-
-                with(binding) {
-                    //If recommendation found, set it to view
-                    if (recommendation?.recommendationUnit != null &&
-                        (recommendation.recommendationUnit.content.isNotBlank()
-                                || recommendation.recommendationUnit.importantContent.isNotBlank())
-                    ) {
+                if (isContentNotBlank || isImportantContentNotBlank)
+                //Set content to the view
+                {
+                    with(binding) {
                         isCurrentItemContainRecommendation = true
                         scrollView.setScrollingEnabled(true)
-                        refreshRecommendationConfirm(recommendation.recommendationUnit.id)
+                        refreshRecommendationConfirm(it.id)
 
                         crossfadeViews(displayedRecommendations, emptyRecommendationCard)
 
                         //Content
-                        if (recommendation.recommendationUnit.content.isNotBlank()) {
-                            recommendationText.text = recommendation.recommendationUnit.content
+                        if (isContentNotBlank) {
+                            recommendationText.text = it.content
                             recommendationCard.visibility = VISIBLE
                         } else {
                             recommendationCard.visibility = GONE
                         }
 
                         //Important content
-                        if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
-                            binding.importantRecommendationText.text =
-                                recommendation.recommendationUnit.importantContent
+                        if (isImportantContentNotBlank) {
+                            binding.importantRecommendationText.text = it.importantContent
                             importantCard.visibility = VISIBLE
                         } else {
                             importantCard.visibility = GONE
                         }
                     }
-
-                    //Else show view with empty recommendation text
-                    else {
-                        isCurrentItemContainRecommendation = false
-                        scrollView.setScrollingEnabled(false)
-
-                        crossfadeViews(emptyRecommendationCard, displayedRecommendations)
-                    }
                 }
-                updateRecommendationButton()
-            } catch (e: Exception) {
-                Timber.e(e)
+            }
+
+            if (recommendation?.recommendationUnit == null) {
                 with(binding) {
                     isCurrentItemContainRecommendation = false
                     scrollView.setScrollingEnabled(false)
+                    crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                 }
             }
+
+            updateRecommendationButton()
         }
     }
 
@@ -278,12 +252,10 @@ class RecommendationsFragment : Fragment() {
             }
             R.id.chevron_left -> {
                 viewModel.decSelectedDate()
-                updateRecommendationViewForDate(viewModel.selectedDate)
                 true
             }
             R.id.chevron_right -> {
                 viewModel.incSelectedDate()
-                updateRecommendationViewForDate(viewModel.selectedDate)
                 true
             }
             else -> false
@@ -294,8 +266,6 @@ class RecommendationsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.date_navigation_menu, menu)
     }
-
-
 
     companion object {
         private val recommendationsFragmentDateFormat = SimpleDateFormat(
