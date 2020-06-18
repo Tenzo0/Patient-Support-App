@@ -93,7 +93,8 @@ class RecommendationsFragment : Fragment() {
 
         requireActivity().toolbar.title = getString(R.string.recommendations)
 
-        updateRecommendationViewForDate(viewModel.selectedDate)
+        binding.swipeRefreshLayout.requestFocus()
+        //updateRecommendationViewForDate(viewModel.selectedDate)
 
         return binding.root
     }
@@ -127,6 +128,10 @@ class RecommendationsFragment : Fragment() {
     private fun setupViewModel() {
         with(viewModel) {
             recommendationsList.observe(viewLifecycleOwner, Observer {
+                UserPreferences.getOperationDate()?.let {
+                    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+                    viewModel.operationDate.time = RecommendationsViewModel.DATABASE_DATE_FORMAT.parse(it)
+                }
                 updateRecommendationViewForDate(selectedDate)
             })
 
@@ -187,6 +192,7 @@ class RecommendationsFragment : Fragment() {
     }
 
     private fun updateRecommendationViewForDate(date: Calendar?) {
+
         binding.chosenDate.text = recommendationsFragmentDateFormat.format(date!!.time)
 
         with(viewModel) {
@@ -196,25 +202,30 @@ class RecommendationsFragment : Fragment() {
 
                 val millisPassedFromOperation =
                     date.timeInMillis - databaseSimpleDateFormat.parse(UserPreferences.getOperationDate()).time
-                val daysPassedFromOperation = (millisPassedFromOperation.toDouble() / (1000 * 60 * 60 * 24))
+                val daysPassedFromOperation =
+                    (millisPassedFromOperation.toDouble() / (1000 * 60 * 60 * 24))
                 val day =
-                    if(daysPassedFromOperation >= 0) daysPassedFromOperation.toInt()
+                    if (daysPassedFromOperation >= 0) daysPassedFromOperation.toInt()
                     else floor(daysPassedFromOperation)
 
-                Timber.i("$day days passed since operation date (${viewModel.operationDate.get(Calendar.DATE)})")
+                Timber.i(
+                    "$day days passed since operation date (${viewModel.operationDate.get(
+                        Calendar.DATE
+                    )})"
+                )
 
                 //Find recommendation by days passed from operation date
                 val recommendation = recommendationsList
                     .value?.firstOrNull {
-                    it.day == day
-                }
+                        it.day == day
+                    }
 
                 with(binding) {
                     //If recommendation found, set it to view
                     if (recommendation?.recommendationUnit != null &&
                         (recommendation.recommendationUnit.content.isNotBlank()
-                        || recommendation.recommendationUnit.importantContent.isNotBlank()))
-                    {
+                                || recommendation.recommendationUnit.importantContent.isNotBlank())
+                    ) {
                         isCurrentItemContainRecommendation = true
                         scrollView.setScrollingEnabled(true)
                         refreshRecommendationConfirm(recommendation.recommendationUnit.id)
@@ -225,8 +236,7 @@ class RecommendationsFragment : Fragment() {
                         if (recommendation.recommendationUnit.content.isNotBlank()) {
                             recommendationText.text = recommendation.recommendationUnit.content
                             recommendationCard.visibility = VISIBLE
-                        }
-                        else {
+                        } else {
                             recommendationCard.visibility = GONE
                         }
 
@@ -249,14 +259,11 @@ class RecommendationsFragment : Fragment() {
                     }
                 }
                 updateRecommendationButton()
-            }
-            catch (e: Exception) {
-                Timber.e("first user auth? $e")
+            } catch (e: Exception) {
+                Timber.e(e)
                 with(binding) {
                     isCurrentItemContainRecommendation = false
                     scrollView.setScrollingEnabled(false)
-
-                    crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                 }
             }
         }

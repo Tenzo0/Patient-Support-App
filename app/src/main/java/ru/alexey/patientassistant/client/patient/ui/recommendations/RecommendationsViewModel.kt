@@ -28,9 +28,7 @@ class RecommendationsViewModel @Inject constructor(
     val recommendationsList: LiveData<List<Recommendation>> = recommendationsRepository.recommendationsList
     val isRecommendationConfirmed: LiveData<Boolean> = recommendationsRepository.isRecommendationConfirmed
 
-    private var _operationDate: Calendar = Calendar.getInstance()
-    val operationDate: Calendar
-        get() = _operationDate
+    var operationDate: Calendar = Calendar.getInstance()
 
     private var _selectedDate: Calendar = Calendar.getInstance()
     val selectedDate: Calendar
@@ -38,7 +36,7 @@ class RecommendationsViewModel @Inject constructor(
 
     init {
         UserPreferences.init(context)
-        _operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
+        operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
             databaseSimpleDateFormat.parse(it)!!.time
         } ?: 0
     }
@@ -56,7 +54,7 @@ class RecommendationsViewModel @Inject constructor(
                     ),
                     recommendationUnitId
                 )
-                _operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
+                operationDate.timeInMillis = UserPreferences.getOperationDate()?.let {
                     databaseSimpleDateFormat.parse(it)!!.time
                 } ?: 0
             }
@@ -89,12 +87,6 @@ class RecommendationsViewModel @Inject constructor(
                         UserPreferences.getPassword()!!
                     )
                 )
-
-                UserPreferences.getOperationDate()?.let {
-                    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-                    _operationDate.time = DATABASE_DATE_FORMAT.parse(it)
-                }
-
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {

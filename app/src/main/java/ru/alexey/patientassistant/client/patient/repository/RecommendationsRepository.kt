@@ -77,6 +77,7 @@ class RecommendationsRepository @Inject constructor(
             database.recommendationsDao.insert(recommendations.body()!!.asDatabaseModel())
             Timber.i("recommendations inserted into database: ${database.recommendationsDao.getAllRecommendations().value}")
             updateNotifications(recommendations.body())
+            Timber.i("2")
         }
     }
 
