@@ -16,6 +16,7 @@ fun Activity.hideKeyboard() {
             this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         val view = (if (this.currentFocus != null) this.currentFocus else this) as View
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        view.clearFocus()
     } catch (e: Exception) {
         Timber.e(e)
     }
