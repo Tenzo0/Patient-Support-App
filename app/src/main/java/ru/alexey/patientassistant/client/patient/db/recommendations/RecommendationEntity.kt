@@ -13,10 +13,10 @@ import ru.alexey.patientassistant.client.patient.vo.RecommendationUnit
 
 @Entity(tableName = "recommendations_database")
 data class RecommendationEntity(
-    @ColumnInfo val id: Long,
+    @PrimaryKey val id: Long,
     @ColumnInfo val recommendationId: Long,
     @ColumnInfo val day: Int,
-    @PrimaryKey val recommendationUnitId: Long,
+    @ColumnInfo val recommendationUnitId: Long,
     @ColumnInfo val content: String,
     @ColumnInfo val importantContent: String,
     @ColumnInfo val message: String

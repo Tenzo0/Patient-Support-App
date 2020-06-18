@@ -98,6 +98,7 @@ class RecommendationsViewModel @Inject constructor(
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } catch (e: Exception) {
+                Timber.e(e)
                 _eventNetworkError.value = true
             }
             _isProgressShow.value = false
