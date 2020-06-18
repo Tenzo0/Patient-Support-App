@@ -15,6 +15,7 @@ fun crossfadeViews(revealedView: View, hidedView: View) {
 }
 
 fun hideView(view: View) {
+    view.clearAnimation()
     // Animate the loading view to 0% opacity. After the animation ends,
     // set its visibility to GONE
     view.animate()
@@ -34,6 +35,7 @@ fun hideVisibleView(view: View) {
 }
 
 fun revealView(view: View) {
+    view.clearAnimation()
     view.apply {
         // Set the content view to 0% opacity but visible, so that it is visible
         // (but fully transparent) during the animation.

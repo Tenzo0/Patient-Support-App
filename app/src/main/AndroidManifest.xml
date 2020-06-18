@@ -55,7 +55,7 @@
 
         <activity
             android:name="ru.alexey.patientassistant.client.patient.ui.PatientActivity"
-            android:label="@string/for_patient"/>
+            android:label="@string/recommendations"/>
     </application>
 
 </manifest>

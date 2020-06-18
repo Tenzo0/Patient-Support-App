@@ -34,6 +34,8 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.ceil
+import kotlin.math.floor
 
 class RecommendationsFragment : Fragment() {
 
@@ -89,7 +91,7 @@ class RecommendationsFragment : Fragment() {
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 
-        requireActivity().toolbar.title = getString(R.string.for_patient)
+        requireActivity().toolbar.title = getString(R.string.recommendations)
 
         updateRecommendationViewForDate(viewModel.selectedDate)
 
@@ -117,7 +119,7 @@ class RecommendationsFragment : Fragment() {
                 DatePickerDialog.OnDateSetListener { _, year, month, day ->
                     viewModel.updateSelectedDate(year, month, day)
                     updateRecommendationViewForDate(viewModel.selectedDate)
-                }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_WEEK)
+                }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DATE)
             )
         }
     }
@@ -157,6 +159,7 @@ class RecommendationsFragment : Fragment() {
             val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
 
             Timber.i("$daysPassedFromOperation days passed since operation date")
+            Timber.i("$millisPassedFromOperation millis passed since operation date")
 
             //Find recommendation by days passed from operation date
             recommendation = viewModel.recommendationsList
@@ -193,36 +196,55 @@ class RecommendationsFragment : Fragment() {
 
                 val millisPassedFromOperation =
                     date.timeInMillis - databaseSimpleDateFormat.parse(UserPreferences.getOperationDate()).time
-                val daysPassedFromOperation = (millisPassedFromOperation / (1000 * 60 * 60 * 24))
+                val daysPassedFromOperation = (millisPassedFromOperation.toDouble() / (1000 * 60 * 60 * 24))
+                val day =
+                    if(daysPassedFromOperation >= 0) daysPassedFromOperation.toInt()
+                    else floor(daysPassedFromOperation)
 
-                Timber.i("$daysPassedFromOperation days passed since operation date (${viewModel.operationDate.get(Calendar.DATE)})")
+                Timber.i("$day days passed since operation date (${viewModel.operationDate.get(Calendar.DATE)})")
 
                 //Find recommendation by days passed from operation date
                 val recommendation = recommendationsList
                     .value?.firstOrNull {
-                    it.day == daysPassedFromOperation.toInt()
+                    it.day == day
                 }
 
                 with(binding) {
                     //If recommendation found, set it to view
-                    if (recommendation?.recommendationUnit != null) {
+                    if (recommendation?.recommendationUnit != null &&
+                        (recommendation.recommendationUnit.content.isNotBlank()
+                        || recommendation.recommendationUnit.importantContent.isNotBlank()))
+                    {
                         isCurrentItemContainRecommendation = true
                         scrollView.setScrollingEnabled(true)
                         refreshRecommendationConfirm(recommendation.recommendationUnit.id)
-                        recommendationText.text = recommendation.recommendationUnit.content
+
                         crossfadeViews(displayedRecommendations, emptyRecommendationCard)
-                        importantCard.visibility = if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
+
+                        //Content
+                        if (recommendation.recommendationUnit.content.isNotBlank()) {
+                            recommendationText.text = recommendation.recommendationUnit.content
+                            recommendationCard.visibility = VISIBLE
+                        }
+                        else {
+                            recommendationCard.visibility = GONE
+                        }
+
+                        //Important content
+                        if (recommendation.recommendationUnit.importantContent.isNotBlank()) {
                             binding.importantRecommendationText.text =
                                 recommendation.recommendationUnit.importantContent
-                            VISIBLE
+                            importantCard.visibility = VISIBLE
                         } else {
-                            GONE
+                            importantCard.visibility = GONE
                         }
                     }
+
                     //Else show view with empty recommendation text
                     else {
                         isCurrentItemContainRecommendation = false
                         scrollView.setScrollingEnabled(false)
+
                         crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                     }
                 }
@@ -233,6 +255,7 @@ class RecommendationsFragment : Fragment() {
                 with(binding) {
                     isCurrentItemContainRecommendation = false
                     scrollView.setScrollingEnabled(false)
+
                     crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                 }
             }
