@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_patient.*
+import kotlinx.android.synthetic.main.recommendations_fragment.*
 import ru.alexey.patientassistant.client.App
 import ru.alexey.patientassistant.client.R
 import ru.alexey.patientassistant.client.databinding.RecommendationsFragmentBinding
@@ -53,17 +54,17 @@ class RecommendationsFragment : Fragment() {
             .inject(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refreshRecommendationsInfo()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.recommendations_fragment,
                 container, false)
+
+        binding.emptyRecommendationCard.visibility = GONE
+        binding.recommendationCard.visibility = GONE
+        binding.importantCard.visibility = GONE
+        binding.displayedRecommendations.visibility = GONE
 
         setupHeightChangeAnimations()
 
@@ -95,10 +96,10 @@ class RecommendationsFragment : Fragment() {
         //Set Toolbar menu with calendar icon visible
         setHasOptionsMenu(true)
 
-        requireActivity().toolbar.title = getString(R.string.recommendations)
-
         binding.swipeRefreshLayout.requestFocus()
         //updateRecommendationViewForDate(viewModel.selectedDate)
+
+
 
         return binding.root
     }
@@ -132,7 +133,8 @@ class RecommendationsFragment : Fragment() {
     private fun setupViewModel() {
         with(viewModel) {
             recommendationsList.observe(viewLifecycleOwner, Observer {
-                updateRecommendationViewForDate()
+                if (it != null)
+                    updateRecommendationViewForDate()
             })
 
             selectedDate.observe(viewLifecycleOwner, Observer {
@@ -182,6 +184,11 @@ class RecommendationsFragment : Fragment() {
         return recommendation
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshRecommendationsInfo()
+    }
+
     private fun updateRecommendationButton() {
         val selectedDate = viewModel.selectedDate.value
         val currentDate = DatePreferences.getActualServerDate()
@@ -201,6 +208,7 @@ class RecommendationsFragment : Fragment() {
         with(viewModel) {
             //Find recommendation by days passed from operation date
             val recommendation = getRecommendationByDate(selectedDate)
+            Timber.i("Founded recommendation id: ${recommendation?.id}")
             recommendation?.recommendationUnit?.let {
                 val isContentNotBlank = it.content.isNotBlank()
                 val isImportantContentNotBlank = it.importantContent.isNotBlank()
@@ -241,6 +249,11 @@ class RecommendationsFragment : Fragment() {
                     crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                 }
             }
+
+
+            Timber.i("ERROR $recommendation ${recommendationsList.value} ${selectedDate.date} ${operationDate.value?.date}")
+            Timber.i("${binding.importantCard.alpha} ${binding.emptyRecommendationCard.alpha}" +
+                    "${binding.recommendationCard.alpha} ${binding.swipeRefreshLayout.alpha}")
 
             updateRecommendationButton()
         }
