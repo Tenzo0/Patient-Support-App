@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.alexey.patientassistant.client.App
 import ru.alexey.patientassistant.client.R
 import ru.alexey.patientassistant.client.databinding.DrugsFragmentBinding
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -42,10 +43,16 @@ class DrugsFragment : Fragment() {
             .inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.i("DRUGS_FRAGMENT: $this \n VIEWMODEL: $viewModel")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         //Setup list of drugs
         binding = DataBindingUtil.inflate(inflater, R.layout.drugs_fragment, container, false)
         adapter = DrugsAdapter(viewModel)
@@ -81,6 +88,7 @@ class DrugsFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        viewModel
         return binding.root
     }
 

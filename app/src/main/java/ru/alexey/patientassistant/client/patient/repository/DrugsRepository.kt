@@ -12,9 +12,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations.map
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import ru.alexey.patientassistant.client.patient.api.DrugsNetwork
+import ru.alexey.patientassistant.client.patient.db.drugs.DrugEntity
 import ru.alexey.patientassistant.client.patient.db.drugs.DrugsDatabase
 import ru.alexey.patientassistant.client.patient.db.drugs.asDomainObject
 import ru.alexey.patientassistant.client.patient.domain.DrugItem
@@ -41,11 +44,11 @@ class DrugsRepository @Inject constructor(
     private val context: Context,
     private val drugsDatabase: DrugsDatabase) {
 
-    val drugsList: LiveData<List<DrugItem>> = map(drugsDatabase.drugsDao.getAllLiveData()) { listOfEntities ->
-        listOfEntities.asDomainObject().sortedWith(compareBy
-            { databaseSimpleDateTimeFormat.parse(it.dateOfDrugReception + 'T' + it.timeOfDrugReception) }
-        )
-    }
+    val drugsList: Flow<List<DrugItem>> = drugsDatabase.drugsDao.getAllAsFlow()
+        .map {
+            it.asDomainObject()
+        }
+        .flowOn(Dispatchers.IO)
 
     suspend fun refreshNotificationsFromDatabase() {
         withContext(Dispatchers.IO) {

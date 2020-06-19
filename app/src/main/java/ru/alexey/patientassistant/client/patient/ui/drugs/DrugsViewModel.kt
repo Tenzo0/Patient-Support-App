@@ -8,7 +8,12 @@ package ru.alexey.patientassistant.client.patient.ui.drugs
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Credentials
 import ru.alexey.patientassistant.client.patient.domain.DrugItem
 import ru.alexey.patientassistant.client.patient.repository.DrugsRepository
@@ -29,18 +34,26 @@ class DrugsViewModel @Inject constructor(
     val selectedDate: Calendar
         get() = _selectedDate
 
-    private var _currentServerDate: String? = DatePreferences.getActualServerDate()
+    private var _currentServerDate: String? = null
     val currentServerDate: String?
         get() = _currentServerDate
 
-    val drugsList = drugsRepository.drugsList
+    val drugsList: LiveData<List<DrugItem>> = drugsRepository.drugsList
+        .asLiveData(viewModelScope.coroutineContext + Dispatchers.Default)
+
+    init {
+        Timber.i("DRUGS_REPO: $drugsRepository")
+    }
+
     private var _drugsListForSelectedDate = MutableLiveData<List<DrugItem>>()
     val drugsListForSelectedDate: LiveData<List<DrugItem>>
         get() = _drugsListForSelectedDate
 
     fun updateDrugsListForSelectedDate() {
-        _drugsListForSelectedDate.value = drugsList.value?.filter {
-            it.dateOfDrugReception == databaseSimpleDateFormat.format(selectedDate.time)
+        viewModelScope.launch {
+            _drugsListForSelectedDate.postValue(drugsList.value?.filter {
+                it.dateOfDrugReception == databaseSimpleDateFormat.format(selectedDate.time)
+            })
         }
     }
 

@@ -89,7 +89,7 @@ class DrugsAdapter(private val viewModel: DrugsViewModel) :
 
     class DrugDiffCallback: DiffUtil.ItemCallback<DrugItem>() {
         override fun areItemsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: DrugItem, newItem: DrugItem): Boolean {

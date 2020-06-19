@@ -7,20 +7,21 @@ package ru.alexey.patientassistant.client.patient.db.drugs
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DrugsDao {
     @Query("select * from drugs_database")
-    fun getAllLiveData(): LiveData<List<DrugEntity>>
+    fun getAllAsFlow(): Flow<List<DrugEntity>>
 
     @Query("select * from drugs_database")
     fun getAll(): List<DrugEntity>
 
     @Query("select * from drugs_database where id = :id")
-    fun getById(id: Long): LiveData<DrugEntity>
+    fun getById(id: Long): Flow<DrugEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(drugs: List<DrugEntity>)
+    suspend fun insert(drugs: List<DrugEntity>)
 
     @Query("delete from drugs_database where id = :id")
     fun deleteById(id: Long)
