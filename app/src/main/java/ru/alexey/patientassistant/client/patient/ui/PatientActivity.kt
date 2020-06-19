@@ -81,8 +81,11 @@ class PatientActivity : AppCompatActivity() {
                 when (it.itemId) {
                     R.id.exit -> exit() // exit from profile
                     else -> {
+                        val options = NavOptions.Builder().setLaunchSingleTop(true).build()
                         // navigate to fragment
-                        NavigationUI.onNavDestinationSelected(it, navController)
+                        if (navController.currentDestination?.id != it.itemId)
+                            navController.navigate(it.itemId, null, options)
+                        //NavigationUI.onNavDestinationSelected(it, navController)
                         drawerLayout.closeDrawers()
                     }
                 }
