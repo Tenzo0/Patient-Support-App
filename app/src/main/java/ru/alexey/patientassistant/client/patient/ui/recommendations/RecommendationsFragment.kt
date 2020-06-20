@@ -61,11 +61,6 @@ class RecommendationsFragment : Fragment() {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.recommendations_fragment,
                 container, false)
 
-        binding.emptyRecommendationCard.visibility = GONE
-        binding.recommendationCard.visibility = GONE
-        binding.importantCard.visibility = GONE
-        binding.displayedRecommendations.visibility = GONE
-
         setupHeightChangeAnimations()
 
         //Set onRefresh and onClick listeners
@@ -133,8 +128,7 @@ class RecommendationsFragment : Fragment() {
     private fun setupViewModel() {
         with(viewModel) {
             recommendationsList.observe(viewLifecycleOwner, Observer {
-                if (it != null)
-                    updateRecommendationViewForDate()
+                updateRecommendationViewForDate()
             })
 
             selectedDate.observe(viewLifecycleOwner, Observer {
@@ -142,8 +136,7 @@ class RecommendationsFragment : Fragment() {
             })
 
             operationDate.observe(viewLifecycleOwner, Observer {
-                if (it != null)
-                    updateRecommendationViewForDate()
+                updateRecommendationViewForDate()
             })
 
             isProgressShow.observe(viewLifecycleOwner, Observer {

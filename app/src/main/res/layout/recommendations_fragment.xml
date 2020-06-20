@@ -54,10 +54,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
+                        android:alpha = "0"
                         android:paddingBottom="4dp"
                         android:clipToPadding="false"
                         android:outlineProvider="bounds"
-                        tools:visibility="visible"
+                        tools:alpha="1"
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
@@ -104,12 +105,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="12dp"
+                            android:visibility="gone"
                             app:cardCornerRadius="12dp"
                             app:cardElevation="@dimen/card_elevation"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                            tools:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -173,11 +176,10 @@
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginBottom="12dp"
                 android:layout_marginTop="40dp"
-                android:visibility="gone"
+                android:alpha="0"
                 android:animateLayoutChanges="true"
                 app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="@dimen/card_elevation"
-                tools:visibility="invisible">
+                app:cardElevation="@dimen/card_elevation">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

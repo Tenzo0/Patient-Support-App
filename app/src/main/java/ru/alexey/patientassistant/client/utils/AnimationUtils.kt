@@ -15,27 +15,21 @@ fun crossfadeViews(revealedView: View, hidedView: View) {
 }
 
 fun hideView(view: View) {
-    view.animation?.cancel()
-    // Animate the loading view to 0% opacity. After the animation ends,
-    // set its visibility to GONE
-    view.animate()
-        .alpha(0f)
-        .setDuration(ANIMATION_DURATION)
+    if (view.alpha != 0f) {
+        view.animation?.cancel()
+        view.animate()
+            .alpha(0f)
+            .setDuration(ANIMATION_DURATION)
+    }
 }
 
 fun revealView(view: View) {
     view.animation?.cancel()
     view.apply {
-        // Set the content view to 0% opacity but visible, so that it is visible
-        // (but fully transparent) during the animation.
-        alpha = 0f
-
-        // Animate the content view to 100% opacity, and clear any animation
-        // listener set on the view.
         animate()
             .alpha(1f)
             .setDuration(ANIMATION_DURATION)
     }
 }
 
-const val ANIMATION_DURATION = 250L
+const val ANIMATION_DURATION = 200L
