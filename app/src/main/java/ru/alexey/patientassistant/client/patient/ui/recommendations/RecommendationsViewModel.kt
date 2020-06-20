@@ -30,7 +30,11 @@ class RecommendationsViewModel @Inject constructor(
     val isRecommendationConfirmed: LiveData<Boolean> = recommendationsRepository.isRecommendationConfirmed
 
     val selectedDate = MutableLiveData(Calendar.getInstance().time)
-    var operationDate = MutableLiveData<Date?>()
+    var operationDate = MutableLiveData<Date?>().apply {
+        UserPreferences.getOperationDate()?.let {
+            value = databaseSimpleDateFormat.parse(it)
+        }
+    }
 
     private fun updateOperationDate() {
         val operationDateAsString = UserPreferences.getOperationDate()

@@ -194,9 +194,9 @@ class RecommendationsFragment : Fragment() {
         val currentDate = DatePreferences.getActualServerDate()
         val isEqualDates = (databaseSimpleDateFormat.format(selectedDate?.time) == currentDate)
         if (viewModel.isRecommendationConfirmed.value == false && isEqualDates && isCurrentItemContainRecommendation)
-            revealNotVisibleView(binding.doneRecommendationButton)
+            revealView(binding.doneRecommendationButton)
         else {
-            hideVisibleView(binding.doneRecommendationButton)
+            hideView(binding.doneRecommendationButton)
         }
     }
 
@@ -209,13 +209,14 @@ class RecommendationsFragment : Fragment() {
             //Find recommendation by days passed from operation date
             val recommendation = getRecommendationByDate(selectedDate)
             Timber.i("Founded recommendation id: ${recommendation?.id}")
-            recommendation?.recommendationUnit?.let {
-                val isContentNotBlank = it.content.isNotBlank()
-                val isImportantContentNotBlank = it.importantContent.isNotBlank()
 
-                if (isContentNotBlank || isImportantContentNotBlank)
-                //Set content to the view
-                {
+            val isContentNotBlank = !recommendation?.recommendationUnit?.content.isNullOrEmpty()
+            val isImportantContentNotBlank = !recommendation?.recommendationUnit?.importantContent.isNullOrEmpty()
+
+            if (isContentNotBlank || isImportantContentNotBlank)
+            //Set content to the view
+            {
+                recommendation!!.recommendationUnit.let {
                     with(binding) {
                         isCurrentItemContainRecommendation = true
                         scrollView.setScrollingEnabled(true)
@@ -241,19 +242,13 @@ class RecommendationsFragment : Fragment() {
                     }
                 }
             }
-
-            if (recommendation?.recommendationUnit == null) {
+            else {
                 with(binding) {
                     isCurrentItemContainRecommendation = false
                     scrollView.setScrollingEnabled(false)
                     crossfadeViews(emptyRecommendationCard, displayedRecommendations)
                 }
             }
-
-
-            Timber.i("ERROR $recommendation ${recommendationsList.value} ${selectedDate.date} ${operationDate.value?.date}")
-            Timber.i("${binding.importantCard.alpha} ${binding.emptyRecommendationCard.alpha}" +
-                    "${binding.recommendationCard.alpha} ${binding.swipeRefreshLayout.alpha}")
 
             updateRecommendationButton()
         }
